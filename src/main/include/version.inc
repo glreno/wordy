@@ -6,7 +6,7 @@
 ;
 ; http://www.apache.org/licenses/LICENSE-2.0
 
-    .define aqordl_version "v1.00"
+    .define aqordl_version "1.01a"
     .define year "2025"
     .define copyright_dict .concat("Aqordl Dictionary ",aqordl_version," Copyright (c)",year," Gerald Reno, Jr. ")
 
