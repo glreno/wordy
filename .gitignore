@@ -1,0 +1,16 @@
+# Object files
+*.o
+*.lib
+
+# Compiled but not assembled c
+*.s
+target/*.inc
+
+# Executables
+*.xex
+*.xex.map
+*.rom
+*.rom.map
+
+# vim
+*.swp

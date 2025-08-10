@@ -6,8 +6,13 @@
 ;
 ; http://www.apache.org/licenses/LICENSE-2.0
 
-    .define aqordl_version "0.01a"
+    .define aqordl_version "v1.00"
     .define year "2025"
     .define copyright_dict .concat("Aqordl Dictionary ",aqordl_version," Copyright (c)",year," Gerald Reno, Jr. ")
 
+
+; After updating this file, also update:
+;   VERSIONS.md
+;   NOTICE
+;   README.md (the filenames in the "Starting the game" section)
 
