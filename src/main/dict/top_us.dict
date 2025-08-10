@@ -1,0 +1,42 @@
+; Copyright (c) 2025 Gerald Reno, Jr.
+;
+; Licensed under the Apache License, Version 2.0 (the "License");
+; you may not use this file except in compliance with the License.
+; You may obtain a copy of the License at
+;
+; http://www.apache.org/licenses/LICENSE-2.0
+
+@PRIORITY 1
+@DICT DICT_ES_US
+@DICT DICT_EA
+@DICTD DICT_EA
+@DFLAGS np,vc
+@DICT DICT_MS_US,x6
+@DICTD DICT_MS_US,x3
+@DICT DICT_MA
+@DICTD DICT_MA
+@DICT DICT_HS_US,x6
+@DICTD DICT_HS_US,x3
+@DICT DICT_HA
+@DICTD DICT_HA
+@DICT DICT_SS_US,x6
+@DICTD DICT_SS_US,x3
+@DICT DICT_SA
+@DICTD DICT_SA
+; Top Thousand Or So Words
+; Unlike the other volumes, this will be split
+; into Headwords and Derived Words volumes.
+; This is done by using separate @DICT (headword) and @DICTD (derived) commands.
+; The @DFLAGS is a list of flags that cause the word to go to @DICTD.
+aging,vc,us
+color,us
+draft,us
+favor,us
+fiber,us
+grays,np,vc,us
+honor,us
+humor,us
+jails,np,vc,us
+labor,us
+mommy,us
+rumor,us

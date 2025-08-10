@@ -1,0 +1,28 @@
+; Copyright (c) 2025 Gerald Reno, Jr.
+;
+; Licensed under the Apache License, Version 2.0 (the "License");
+; you may not use this file except in compliance with the License.
+; You may obtain a copy of the License at
+;
+; http://www.apache.org/licenses/LICENSE-2.0
+
+@PRIORITY 3
+@DICT DICT_MA
+@DICTD DICT_MA
+@DFLAGS np,vc
+@DICT DICT_HA
+@DICTD DICT_HA
+@DICT DICT_HS_UK,x2
+@DICTD DICT_HS_UK
+@DICT DICT_SA
+@DICTD DICT_SA
+@DICT DICT_SS_UK,x2
+@DICTD DICT_SS_UK
+; MAIN WORD LIST
+fibre,uk
+fuzed,vc
+fuzes,np,vc
+lorry,uk
+gaols,np,vc,uk
+pully,uk ; apparently slang for a pullover, or misspelling of pulley
+sabre,uk

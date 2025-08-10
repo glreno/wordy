@@ -1,0 +1,89 @@
+; Copyright (c) 2025 Gerald Reno, Jr.
+;
+; Licensed under the Apache License, Version 2.0 (the "License");
+; you may not use this file except in compliance with the License.
+; You may obtain a copy of the License at
+;
+; http://www.apache.org/licenses/LICENSE-2.0
+
+@PRIORITY 7
+@DICT DICT_HA
+@DICT DICT_SA
+@DICT DICT_SS,x2
+@DICT DICT_SS_US,x2
+@DICT DICT_SS_UK,x2
+arses,np
+asses,np
+balls,np
+bangs,vc
+bitch,n,v
+blown,vc
+blows,vc
+boned,vc
+bones,vc,np
+boner,n
+bongs,np
+boobs,np
+booby,n
+busts,np
+busty
+butts,np,vc
+buxom
+cocks,np
+cocky
+craps,vc
+damns,vc
+dicks,np,vc
+dicky,n
+dykes,np
+fagot,n ; this spelling really IS bundle of stick
+fanny,n
+farts,vc
+gipsy,n
+gooks,np
+gypsy,n
+horny
+hussy,n
+hymen,n
+kinks,np
+kinky
+labia,n
+lusts,vc
+lusty
+milfs,np
+panty,n
+peepy
+penes,np
+penis,n
+pervy
+peter,n,v
+pimps,np
+poops,vc
+porno,n
+prick,n,v
+pubes,np
+pubic
+pubis,n
+pussy,n
+raped,vc
+rapes,vc
+recta,np
+roger,v
+screw,v
+semen,n
+sexed,vc
+sexes,np,vc
+shags,vc
+shite,n,v
+sluts,np
+sperm,n
+squaw,n
+sucks,vc
+teats,np
+turds,np
+twerk,v
+urine,n
+vulva,n
+whore,n
+willy,n
+woody,n
