@@ -29,7 +29,7 @@ The twist here is that you are guessing four words at once.
 - The cartridge version should run on any Atari 8-bit system with at least 16K RAM.
   - I have only tested this in emulation
   - It is a 64KB XEGS bank-switched cartridge (cartridge type 13)
-  - This may or may not work on a real 400/800 system; I'm not sure the hardware is compatible
+  - This may or may not work on a real 400/800 system; I'm not sure the XEGS cartridge hardware is compatible
   - It works in emulation though!
 
 - The text-only cartridge version will run in 8KB.
@@ -50,8 +50,8 @@ The twist here is that you are guessing four words at once.
 
 - A **Real** Atari 130XE
   - This is still untested, since my 130XE has been in storage for a couple decades
-  - Copy the .atr image to a blank single-density floppy. The image includes myPicoDos, and will boot directly into the game
-  - Or you can load the .xex image using your favourite method of loading .exe files
+  - Copy the aqordl_1.00.atr image to a blank single-density floppy. The image includes myPicoDos, and will boot directly into the game
+  - Or you can load the AQORDL_1.XEX file using your favourite method of loading .exe files
   - Either way, it's going to take a long time to load
   - The game does use all 128K, so do not use with a RAM disk
 
