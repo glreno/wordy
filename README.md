@@ -6,6 +6,8 @@
 
 A word puzzle game for the Atari 8-bit computers. With a dancing robot. And no social media.
 
+Download from: https://github.com/glreno/wordy/releases
+
 ## Why?
 
 Because "Wordl" is awesome, and "Dordle" and "Quordle" are awesomer. "Sedecordle" is awesomest, but it's really hard to fit 16 puzzles on an Atari screen.
