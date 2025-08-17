@@ -17,7 +17,7 @@
 
     ; 20 char string, used for title messages in Gr.2 text
     ; so do not mix case!
-    .define title20char  "       aqordl       "
+    .define title20char " aqordl - robot mode"
 
     ; Two lines of 20-char text for game description
     .define description1 " a word puzzle game "
@@ -41,8 +41,8 @@
 ;                                             01234567890123456789
     .define instruction3 "GREEN letters are correct.              "
     .define instruction4 "YELLOW letters are in the wrong place.  "
-    .define instruction5 "To change palette, press 1-9 (0 for b/w)"
-    .define instruction6 "To mute, guess 'PLEASE QUIET'           "
+    .define instruction5 "                                        "
+    .define instruction6 "To adjust colors, press 1-9 (0 for b/w) "
     .define instructionLoad "LOADING GAME...     "
 
 ;
@@ -106,9 +106,9 @@
 
     .segment "BIGHDR"
     .import __CODE_LOAD__
-    .import __COPYRIGHT_ROM_LOAD__,__COPYRIGHT_ROM_SIZE__
+    .import __DATA_LOAD__,__DATA_SIZE__
     .word __CODE_LOAD__
-    .word __COPYRIGHT_ROM_LOAD__+__COPYRIGHT_ROM_SIZE__-1
+    .word __DATA_LOAD__+__DATA_SIZE__-1
 
     .segment "XEBANK0_HDR"
     .import __DICT_BANK_1_LOAD__
@@ -123,9 +123,9 @@
     .word __DICT_BANK_4_LOAD__+__DICT_BANK_4_SIZE__-1
 
     .segment "XEBANK2_HDR"
-    .import __VOR_PICS0_LOAD__
+    .import __COPYRIGHT_ROM_LOAD__
     .import __VOR_CODE_LOAD__,__VOR_CODE_SIZE__
-    .word __VOR_PICS0_LOAD__
+    .word __COPYRIGHT_ROM_LOAD__
     .word __VOR_CODE_LOAD__+__VOR_CODE_SIZE__-1
 
     ; duplicate of XEBANK4_LOAD because we keep having to switch back

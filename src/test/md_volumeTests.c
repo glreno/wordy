@@ -16,10 +16,10 @@
 #include <conio.h>
 #include <_atarios.h>
 
-const md_word WORD[] = {
-    { "super", 6 },
-    { "supes", 8 },
-    { "today", 7 }
+const md_wordInternal WORD[] = {
+    { "super" }, // , 6 },
+    { "supes" }, // , 8 },
+    { "today" }, // , 7 }
 };
 
 const md_volume DICT = { 3, 0, WORD };
@@ -32,7 +32,7 @@ void wordTests(void)
     char buf0[6],buf1[6],buf2[6];
     int n;
     printf("\x7DThe first Test\n");
-    printf("Storage: Word0 flag is: %d\n",WORD[0].wordflags);
+    //printf("Storage: Word0 flag is: %d\n",WORD[0].wordflags);
     md_wordToString(buf0,&WORD[0]);
     printf("Storage: Word0 is: [%s]\n",buf0);
     md_wordToString(buf1,&WORD[1]);

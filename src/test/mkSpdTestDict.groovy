@@ -115,7 +115,8 @@ public class mkSpdTstDict
         System.out.println("    .export _dict_"+name);
         for(String s : words)
         {
-            System.out.println("    .byte \""+s+"\", \$1 ; "+idx);
+            System.out.println("    .byte \""+s+"\" ; "+idx);
+            //System.out.println("    .byte \""+s+"\", \$1 ; "+idx);
             ++idx;
         }
         System.out.println("    .RODATA");

@@ -25,9 +25,9 @@ extern int vor_anim_angry_loop; // angry foot tapping
 // { "pic":"vor_frame_angry1", "exit":"true", "next":"vor_anim_angry_loop" }
 
 extern int vor_anim_angry_notfound; // angry foot tapping
-// { "pic":"vor_frame_angry1", "exit":"true", "next":"vor_anim_angry_loop", "sound":"cueWordNotFound" }
+// { "pic":"vor_frame_angry1", "exit":"true", "next":"vor_anim_angry_loop", "sfxlevel":1, "sound":"cueWordNotFound" }
 extern int vor_anim_angry_badkey; // angry foot tapping
-// { "pic":"vor_frame_angry1", "exit":"true", "next":"vor_anim_angry_loop", "sound":"cueBadKey" }
+// { "pic":"vor_frame_angry1", "exit":"true", "next":"vor_anim_angry_loop", "sfxlevel":1, "sound":"cueBadKey" }
 
 extern int vor_anim_bored; // bored foot tapping
 // { "pic":"vor_frame_stand", "exit":"true" }
@@ -263,14 +263,14 @@ extern int vor_anim_victory; // victory dance
 extern int vor_anim_loss_loop; // sad dance
 // { "pic":"vor_frame_sad2", "exit":"true", "next":"vor_anim_loss_loop" }
 extern int vor_anim_loss; // sad dance
-// { "pic":"vor_frame_sad1", "sound":"cueSadTrombone" }
+// { "pic":"vor_frame_sad1", "sfxlevel":0, "sound":"cueSadTrombone" }
 // { "pic":"vor_frame_sad2" }
 // { "pic":"vor_frame_sad3", "next":"vor_anim_loss_loop" }
 
 extern int vor_anim_laserwait; // fast wrist computer check for between lasers
-// { "pic":"vor_frame_wrist1", "sound":"cueRobotsOfDeath_LOW", "exit":"true" }
+// { "pic":"vor_frame_wrist1", "sfxlevel":3, "sound":"cueRobotsOfDeath_LOW", "exit":"true" }
 // { "pic":"vor_frame_wrist2", "exit":"countdown" }
-// { "pic":"vor_frame_wrist3", "sound":"cueRobotsOfDeath_HIGH", "exit":"true" }
+// { "pic":"vor_frame_wrist3", "sfxlevel":3, "sound":"cueRobotsOfDeath_HIGH", "exit":"true" }
 // { "pic":"vor_frame_wrist2", "next":"vor_anim_laserwait", "exit":"true" }
 
 extern int vor_anim_laserleft5; // Left laser to tile 5
@@ -295,29 +295,29 @@ extern int vor_anim_laserleft1; // Left laser to tile 1
 // { "pic":"vor_frame_left_laser60", "next":"vor_anim_laserwait" }
 
 extern int vor_anim_laserleft_yellow; // Left laser
-// { "pic":"vor_frame_left_laser0", "sound":"cueLaserYellow", "next":"vor_anim_laserleft3" }
+// { "pic":"vor_frame_left_laser0", "sfxlevel":1, "sound":"cueLaserYellow", "next":"vor_anim_laserleft3" }
 extern int vor_anim_laserleft1_yellow; // Left laser
-// { "pic":"vor_frame_left_laser0", "sound":"cueLaserYellow", "next":"vor_anim_laserleft1" }
+// { "pic":"vor_frame_left_laser0", "sfxlevel":1, "sound":"cueLaserYellow", "next":"vor_anim_laserleft1" }
 extern int vor_anim_laserleft2_yellow; // Left laser
-// { "pic":"vor_frame_left_laser0", "sound":"cueLaserYellow", "next":"vor_anim_laserleft2" }
+// { "pic":"vor_frame_left_laser0", "sfxlevel":1, "sound":"cueLaserYellow", "next":"vor_anim_laserleft2" }
 extern int vor_anim_laserleft3_yellow; // Left laser
-// { "pic":"vor_frame_left_laser0", "sound":"cueLaserYellow", "next":"vor_anim_laserleft3" }
+// { "pic":"vor_frame_left_laser0", "sfxlevel":1, "sound":"cueLaserYellow", "next":"vor_anim_laserleft3" }
 extern int vor_anim_laserleft4_yellow; // Left laser
-// { "pic":"vor_frame_left_laser0", "sound":"cueLaserYellow", "next":"vor_anim_laserleft4" }
+// { "pic":"vor_frame_left_laser0", "sfxlevel":1, "sound":"cueLaserYellow", "next":"vor_anim_laserleft4" }
 extern int vor_anim_laserleft5_yellow; // Left laser
-// { "pic":"vor_frame_left_laser0", "sound":"cueLaserYellow", "next":"vor_anim_laserleft5" }
+// { "pic":"vor_frame_left_laser0", "sfxlevel":1, "sound":"cueLaserYellow", "next":"vor_anim_laserleft5" }
 extern int vor_anim_laserleft_green; // Left laser
-// { "pic":"vor_frame_left_laser0", "sound":"cueLaserGreen", "next":"vor_anim_laserleft3" }
+// { "pic":"vor_frame_left_laser0", "sfxlevel":1, "sound":"cueLaserGreen", "next":"vor_anim_laserleft3" }
 extern int vor_anim_laserleft1_green; // Left laser
-// { "pic":"vor_frame_left_laser0", "sound":"cueLaserGreen", "next":"vor_anim_laserleft1" }
+// { "pic":"vor_frame_left_laser0", "sfxlevel":1, "sound":"cueLaserGreen", "next":"vor_anim_laserleft1" }
 extern int vor_anim_laserleft2_green; // Left laser
-// { "pic":"vor_frame_left_laser0", "sound":"cueLaserGreen", "next":"vor_anim_laserleft2" }
+// { "pic":"vor_frame_left_laser0", "sfxlevel":1, "sound":"cueLaserGreen", "next":"vor_anim_laserleft2" }
 extern int vor_anim_laserleft3_green; // Left laser
-// { "pic":"vor_frame_left_laser0", "sound":"cueLaserGreen", "next":"vor_anim_laserleft3" }
+// { "pic":"vor_frame_left_laser0", "sfxlevel":1, "sound":"cueLaserGreen", "next":"vor_anim_laserleft3" }
 extern int vor_anim_laserleft4_green; // Left laser
-// { "pic":"vor_frame_left_laser0", "sound":"cueLaserGreen", "next":"vor_anim_laserleft4" }
+// { "pic":"vor_frame_left_laser0", "sfxlevel":1, "sound":"cueLaserGreen", "next":"vor_anim_laserleft4" }
 extern int vor_anim_laserleft5_green; // Left laser
-// { "pic":"vor_frame_left_laser0", "sound":"cueLaserGreen", "next":"vor_anim_laserleft5" }
+// { "pic":"vor_frame_left_laser0", "sfxlevel":1, "sound":"cueLaserGreen", "next":"vor_anim_laserleft5" }
 
 extern int vor_anim_laserright; // Right laser
 // { "pic":"vor_frame_right_laser20" }
@@ -325,38 +325,38 @@ extern int vor_anim_laserright; // Right laser
 // { "pic":"vor_frame_right_laser60", "next":"vor_anim_laserwait" }
 
 extern int vor_anim_laserright_yellow; // Right laser
-// { "pic":"vor_frame_right_laser0", "sound":"cueLaserYellow", "next":"vor_anim_laserright" }
+// { "pic":"vor_frame_right_laser0", "sfxlevel":1, "sound":"cueLaserYellow", "next":"vor_anim_laserright" }
 extern int vor_anim_laserright1_yellow; // Right laser
-// { "pic":"vor_frame_right_laser0", "sound":"cueLaserYellow", "next":"vor_anim_laserright" }
+// { "pic":"vor_frame_right_laser0", "sfxlevel":1, "sound":"cueLaserYellow", "next":"vor_anim_laserright" }
 extern int vor_anim_laserright2_yellow; // Right laser
-// { "pic":"vor_frame_right_laser0", "sound":"cueLaserYellow", "next":"vor_anim_laserright" }
+// { "pic":"vor_frame_right_laser0", "sfxlevel":1, "sound":"cueLaserYellow", "next":"vor_anim_laserright" }
 extern int vor_anim_laserright3_yellow; // Right laser
-// { "pic":"vor_frame_right_laser0", "sound":"cueLaserYellow", "next":"vor_anim_laserright" }
+// { "pic":"vor_frame_right_laser0", "sfxlevel":1, "sound":"cueLaserYellow", "next":"vor_anim_laserright" }
 extern int vor_anim_laserright4_yellow; // Right laser
-// { "pic":"vor_frame_right_laser0", "sound":"cueLaserYellow", "next":"vor_anim_laserright" }
+// { "pic":"vor_frame_right_laser0", "sfxlevel":1, "sound":"cueLaserYellow", "next":"vor_anim_laserright" }
 extern int vor_anim_laserright5_yellow; // Right laser
-// { "pic":"vor_frame_right_laser0", "sound":"cueLaserYellow", "next":"vor_anim_laserright" }
+// { "pic":"vor_frame_right_laser0", "sfxlevel":1, "sound":"cueLaserYellow", "next":"vor_anim_laserright" }
 extern int vor_anim_laserright_green; // Right laser
-// { "pic":"vor_frame_right_laser0", "sound":"cueLaserGreen", "next":"vor_anim_laserright" }
+// { "pic":"vor_frame_right_laser0", "sfxlevel":1, "sound":"cueLaserGreen", "next":"vor_anim_laserright" }
 extern int vor_anim_laserright1_green; // Right laser
-// { "pic":"vor_frame_right_laser0", "sound":"cueLaserGreen", "next":"vor_anim_laserright" }
+// { "pic":"vor_frame_right_laser0", "sfxlevel":1, "sound":"cueLaserGreen", "next":"vor_anim_laserright" }
 extern int vor_anim_laserright2_green; // Right laser
-// { "pic":"vor_frame_right_laser0", "sound":"cueLaserGreen", "next":"vor_anim_laserright" }
+// { "pic":"vor_frame_right_laser0", "sfxlevel":1, "sound":"cueLaserGreen", "next":"vor_anim_laserright" }
 extern int vor_anim_laserright3_green; // Right laser
-// { "pic":"vor_frame_right_laser0", "sound":"cueLaserGreen", "next":"vor_anim_laserright" }
+// { "pic":"vor_frame_right_laser0", "sfxlevel":1, "sound":"cueLaserGreen", "next":"vor_anim_laserright" }
 extern int vor_anim_laserright4_green; // Right laser
-// { "pic":"vor_frame_right_laser0", "sound":"cueLaserGreen", "next":"vor_anim_laserright" }
+// { "pic":"vor_frame_right_laser0", "sfxlevel":1, "sound":"cueLaserGreen", "next":"vor_anim_laserright" }
 extern int vor_anim_laserright5_green; // Right laser
-// { "pic":"vor_frame_right_laser0", "sound":"cueLaserGreen", "next":"vor_anim_laserright" }
+// { "pic":"vor_frame_right_laser0", "sfxlevel":1, "sound":"cueLaserGreen", "next":"vor_anim_laserright" }
 
 extern int vor_anim_fistpump_loop; // Green word
 // { "pic":"vor_frame_wrist2", "exit":"true" }
-// { "pic":"vor_frame_wrist3", "sound":"cueRobotsOfDeath_HIGH" }
+// { "pic":"vor_frame_wrist3", "sfxlevel":3, "sound":"cueRobotsOfDeath_HIGH" }
 // { "pic":"vor_frame_wrist2", "exit":"true" }
-// { "pic":"vor_frame_wrist1", "sound":"cueRobotsOfDeath_LOW", "next":"vor_anim_fistpump_loop" }
+// { "pic":"vor_frame_wrist1", "sfxlevel":3, "sound":"cueRobotsOfDeath_LOW", "next":"vor_anim_fistpump_loop" }
 extern int vor_anim_fistpump; // Green word
 // (the lead in is a long sound effect)
-// { "pic":"vor_frame_wrist1", "sound":"cueTadaa" }
+// { "pic":"vor_frame_wrist1", "sfxlevel":0, "sound":"cueTadaa" }
 // { "pic":"vor_frame_stand" }
 // { "pic":"vor_frame_jump_crouch1" }
 // { "pic":"vor_frame_jump_crouch2" }
@@ -367,44 +367,44 @@ extern int vor_anim_fistpump; // Green word
 // { "pic":"vor_frame_stand", "next":"vor_anim_fistpump_loop" }
 
 extern int vor_anim_wristcheck; // Check wrist computer
-// { "pic":"vor_frame_wrist1", "sound":"cueRobotsOfDeath_LOW" }
+// { "pic":"vor_frame_wrist1", "sfxlevel":3, "sound":"cueRobotsOfDeath_LOW" }
 // { "pic":"vor_frame_wrist2", "exit":"true" }
-// { "pic":"vor_frame_wrist3", "sound":"cueRobotsOfDeath_HIGH"}
+// { "pic":"vor_frame_wrist3", "sfxlevel":3, "sound":"cueRobotsOfDeath_HIGH"}
 // { "pic":"vor_frame_wrist2",  "next":"vor_anim_wristcheck", "exit":"true" }
 extern int vor_anim_lookup_wristcheck; // Check wrist computer
 // { "pic":"vor_frame_wrist2" }
-// { "pic":"vor_frame_wrist3", "sound":"cueRobotsOfDeath_HIGH"}
+// { "pic":"vor_frame_wrist3", "sfxlevel":2, "sound":"cueRobotsOfDeath_HIGH"}
 // { "pic":"vor_frame_wrist2" }
-// { "pic":"vor_frame_wrist1", "sound":"cueRobotsOfDeath_LOW" }
-// { "pic":"vor_frame_wrist1", "sound":"cueRobotsOfDeath_LOW" }
+// { "pic":"vor_frame_wrist1", "sfxlevel":2, "sound":"cueRobotsOfDeath_LOW" }
+// { "pic":"vor_frame_wrist1", "sfxlevel":2, "sound":"cueRobotsOfDeath_LOW" }
 // { "pic":"vor_frame_wrist2" }
-// { "pic":"vor_frame_wrist3", "sound":"cueRobotsOfDeath_HIGH"}
+// { "pic":"vor_frame_wrist3", "sfxlevel":2, "sound":"cueRobotsOfDeath_HIGH"}
 // { "pic":"vor_frame_wrist2" }
-// { "pic":"vor_frame_wrist1", "sound":"cueRobotsOfDeath_LOW" }
+// { "pic":"vor_frame_wrist1", "sfxlevel":2, "sound":"cueRobotsOfDeath_LOW" }
 // { "pic":"vor_frame_wrist2" }
 // { "pic":"vor_frame_wrist2" }
 // { "pic":"vor_frame_wrist2",  "next":"vor_anim_wristcheck" }
 
 extern int vor_anim_bored_wristcheck; // Tap wrist computer
 // { "pic":"vor_frame_wrist2",  "exit":"true" }
-// { "pic":"vor_frame_wrist3",  "sound":"cueRobotsOfDeath_HIGH", "exit":"true" }
+// { "pic":"vor_frame_wrist3",  "sfxlevel":3, "sound":"cueRobotsOfDeath_HIGH", "exit":"true" }
 // { "pic":"vor_frame_wrist2",  "exit":"true" }
 // { "pic":"vor_frame_wrist2",  "exit":"true" }
-// { "pic":"vor_frame_wrist1",  "sound":"cueRobotsOfDeath_LOW", "exit":"true" }
+// { "pic":"vor_frame_wrist1",  "sfxlevel":3, "sound":"cueRobotsOfDeath_LOW", "exit":"true" }
 // { "pic":"vor_frame_wrist2",  "next":"vor_anim_bored_wristcheck", "exit":"true" }
 
 extern int vor_anim_alldone_wristcheck; // Tap wrist computer
 // { "pic":"vor_frame_wrist2" }
 // { "pic":"vor_frame_wrist2" }
 // { "pic":"vor_frame_wrist2" }
-// { "pic":"vor_frame_wrist3", "sound":"cueRobotsOfDeath_HIGH"}
+// { "pic":"vor_frame_wrist3", "sfxlevel":1, "sound":"cueRobotsOfDeath_HIGH"}
 // { "pic":"vor_frame_wrist2" }
-// { "pic":"vor_frame_wrist1", "sound":"cueRobotsOfDeath_LOW" }
-// { "pic":"vor_frame_wrist1", "sound":"cueRobotsOfDeath_LOW" }
+// { "pic":"vor_frame_wrist1", "sfxlevel":1, "sound":"cueRobotsOfDeath_LOW" }
+// { "pic":"vor_frame_wrist1", "sfxlevel":1, "sound":"cueRobotsOfDeath_LOW" }
 // { "pic":"vor_frame_wrist2" }
-// { "pic":"vor_frame_wrist3", "sound":"cueRobotsOfDeath_HIGH"}
+// { "pic":"vor_frame_wrist3", "sfxlevel":1, "sound":"cueRobotsOfDeath_HIGH"}
 // { "pic":"vor_frame_wrist2" }
-// { "pic":"vor_frame_wrist1", "sound":"cueRobotsOfDeath_LOW" }
+// { "pic":"vor_frame_wrist1", "sfxlevel":1, "sound":"cueRobotsOfDeath_LOW" }
 // { "pic":"vor_frame_wrist2",  "next":"vor_anim_standby" }
 
 #endif

@@ -19,7 +19,7 @@
 #pragma code-name (push,"MD")
 
 //segment MD
-const md_word *md_volumeGet(const md_volume *d, int index)
+const md_wordInternal *md_volumeGetInternal(const md_volume *d, int index)
 {
     // Port to assmebler, if possible, currently 0x53 bytes
     int sz = md_volumeSize(d);
@@ -29,32 +29,40 @@ const md_word *md_volumeGet(const md_volume *d, int index)
     }
     return &((d->list)[index]);
 }
+md_word RETURNBUF;
+const md_word *md_volumeGet(const md_volume *d, int index)
+{
+    md_wordInternal *found = md_volumeGetInternal(d,index);
+    strcpy(RETURNBUF.s,found->s);
+    return &RETURNBUF;
+}
 
 //segment MD
 void md_volumeCopyWord(const md_volume *d, int index, md_word *dest)
 {
-    const md_word *w=md_volumeGet(d,index);
+    const md_wordInternal *w=md_volumeGetInternal(d,index);
     if ( w == NULL )
     {
         // Error condition - index out of range
         dest->wordflags=0xff;
         return;
     }
-    memcpy(dest,w,6);
+    dest->wordflags=0;
+    memcpy(dest,w,5);
 }
 
 //segment MD
 int md_volumeFindRecurse(const md_volume *d, const md_word *s,int first,int last)
 {
-    const md_word *firstw, *lastw, *midw;
+    const md_wordInternal *firstw, *lastw, *midw;
     int mid;
     signed char cmp;
 
     /* Make sure it's not first or last.*/
 
-    firstw=md_volumeGet(d,first);
+    firstw=md_volumeGetInternal(d,first);
 
-    cmp = md_wordCmp(s,firstw);
+    cmp = md_wordCmpInternal(s,firstw);
     if ( cmp == 0 )
     {
         /** Cool, first in the list */
@@ -71,8 +79,8 @@ int md_volumeFindRecurse(const md_volume *d, const md_word *s,int first,int last
         return -1;
     }
     /* search for last here */
-    lastw=md_volumeGet(d,last);
-    cmp = md_wordCmp(s,lastw);
+    lastw=md_volumeGetInternal(d,last);
+    cmp = md_wordCmpInternal(s,lastw);
     if ( cmp == 0 )
     {
         /** Cool, last in the list */
@@ -91,9 +99,9 @@ int md_volumeFindRecurse(const md_volume *d, const md_word *s,int first,int last
 
     /* find the midpoint and check that */
     mid = ( last - first ) / 2 + first;
-    midw=md_volumeGet(d,mid);
+    midw=md_volumeGetInternal(d,mid);
     /* Is it before,at, or after the midpoint? */
-    cmp = md_wordCmp(s,midw);
+    cmp = md_wordCmpInternal(s,midw);
     if ( cmp == 0 )
     {
         /* Found it! */

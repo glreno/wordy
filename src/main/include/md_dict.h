@@ -44,6 +44,14 @@ typedef struct md_wordStruct
     * 0x01
     */
 } md_word;
+/** This is what is actually stored. client code always gets a md_word,
+* but the ROM contains md_wordInternal, and the accessors convert it.
+* (i.e., add a flags byte)
+*/
+typedef struct md_wordInternal
+{
+    char s[5];
+} md_wordInternal;
 
 /* Since md_wordStruct is exactly six characters,
 * any standard char[6] string can bet cast to it
@@ -53,6 +61,9 @@ typedef struct md_wordStruct
 
 /* Compare two words. Very much like strcmp. */
 signed char md_wordCmp(const md_word *a, const md_word *b);
+
+/* Compare two words. Very much like strcmp. */
+signed char md_wordCmpInternal(const md_wordInternal *a, const md_wordInternal *b);
 
 /* Copy md_word.s to a buffer. dest must point to a char[] of length 6 or more. */
 void md_wordToString(char *dest, const md_word *src);
@@ -70,7 +81,7 @@ typedef struct md_volumeStruct
 {
     unsigned int size; /* Number of words in list, so you can get this without bank-switching */
     char bank; /* ID of cartridge 8K bank that contains list */
-    const md_word *list;
+    const md_wordInternal *list;
 } md_volume;
 
 /* Size of volume. md_volumeGet(d,md_volumeSize(d)) will return null (out of range) */
@@ -78,6 +89,7 @@ typedef struct md_volumeStruct
 #define md_volumeSize(d) ((d)->size)
 
 /* Get a word.
+ * DEPRECATED used only in tests. Uses a temp buffer to return.
 * Assumes correct bank is loaded.
 * Returns null if index<0 or index>=d.size
 * Since volumes can be bank switched, the returned pointer

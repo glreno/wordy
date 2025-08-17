@@ -53,9 +53,11 @@ loop:
 ; Compare two words. Very much like strcmp.
 ; signed char md_wordCmp(const md_word *w1, const md_word *w2);
 ; w2 is in AX; w1 is on the stack. Return result in A, 0 in X
+_md_wordCmpInternal: ; flags are ignored so the compare is actually the same
 _md_wordCmp:
     .proc md_wordCmp
     .export _md_wordCmp
+    .export _md_wordCmpInternal
     ; There are a lot of returns in here. Get the params into ptr1 and ptr2
     ; and clear the stack NOW instead of at the end
     STA ptr2

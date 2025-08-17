@@ -53,8 +53,14 @@ extern char AE_16REST_16_TRAILING[]; // same, with a 32dth rest before
 /* #                  AUDIO DRIVER                         # */
 /* ######################################################### */
 
-// Mute flag. Set to 1 to shut up.
-extern char DA_QUIET;
+// Sound Effects Level flag
+// Set to 0 or 1 to disable key clicks
+//  0 = Mute
+//  1 = Music Only
+//  2 = Key Click off
+//  3 = Normal
+//  4 = Annoying
+extern unsigned char SFX_LEVEL;
 
 // Play a note.
 //
@@ -72,6 +78,7 @@ extern char DA_QUIET;
 // Voice 1 is a timer. Do NOT change audf1 from 31.
 
 void __fastcall__ da_playNote(char voice, const char envelope[]);
+void __fastcall__ da_checkAndPlayNote(unsigned char level, char voice, const char envelope[]);
 
 // Play a note, and wait for it to finish
 void __fastcall__ da_playNoteAndWait(char voice, const char envelope[]);

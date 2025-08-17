@@ -138,8 +138,8 @@ char vot_queueMessage()
         case MSG_WORD_NOT_FOUND: // 11
             POKEY_WRITE.audf2 = 193; // E3
             POKEY_WRITE.audf3 = 243; // C3
-            da_playNote(2,AE_32_SIMPLE);
-            da_playNote(3,AE_16REST_16_TRAILING);
+            da_checkAndPlayNote(1,2,AE_32_SIMPLE);
+            da_checkAndPlayNote(1,3,AE_16REST_16_TRAILING);
             strcpy(this->queue,"Word not found.");
             return 1;
         case MSG_ROWS_LEFT: // 18
@@ -153,9 +153,9 @@ char vot_queueMessage()
             POKEY_WRITE.audf2 = 64; // B4
             POKEY_WRITE.audf3 = 50; // D#5
             POKEY_WRITE.audf4 = 43; // F#5
-            da_playNote(2,tada);
-            da_playNote(3,tada);
-            da_playNote(4,tada);
+            da_checkAndPlayNote(1,2,tada);
+            da_checkAndPlayNote(1,3,tada);
+            da_checkAndPlayNote(1,4,tada);
             return (base->nextMessageId == MSG_WINNER);
         case MSG_LOSER: // 1A - you lost QORDL
             // 28 0x1c uparrow, 29 0x1d downarrow
@@ -170,9 +170,9 @@ char vot_queueMessage()
             POKEY_WRITE.audf2 = 255; // B2
             POKEY_WRITE.audf3 = 217; // D3
             POKEY_WRITE.audf4 = 172; // F#3
-            da_playNote(2,tada);
-            da_playNote(3,tada);
-            da_playNote(4,tada);
+            da_checkAndPlayNote(1,2,tada);
+            da_checkAndPlayNote(1,3,tada);
+            da_checkAndPlayNote(1,4,tada);
             return 1;
         case MSG_LOSER1: // 1B - you lost WORDL
             strcpy(this->queue,"Sorry, the answer is: ");
@@ -185,22 +185,23 @@ char vot_queueMessage()
             return 0;
         case MSG_PLAYAGAIN: // 02
         case MSG_RESTART: // 03
+            return 0;
         case MSG_LETTER_IS_GREY: // 13
             POKEY_WRITE.audf3 = 128;
-            da_playNote(3,AE_32_SIMPLE);
+            da_checkAndPlayNote(4,3,AE_32_SIMPLE);
             return 0;
         case MSG_LETTER_IS_YELLOW: // 14
             POKEY_WRITE.audf3 = 64;
-            da_playNote(3,AE_16_TRAILING);
+            da_checkAndPlayNote(2,3,AE_16_TRAILING);
             return 0;
         case MSG_LETTER_IS_GREEN: // 15
             POKEY_WRITE.audf3 = 25;
-            da_playNote(1,AE_32_ABRUPT);
-            da_playNote(3,AE_32REST_16_TRAILING);
+            da_checkAndPlayNote(2,1,AE_32_ABRUPT);
+            da_checkAndPlayNote(2,3,AE_32REST_16_TRAILING);
             return 0;
         case MSG_BAD_KEY_PRESSED: // 23
             POKEY_WRITE.audf2 = 255; // B2
-            da_playNote(2,AE_32_SIMPLE);
+            da_checkAndPlayNote(1,2,AE_32_SIMPLE);
             return 0;
         case MSG_GREEN_WORD_COUNT: // 17
             vot_clearSpotlight();

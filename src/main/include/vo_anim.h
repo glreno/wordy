@@ -52,10 +52,18 @@ typedef struct vo_anim_struct {
 
 typedef struct vo_anim_frame_node_struct {
     unsigned int next; // probably an index into a huge list of these things
-    unsigned char flag; // 1=exit allowed here
+    unsigned char flag; // 0x80=exit allowed here, 0x40=exit after countdown, 1-3 sfx limit level
+                        // sfx limit level 0 = always play (unless muted) "music only"
+                        // sfx limit level 1 = key click off
+                        // sfx limit level 2 = normal (so this is where key click and prompt clicks are)
+                        // sfx limit level 3 = annoying, make all the noise you want
     unsigned char picid; // ID of the pic to draw, maybe should be an int
     unsigned char soundid; // ID of the sound to play
 } vo_anim_frame_node;
+
+#define ANIM_FLAG_EXIT 0x80
+#define ANIM_FLAG_COUNTDOWN 0x40
+#define ANIM_FLAG_SFX_MASK 3
 
 typedef struct vo_anim_pic_struct {
     void *topPic1;  // offset 0
