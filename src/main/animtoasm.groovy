@@ -49,7 +49,7 @@ void generatePic(Map map)
     if ( "true".equals(map.exit) )
     {
         desc+=" (exit allowed)";
-        flags |= 1;
+        flags |= 128;
     }
     if ( "debug".equals(map.exit) )
     {
@@ -60,13 +60,18 @@ void generatePic(Map map)
         else
         {
             desc+=" (exit allowed)";
-            flags |= 1;
+            flags |= 128;
         }
     }
     if ( "countdown".equals(map.exit) )
     {
         desc+=" (exit after 3 loops)";
-        flags |= 2;
+        flags |= 64;
+    }
+    if ( map.sfxlevel != null )
+    {
+        int n = map.sfxlevel;
+        flags |= ( n & 3 );
     }
     if ( map.lyric != null )
     {

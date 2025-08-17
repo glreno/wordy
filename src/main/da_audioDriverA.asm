@@ -11,6 +11,7 @@
 .include "atari.inc"
 .include "include/trampoline.inc"
 .import incsp1
+.import incsp2
 .import pusha
 .import staxptr1
 .include "zeropage.inc"
@@ -44,12 +45,13 @@ _AE_SHUT_UP:
     .export  AE_SHUT_UP
 
 ; Application data
+
     .DATA
-_DA_QUIET:
- DA_QUIET:
-    .byte 0
-    .export _DA_QUIET
-    .export  DA_QUIET
+_SFX_LEVEL:
+ SFX_LEVEL:
+    .byte 3 ; Normal
+    .export _SFX_LEVEL
+    .export  SFX_LEVEL
 
 
 ;
@@ -60,9 +62,15 @@ _DA_QUIET:
     .segment "DA"
 
 ; Convenience call for da_playNote(1, AE_KEYCLICK)
+; but with an extra check of the SFX_LEVEL
 ; void __fastcall__ da_keyClick(void);
 trampoline _da_keyClick,_da_keyClick_tramp
     .proc da_keyClick_tramp
+    LDA SFX_LEVEL
+    CMP #3
+    BPL doit ; SFX_LEVEL > 2
+    RTS
+doit:
     LDA #1
     JSR pusha
     LDA #<AE_KEYCLICK
@@ -72,6 +80,26 @@ trampoline _da_keyClick,_da_keyClick_tramp
     .endproc
 
     .segment "DA"
+
+; play a note, but check the FX level first.
+; void __fastcall__ da_checkAndPlayNote(unsigned char level, char voice, const char envelope[]);
+; Params same as da_playNote except that level that is on the stack. Check it before calling,
+; and be sure to remove it when done.
+trampoline _da_checkAndPlayNote,_da_checkAndPlayNote_tramp
+    .proc da_checkAndPlayNote_tramp
+    PHA
+    LDY #1
+    LDA SFX_LEVEL
+    CMP (sp),Y
+    BPL doit ; SFX_LEVEL > level
+nope:
+    PLA
+    JMP incsp2
+doit:
+    PLA
+    JSR _da_playNote_tramp
+    JMP incsp1
+    .endproc
 
 ; Play a note.
 ; Valid voices are 1,2,3,4 (to match what the OS calls them)
@@ -92,15 +120,6 @@ trampoline _da_keyClick,_da_keyClick_tramp
 trampoline _da_playNote,_da_playNote_tramp
     .proc da_playNote_tramp
 
-    ; If muted, replace the envelope pointer with SHUTUP
-    ; Can't just return because people are waiting for the sound to finish.
-    ; But things do go a LOT faster when the sound is replaced by "shut up".
-    LDY _DA_QUIET
-    BEQ not_muted
-    LDA #<AE_SHUT_UP
-    LDX #>AE_SHUT_UP
-
-not_muted:
     ; Which voice is this?
     PHA
     LDY #0

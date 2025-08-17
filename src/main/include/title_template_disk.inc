@@ -33,6 +33,7 @@ _COPYRIGHT_NOTICE:
     .export _COPYRIGHT_NOTICE
     .asciiz copyright_short
 
+
     .segment "TITLE_PAGE"
 
 ; This is the first thing in the title page cartridge bank
@@ -40,6 +41,7 @@ _COPYRIGHT_NOTICE:
 _COPYRIGHT_NOTICE_INTERNAL_WIDE:
     scrcode title10char
 _COPYRIGHT_NOTICE_INTERNAL:
+.export _COPYRIGHT_NOTICE_INTERNAL
     scrcode copyright_noname
 
     .segment "TITLEL_PAGE"
@@ -76,7 +78,10 @@ license_screen:
     .segment "TITLE_PAGE"
     ;        01234567890123456789
     ;                            01234567890123456789
+options_screen_name:
+    .export options_screen_name
 title_screen_name:
+.export title_screen_name
     scrcode title20char ; mode 6 text, lower case for high-bits 01, green
 title_screen:
     scrcode description1 ; " a word puzzle game "
@@ -96,8 +101,8 @@ instruction_screen:
     scrcode instruction2 ; "  guess four words  "
     scrcode instruction3 ; "GREEN letters are correct.              "
     scrcode instruction4 ; "YELLOW letters are in the wrong place.  "
-    scrcode instruction5 ; "To change palette, press 1-9            "
-    scrcode instruction6 ; "To mute, guess 'PLEASE QUIET'           "
+    scrcode instruction5 ; "                                        "
+    scrcode instruction6 ; "To adjust colors, press 1-9             "
 _title_loading_message:
     scrcode instructionLoad
     ;        01234567890123456789
@@ -158,6 +163,7 @@ press_a_key_to_begin:
 
     .segment "TITLE_PAGE"
 title_display_list:
+    .export title_display_list
 ; Leading blank rows
     .byte $70,$70,$70
 ; first line (big text) and address of screen RAM

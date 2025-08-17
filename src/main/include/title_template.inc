@@ -34,6 +34,11 @@ _COPYRIGHT_NOTICE:
     .export _COPYRIGHT_NOTICE
     .asciiz copyright_short
 
+    .segment "OPTIONS_BANK"
+options_screen_name:
+    .export options_screen_name
+    scrcode title20char ; mode 6 text, lower case for high-bits 01, green
+
     .segment "TITLEPAGE"
 
 ; This is the first thing in the title page cartridge bank
@@ -129,7 +134,7 @@ title_screen:
     scrcode instruction1 ; "  nine attempts to  "
     scrcode instruction2 ; "  guess four words  "
     scrcode "To change palette, press 1-9 (0 for b/w)"
-    scrcode "To mute, guess 'PLEASE QUIET'           "
+    scrcode "                                        "
     scrcode "PRESS C FOR CREDITS " ; mode 6 text high-bits 00, orange
     scrcode "PRESS L FOR LICENSE " ; mode 6 text high-bits 00, orange
     ;        01234567890123456789
@@ -182,6 +187,7 @@ press_a_key_to_begin:
 ;
 
 title_display_list:
+    .export title_display_list
 ; Leading blank rows
     .byte $70,$70,$70
 ; first line (big text) and address of screen RAM

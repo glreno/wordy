@@ -124,14 +124,6 @@ char __cdecl__ moq_findActivePuzzle(mw *puzzles,char y)
 void __fastcall__ moq_handleCommand(char *guess,moq *this)
 {
     this->commandModeFlag=0;
-    if ( !strcmp("QUIET",guess) )
-    {
-        DA_QUIET=1;
-    }
-    else if ( !strcmp("SOUND",guess) )
-    {
-        DA_QUIET=0;
-    }
     vo_messagep( MSG_COMMAND,0,guess);
     vo_waitUntilMessageReceived();
 }

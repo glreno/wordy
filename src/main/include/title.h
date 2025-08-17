@@ -65,5 +65,12 @@ void __fastcall__ title_wait_for_key(char shown);
 // For the disk version, you can wipe out the 'LOADING...' line since it's in RAM
 void __fastcall__ title_erase_loading_msg(void);
 
+/* ######################################################### */
+/* #                OPTIONS SCREEN                         # */
+/* ######################################################### */
+
+extern unsigned char selectedDictionary;
+void __fastcall__ show_options_screen(void *screenram);
+
 #endif
 

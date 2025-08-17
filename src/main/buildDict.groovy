@@ -148,7 +148,8 @@ public class BuildDict
             out.println("    .export _words_"+name);
             for(Map.Entry<String,Integer> w : wordList)
             {
-                out.println("    .byte \""+w.getKey()+"\", "+w.getValue()+" ; "+idx);
+                out.println("    .byte \""+w.getKey()+"\" ; "+idx);
+                //out.println("    .byte \""+w.getKey()+"\", "+w.getValue()+" ; "+idx);
                 ++idx;
             }
             out.println("    .RODATA");
@@ -347,13 +348,13 @@ System.err.println("DICTD flags = "+dflagList);
         out.println("; There are "+allVolumes.size()+" volumes.");
         for(Volume v : allVolumes)
         {
-            out.println("; p="+v.getPriority()+" "+v.getName()+": "+v.size()+" words, "+v.size()*6+" bytes, bank "+v.getBank());
+            out.println("; p="+v.getPriority()+" "+v.getName()+": "+v.size()+" words, "+v.size()*5+" bytes, bank "+v.getBank());
         }
         out.println();
 
         for(int i=1;i<5;i++)
         {
-            out.println("; Bank "+i+" size: "+banks[i]+" words, "+(62+banks[i]*6)+" bytes");
+            out.println("; Bank "+i+" size: "+banks[i]+" words, "+(62+banks[i]*5)+" bytes");
         }
         out.println();
         // This .s file will be in target, hard to include stuff....
@@ -405,6 +406,7 @@ System.err.println("DICTD flags = "+dflagList);
         
         for(Map.Entry<String,List<Volume>> e: dicts)
         {
+            Set<String> donevols=new HashSet<>();
             String n = e.getKey();
             out = new GroovyPrintWriter("target/${n}.s");
             out.println("    .RODATA");
@@ -412,11 +414,18 @@ System.err.println("DICTD flags = "+dflagList);
             out.println("_"+n+":");
             out.println("    .export _"+n);
             out.println("    .word "+vl.size()+" ; number of volumes");
+            int wordcount=0;
             for(Volume v : vl)
             {
                 out.println("    .import _vol_"+v.getName());
                 out.println("    .word _vol_"+v.getName());
+                if ( !donevols.contains(v.getName()))
+                {
+                    donevols.add(v.getName());
+                    wordcount += v.size();
+                }
             }
+            out.println("; Word count: ${wordcount}");
             out.println();
             out.close();
         }

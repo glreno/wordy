@@ -16,10 +16,10 @@
 #include <conio.h>
 #include <_atarios.h>
 
-const md_word WORD[] = {
-    { "super", 6 },
-    { "supes", 8 },
-    { "today", 7 }
+const md_wordInternal WORD[] = {
+    { "super" }, //, 6 },
+    { "supes" }, //, 8 },
+    { "today" }, //, 7 }
 };
 
 const md_volume DICT1 = { 3, 0, WORD };

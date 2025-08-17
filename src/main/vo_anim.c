@@ -175,13 +175,13 @@ void voa_frameQueueAdvance()
     unsigned char flag = (*voa_animFrameQueue)[voa_qcurr].flag;
     unsigned int next;
 
-    if ( flag==2)
+    if ( flag & ANIM_FLAG_COUNTDOWN )
     {
         --animCountdown;
         if ( animCountdown==0 )
         {
             animExitTo = animCountdownDest;
-            flag=1;
+            flag|=ANIM_FLAG_EXIT;
             if (animCountdownCompleteFlag!=NULL)
             {
                 *animCountdownCompleteFlag=0;
@@ -189,7 +189,7 @@ void voa_frameQueueAdvance()
         }
     }
 
-    if ( flag==1  && animExitTo != 0xffff )
+    if ( (flag & ANIM_FLAG_EXIT)  && animExitTo != 0xffff )
     {
         next=animExitTo;
         animExitTo=0xffff;
@@ -208,12 +208,30 @@ void __fastcall__ voa_animate()
     unsigned char nextFrame;
     unsigned char nextSound;
     vo_anim_frame_node *peek;
+    unsigned char sfxflag;
     // Draw the next frame of animation, if possible
     // Peek at the animation queue, and attempt to render the next frame
     // (very likely to fail, when there is not an empty page)
     peek = voa_frameQueuePeek();
+    sfxflag = ( ( (*voa_animFrameQueue)[voa_qcurr].flag ) & ANIM_FLAG_SFX_MASK );
     nextFrame = peek->picid;
     nextSound = peek->soundid;
+    if ( SFX_LEVEL <= sfxflag )
+    {
+        // Thresholds:
+        //      sfxflag         SFX_LEVEL (set by options menu)
+        //      0 Music         1 Music Only
+        //      1 Prompts       2 Key Click off
+        //      2 Normal FX     3 Normal
+        //      3 Annoying      4 Annoying
+
+        // This frame's sfxflag is above the allowed threshold,
+        // (i.e., user set 2 to disable normal fx, but this is an annoying sound)
+        // and 2<3 so mute the sound
+        // Default is normal SFX_LEVEL=3, but the annoying sound is level 3,
+        // and 3==3 so mute the sound
+        nextSound = 0;
+    }
     if ( voa_renderFrameAndEnqueuePage(nextFrame,nextSound) )
     {
         // frame rendered successfully - advance the animation queue

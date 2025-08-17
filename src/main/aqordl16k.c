@@ -20,6 +20,7 @@
 #include "mo_qordl.h"
 #include "vo_robot.h"
 #include "dk_kbdriver.h"
+#include "md_pick.h"
 
 
 /* VIDEO DATA */
@@ -32,8 +33,6 @@ unsigned char *FONTLIST1[3], *FONTLIST2[3];
 vfm_fontmanager fontManagerTop, fontManagerBot;
 
 /* The dictionaries */
-extern md_dict DICT_HS_US;
-extern md_dict DICT_HS_UK;
 extern md_dict DICT_HA;
 
 /* Game code (these don't need to be global, really) */
@@ -41,6 +40,11 @@ mq gameModel;
 vo_robot opponentView;
 moq opponentModel;
 void *vu_letters;
+md_dict *dict;
+                 // 012345678901234567890123456
+char titleText[] = "AQordl (robot)   US/n";
+// titleText[18] should be S or K
+// titleText[20] should be e/n/h
 
 const unsigned char LASER[] = {
     0b00011000,
@@ -196,6 +200,9 @@ void initializeQordl()
     // already showed the license
     title_wait_for_key(shown);
 
+    show_options_screen(&(PAGES[1]->pm.player0));
+    dict = md_pickDictionary(&titleText[18],&titleText[20],selectedDictionary);
+
     voa_loadFirstPage(PAGES[2]);
 }
 
@@ -214,14 +221,7 @@ void pickWord()
     char buf[6];
     for(i=0;i<4;++i)
     {
-        if ( (GTIA_READ.pal & 0xE) == 0xE )
-        {
-            md_pickRandomWord(&DICT_HS_US,&w1);
-        }
-        else
-        {
-            md_pickRandomWord(&DICT_HS_UK,&w1);
-        }
+        md_pickRandomWord(dict,&w1);
         md_wordToString(buf,&w1);
         buf[5]='\0';
         mw_setSolution(buf,&(gameModel.puzzles[i]));
@@ -238,7 +238,7 @@ int main()
     for(;;)
     {
         pickWord();
-        moq_gameDriver("AQordl (robot mode)", &opponentModel);
+        moq_gameDriver(titleText, &opponentModel);
         dk_getc();
         // Need to bankswitch to where the initialize code is!
         bankswitchStartup();

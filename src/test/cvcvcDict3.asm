@@ -9,70 +9,70 @@
 .segment "CARTBANK2"
     .export _cvcvcDict3
 _cvcvcDict3:
-    .byte "LABOR", $1
-    .byte "LADEN", $1
-    .byte "LAGER", $1
-    .byte "LAMER", $1
-    .byte "LAPEL", $1
-    .byte "LASER", $1
-    .byte "LATER", $1
-    .byte "LEGAL", $1
-    .byte "LEGIT", $1
-    .byte "LEMON", $1
-    .byte "LEPER", $1
-    .byte "LEVEL", $1
-    .byte "LEVER", $1
-    .byte "LIBEL", $1
-    .byte "LICIT", $1
-    .byte "LIFER", $1
-    .byte "LIKEN", $1
-    .byte "LIKER", $1
-    .byte "LILAC", $1
-    .byte "LIMIT", $1
-    .byte "LINEN", $1
-    .byte "LINER", $1
-    .byte "LITER", $1
-    .byte "LIVEN", $1
-    .byte "LIVER", $1
-    .byte "LOCAL", $1
-    .byte "LOGIC", $1
-    .byte "LOGIN", $1
-    .byte "LOGON", $1
-    .byte "LONER", $1
-    .byte "LOSER", $1
-    .byte "LOVER", $1
-    .byte "MADAM", $1
-    .byte "MAGIC", $1
-    .byte "MAKER", $1
-    .byte "MANIC", $1
-    .byte "MANOR", $1
-    .byte "MASON", $1
-    .byte "MAVEN", $1
-    .byte "MAVIN", $1
-    .byte "MEDAL", $1
-    .byte "MEDIC", $1
-    .byte "MELON", $1
-    .byte "MERIT", $1
-    .byte "METAL", $1
-    .byte "METER", $1
-    .byte "MILER", $1
-    .byte "MIMIC", $1
-    .byte "MINER", $1
-    .byte "MINIM", $1
-    .byte "MINOR", $1
-    .byte "MISER", $1
-    .byte "MITER", $1
-    .byte "MODAL", $1
-    .byte "MODEL", $1
-    .byte "MODEM", $1
-    .byte "MOLAR", $1
-    .byte "MORAL", $1
-    .byte "MORON", $1
-    .byte "MOTEL", $1
-    .byte "MOTIF", $1
-    .byte "MOTOR", $1
-    .byte "MOVER", $1
-    .byte "NABOB", $1
-    .byte "NADIR", $1
-    .byte "NASAL", $1
-    .byte "NATAL", $5
+    .byte "LABOR"
+    .byte "LADEN"
+    .byte "LAGER"
+    .byte "LAMER"
+    .byte "LAPEL"
+    .byte "LASER"
+    .byte "LATER"
+    .byte "LEGAL"
+    .byte "LEGIT"
+    .byte "LEMON"
+    .byte "LEPER"
+    .byte "LEVEL"
+    .byte "LEVER"
+    .byte "LIBEL"
+    .byte "LICIT"
+    .byte "LIFER"
+    .byte "LIKEN"
+    .byte "LIKER"
+    .byte "LILAC"
+    .byte "LIMIT"
+    .byte "LINEN"
+    .byte "LINER"
+    .byte "LITER"
+    .byte "LIVEN"
+    .byte "LIVER"
+    .byte "LOCAL"
+    .byte "LOGIC"
+    .byte "LOGIN"
+    .byte "LOGON"
+    .byte "LONER"
+    .byte "LOSER"
+    .byte "LOVER"
+    .byte "MADAM"
+    .byte "MAGIC"
+    .byte "MAKER"
+    .byte "MANIC"
+    .byte "MANOR"
+    .byte "MASON"
+    .byte "MAVEN"
+    .byte "MAVIN"
+    .byte "MEDAL"
+    .byte "MEDIC"
+    .byte "MELON"
+    .byte "MERIT"
+    .byte "METAL"
+    .byte "METER"
+    .byte "MILER"
+    .byte "MIMIC"
+    .byte "MINER"
+    .byte "MINIM"
+    .byte "MINOR"
+    .byte "MISER"
+    .byte "MITER"
+    .byte "MODAL"
+    .byte "MODEL"
+    .byte "MODEM"
+    .byte "MOLAR"
+    .byte "MORAL"
+    .byte "MORON"
+    .byte "MOTEL"
+    .byte "MOTIF"
+    .byte "MOTOR"
+    .byte "MOVER"
+    .byte "NABOB"
+    .byte "NADIR"
+    .byte "NASAL"
+    .byte "NATAL"
