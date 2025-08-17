@@ -46,8 +46,9 @@ The order of the words does not matter. If you get stuck on one word, work on a 
   - Copy the aqordl_robot_1.02.car and aqordl_text_1.02.car file on to a thumb drive, and plug it into one of the USB ports.
   - Select "Media Access" from the carousel
   - Select the aqordl_robot_1.02 or aqordl_text_1.02 image
+  - Press the Menu button to change the game settings
+  - Any settings will work, but the emulator detects PAL instead of NTSC if there is no settings. So just open the settings, select "400" and close it.
   - Press Home to start the game
-  - It is not necessary to modify any emulator settings
 
 - Emulators
   - Pretty much any settings should work for the .car images
@@ -71,11 +72,11 @@ The order of the words does not matter. If you get stuck on one word, work on a 
   - PAL systems get the UK dictionary.
 
 - There are four levels of audio
-  0. Mute all
-  1. Key Click Off
+  - Mute all
+  - Key Click Off
       - Disables the Atari key click
-  2. Normal
-  3. Annoying
+  - Normal
+  - Annoying
       - more sounds from the robot when checking his wrist computer
 
 - Since you don't like my colours, press any number key to pick a different palette.
