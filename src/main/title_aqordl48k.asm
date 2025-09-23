@@ -27,7 +27,7 @@
     .define description4 "                 with no dancing robots "
     ; Two lines of 20-char text for press C/L
     .define description5    "                    "
-    .define description6    "    800 DISK VERSION"
+    .define description6    "    48K DISK VERSION"
 ;                            01234567890123456789
     .define descriptionLoad "NOT LOADING ROBOT   "
     .define      creditLoad "LOADING DICTIONARY. "

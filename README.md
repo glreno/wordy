@@ -1,6 +1,6 @@
-![Image: aqordl screenshot](aqordl_screenshot1.png)
+![Image: AQordl screenshot](aqordl_screenshot1.png)
 
-# Aqordl and Aqo-lite
+# AQordl and AQolite
 
 ## What is it?
 
@@ -26,7 +26,7 @@ The order of the words does not matter. If you get stuck on one word, work on a 
 
 ## System Requirements
 
-### Aqordl (robot version)
+### AQordl (robot version)
 
 - The disk version requires a 130XE or an 800XL with a 130XE-compatible memory expansion.
   - It uses the bank-switched memory to hold the dictionary and animation data.
@@ -38,7 +38,7 @@ The order of the words does not matter. If you get stuck on one word, work on a 
   - This may or may not work on a real 400/800 system; I'm not sure the XEGS cartridge hardware is compatible
   - It works in emulation though!
 
-### Aqo-lite (text version)
+### AQolite (text version)
 
 - The disk version requires 48K RAM
 
@@ -58,13 +58,13 @@ The order of the words does not matter. If you get stuck on one word, work on a 
 
 - Emulators
   - Pretty much any settings should work for the .car images
-  - The .xex and .atr images require 128K (Aqordl) or 48K (Aqo-lite)
+  - The .xex and .atr images require 128K (AQordl) or 48K (AQolite)
 
 - A **Real** Atari
   - Copy the aqordl_robot_1.04.atr or aqordl_text_1.04.atr image to a blank single-density floppy. The image includes myPicoDos, and will boot directly into the game
   - Or you can load the aqordl_robot_1.04.xex or aqordl_text_1.04.xex file using your favourite method of loading .exe files
   - Either way, it's going to take a long time to load
-  - Aqordl does use all 128K, so do not use with a RAM disk
+  - AQordl does use all 128K, so do not use with a RAM disk
 
 - A real cartridge
   - I have no idea how to get this .car image onto a real physical cartridge.
@@ -168,7 +168,7 @@ The order of the words does not matter. If you get stuck on one word, work on a 
     "Wordl" and "Quordle" are copyrighted, of course. The "A" is for Atari.
 
     The robot's name is "Aqord". Although I did consider "Acuity", but that's just not how normal people pronounce "AQ-IT".
-    And, of course, Aqord has a little helper called Aqo-lite.
+    And, of course, Aqord has a little helper called Aqolite.
 
 ***Copyright &copy; 2025 Gerald Reno, Jr  All Rights Reserved***
 

@@ -69,7 +69,7 @@ _vfm_getFontBase:
 
     .segment "ONCE"
 
-; aqordl only allocates fonts once; some of the 8K test carts
+; AQordl only allocates fonts once; some of the 8K test carts
 ; re-allocate them at runtime. If a real application needs to
 ; do that, then vfm_allocateFont needs to move to segment DS.
 

@@ -10,10 +10,10 @@
 ; Title definitions
 ;
     ; 7 char string, used for copyright messages in ROM
-    .define title7char  "Aqordl "
+    .define title7char  "AQordl "
 
     ; 10 char string, used for copyright messages in Gr.0 text
-    .define title10char "   Aqordl "
+    .define title10char "   AQordl "
 
     ; 20 char string, used for title messages in Gr.2 text
     ; so do not mix case!

@@ -8,7 +8,7 @@
 
     .define aqordl_version "v1.04"
     .define year "2025"
-    .define copyright_dict .concat("Aqordl Dictionary ",aqordl_version," Copyright (c)",year," Gerald Reno, Jr. ")
+    .define copyright_dict .concat("AQordl Dictionary ",aqordl_version," Copyright (c)",year," Gerald Reno, Jr. ")
 
 
 ; After updating this file, also update:
