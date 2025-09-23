@@ -15,8 +15,8 @@
 
 all: tests disks carts
 tests: md_volumeTests.rom md_dictTests.rom md_bsTests.rom md_xebsTests.xex md_justDict.xex md_wordCount.rom md_scanTests.rom md_xescanTests.xex md_usUkTests.rom md_randTests.rom randy.rom daMetronome.rom dsTests.rom dkTests.rom fontTests.rom fontTestSmall.rom fontTestTiny.rom fontMgrTest.rom vu_letterTest.rom titleTest.rom mw_scoreTest.rom palTest.xex
-carts: awordl8k.rom aqordl8k.rom aqordl16k.rom
-disks: aqordl128k.xex aqordl48k.xex
+carts: awordl_cart.rom aqolite_cart.rom aqordl_cart.rom
+disks: aqordl_disk.xex aqolite_disk.xex
 maintests: useless1.rom useless2.xex useless3.rom useless4.rom useless5.xex xegs32test.rom xegs64test.rom zlibTest.rom
 
 # Location of cc65 6502 cross-compiler
@@ -125,14 +125,14 @@ $(tdir)/titleTest.o: titleTest.c title.h bankswitch.h
 $(tdir)/bankswitch.o: bankswitch.asm
 $(tdir)/noBankswitch.o: noBankswitch.asm
 $(tdir)/xeBankswitch.o: xeBankswitch.asm
-$(tdir)/title_awordl8k.o: title_awordl8k.asm title_template.inc title.h bankswitch.h version.inc
-$(tdir)/title_aqordl8k.o: title_aqordl8k.asm title_template.inc title.h bankswitch.h version.inc
-$(tdir)/title_aqordl48k.o: title_aqordl48k.asm title_template.inc title.h bankswitch.h version.inc
-$(tdir)/title_aqordl128k.o: title_aqordl128k.asm title_template_disk.inc title.h bankswitch.h version.inc
-$(bindir)/titleTest.rom: titleTest.o title_awordl8k.o bankswitch.o
+$(tdir)/title_awordl_cart.o: title_awordl_cart.asm title_template.inc title.h bankswitch.h version.inc
+$(tdir)/title_aqolite_cart.o: title_aqolite_cart.asm title_template.inc title.h bankswitch.h version.inc
+$(tdir)/title_aqolite_disk.o: title_aqolite_disk.asm title_template.inc title.h bankswitch.h version.inc
+$(tdir)/title_aqordl_disk.o: title_aqordl_disk.asm title_template_disk.inc title.h bankswitch.h version.inc
+$(bindir)/titleTest.rom: titleTest.o title_awordl_cart.o bankswitch.o
 $(tdir)/copydata.o: copydata.asm
 $(tdir)/staxptr1.o: staxptr1.asm
-$(tdir)/title_aqordl16k.o: title_aqordl16k.asm title_template.inc title.h bankswitch.h version.inc
+$(tdir)/title_aqordl_cart.o: title_aqordl_cart.asm title_template.inc title.h bankswitch.h version.inc
 $(tdir)/options.o: options.asm
 
 # Dictionary Model
@@ -238,22 +238,22 @@ $(tdir)/vo_text.o: vo_text.c vo_text.h vo_base.h da_audioDriver.h
 
 # Wordl only, 8K RAM version
 $(tdir)/mo_wordl.o: mo_wordl.c mo_wordl.h mw_puz.h mw_puz.h vw_tiny.h vw_base.h vfm_fontmanager.h ds_screendriver.h da_audioDriver.h dk_kbdriver.h aqordlFont.h title.h bankswitch.h vo_base.h vu_letters.h
-$(tdir)/awordl8k.o: awordl8k.c mo_wordl.h mw_puz.h vw_small.h vw_base.h vfm_fontmanager.h ds_screendriver.h awordlFont.h title.h bankswitch.h vo_text.h vo_base.h
-$(bindir)/awordl8k.rom: awordl8k.cfg awordl8k.o mo_wordl.o mw_puz.o mw_puzA.o vw_small.o vw_baseA.o vfm_fontmanager.o vfm_fontmanagerA.o ds_screendriverA.o ds_screendriverI.o ds_screendriver.o da_audioDriverI.o da_audioDriverA.o dk_kbdriver.o title_awordl8k.o bankswitch.o md_dict.o yield.o vo_base.o vo_textA.o vo_text.o vu_letters.o md_volume.o md_volA.o md_wordA.o aqordlDict.o interactFont.o awordlFont.o staxptr1.o -ldict
+$(tdir)/awordl_cart.o: awordl_cart.c mo_wordl.h mw_puz.h vw_small.h vw_base.h vfm_fontmanager.h ds_screendriver.h awordlFont.h title.h bankswitch.h vo_text.h vo_base.h
+$(bindir)/awordl_cart.rom: awordl_cart.cfg awordl_cart.o mo_wordl.o mw_puz.o mw_puzA.o vw_small.o vw_baseA.o vfm_fontmanager.o vfm_fontmanagerA.o ds_screendriverA.o ds_screendriverI.o ds_screendriver.o da_audioDriverI.o da_audioDriverA.o dk_kbdriver.o title_awordl_cart.o bankswitch.o md_dict.o yield.o vo_base.o vo_textA.o vo_text.o vu_letters.o md_volume.o md_volA.o md_wordA.o aqordlDict.o interactFont.o awordlFont.o staxptr1.o -ldict
 
 # Qordl, 8K RAM cart version
 $(tdir)/mo_qordlA.o: mo_qordlA.asm
 $(tdir)/vo_a400.o: vo_a400.c vo_a400.h a400_pic.h
 $(tdir)/vo_a400A.o: vo_a400A.asm
 $(tdir)/mo_qordl.o: mo_qordl.c mo_qordl.h mq_puz.h mw_puz.h vw_tiny.h vw_base.h vfm_fontmanager.h ds_screendriver.h da_audioDriver.h dk_kbdriver.h aqordlFont.h title.h bankswitch.h vo_text.h vo_base.h vu_letters.h
-$(tdir)/aqordl8k.o: aqordl8k.c mo_qordl.h mq_puz.h mw_puz.h vw_tiny.h vw_base.h vfm_fontmanager.h ds_screendriver.h dk_kbdriver.h aqordlFont.h title.h bankswitch.h vo_text.h vo_base.h vo_a400.h
-$(bindir)/aqordl8k.rom: aqordl8k.cfg aqordl8k.o md_pickA.o mo_qordlA.o mo_qordl.o mq_puzA.o mq_puz.o mw_puz.o mw_puzA.o vw_tinyA.o vw_baseA.o vfm_fontmanager.o vfm_fontmanagerA.o ds_screendriverA.o ds_screendriverI.o ds_screendriver.o da_audioDriverI.o da_audioDriverA.o dk_kbdriver.o title_aqordl8k.o bankswitch.o md_dict.o yield.o vo_base.o vo_textA.o vo_text.o vo_a400.o vo_a400A.o vu_letters.o md_volume.o md_volA.o md_wordA.o aqordlDict.o aqordlFont.o a400_pic.o interactFont.o copydata.o staxptr1.o options.o -ldict
+$(tdir)/aqolite_cart.o: aqolite_cart.c mo_qordl.h mq_puz.h mw_puz.h vw_tiny.h vw_base.h vfm_fontmanager.h ds_screendriver.h dk_kbdriver.h aqordlFont.h title.h bankswitch.h vo_text.h vo_base.h vo_a400.h
+$(bindir)/aqolite_cart.rom: aqolite_cart.cfg aqolite_cart.o md_pickA.o mo_qordlA.o mo_qordl.o mq_puzA.o mq_puz.o mw_puz.o mw_puzA.o vw_tinyA.o vw_baseA.o vfm_fontmanager.o vfm_fontmanagerA.o ds_screendriverA.o ds_screendriverI.o ds_screendriver.o da_audioDriverI.o da_audioDriverA.o dk_kbdriver.o title_aqolite_cart.o bankswitch.o md_dict.o yield.o vo_base.o vo_textA.o vo_text.o vo_a400.o vo_a400A.o vu_letters.o md_volume.o md_volA.o md_wordA.o aqordlDict.o aqordlFont.o a400_pic.o interactFont.o copydata.o staxptr1.o options.o -ldict
 
 # Qordl, 48K RAM disk version
 $(tdir)/memCheck48k.o: memCheck48k.asm
 $(tdir)/warmstart.o: warmstart.asm
-$(tdir)/aqordl48k.o: aqordl48k.c mo_qordl.h mq_puz.h mw_puz.h vw_tiny.h vw_base.h vfm_fontmanager.h ds_screendriver.h dk_kbdriver.h aqordlFont.h title.h bankswitch.h vo_text.h vo_base.h vo_a400.h
-$(bindir)/aqordl48k.xex: aqordl48k.cfg aqordl48k.o md_pickA.o mo_qordlA.o mo_qordl.o mq_puzA.o mq_puz.o mw_puz.o mw_puzA.o vw_tinyA.o vw_baseA.o vfm_fontmanager.o vfm_fontmanagerA.o ds_screendriverA.o ds_screendriverI.o ds_screendriver.o da_audioDriverI.o da_audioDriverA.o dk_kbdriver.o title_aqordl48k.o noBankswitch.o md_dict.o yield.o vo_base.o vo_textA.o vo_text.o vo_a400.o vo_a400A.o vu_letters.o md_volume.o md_volA.o md_wordA.o aqordlDict.o aqordlFont.o a400_pic.o interactFont.o staxptr1.o xlBasicDisable.o memCheck48k.o warmstart.o options.o -ldict -lda_envelopes
+$(tdir)/aqolite_disk.o: aqolite_disk.c mo_qordl.h mq_puz.h mw_puz.h vw_tiny.h vw_base.h vfm_fontmanager.h ds_screendriver.h dk_kbdriver.h aqordlFont.h title.h bankswitch.h vo_text.h vo_base.h vo_a400.h
+$(bindir)/aqolite_disk.xex: aqolite_disk.cfg aqolite_disk.o md_pickA.o mo_qordlA.o mo_qordl.o mq_puzA.o mq_puz.o mw_puz.o mw_puzA.o vw_tinyA.o vw_baseA.o vfm_fontmanager.o vfm_fontmanagerA.o ds_screendriverA.o ds_screendriverI.o ds_screendriver.o da_audioDriverI.o da_audioDriverA.o dk_kbdriver.o title_aqolite_disk.o noBankswitch.o md_dict.o yield.o vo_base.o vo_textA.o vo_text.o vo_a400.o vo_a400A.o vu_letters.o md_volume.o md_volA.o md_wordA.o aqordlDict.o aqordlFont.o a400_pic.o interactFont.o staxptr1.o xlBasicDisable.o memCheck48k.o warmstart.o options.o -ldict -lda_envelopes
 
 # Robot opponent view
 $(tdir)/vo_anim.o: vo_anim.c ds_screendriver.h vo_robot.h vo_anim.h vo_base.h da_audioDriver.h
@@ -294,14 +294,14 @@ $(tdir)/robot0_cueball.inc: robot0_cueball.asm cueballmac.inc
 &    groovy src/main/cueballtoinc.groovy $^ > $(tdir)/robot0_cueball.inc
 
 # Qordl, 16K RAM cart version
-$(tdir)/aqordl16k.o: aqordl16k.c mo_qordl.h mq_puz.h mw_puz.h vw_tiny.h vw_base.h vfm_fontmanager.h ds_screendriver.h dk_kbdriver.h aqordlFont.h title.h bankswitch.h vo_robot.h vo_anim.h vo_base.h
-$(bindir)/aqordl16k.rom: aqordl16k.cfg aqordl16k.o md_pickA.o mo_qordlA.o mo_qordl.o mq_puzA.o mq_puz.o mw_puz.o mw_puzA.o vw_tinyA.o vw_baseA.o vfm_fontmanager.o vfm_fontmanagerA.o ds_screendriverA.o ds_copyPic.o ds_screendriverI.o ds_screendriver.o da_audioDriverI.o da_audioDriverA.o dk_kbdriver.o title_aqordl16k.o bankswitch.o md_dict.o yield.o vo_base.o vo_anim.o vo_animA.o vo_robotA.o vo_robot.o vu_letters.o md_volume.o md_volA.o md_wordA.o aqordlDict.o aqordlFont.o interactFont.o copydata.o robot0_pic.o robot0_frame.o robot0_anim.o robot0_envelopes.o robot0_cueball.o staxptr1.o options.o -ldict
+$(tdir)/aqordl_cart.o: aqordl_cart.c mo_qordl.h mq_puz.h mw_puz.h vw_tiny.h vw_base.h vfm_fontmanager.h ds_screendriver.h dk_kbdriver.h aqordlFont.h title.h bankswitch.h vo_robot.h vo_anim.h vo_base.h
+$(bindir)/aqordl_cart.rom: aqordl_cart.cfg aqordl_cart.o md_pickA.o mo_qordlA.o mo_qordl.o mq_puzA.o mq_puz.o mw_puz.o mw_puzA.o vw_tinyA.o vw_baseA.o vfm_fontmanager.o vfm_fontmanagerA.o ds_screendriverA.o ds_copyPic.o ds_screendriverI.o ds_screendriver.o da_audioDriverI.o da_audioDriverA.o dk_kbdriver.o title_aqordl_cart.o bankswitch.o md_dict.o yield.o vo_base.o vo_anim.o vo_animA.o vo_robotA.o vo_robot.o vu_letters.o md_volume.o md_volA.o md_wordA.o aqordlDict.o aqordlFont.o interactFont.o copydata.o robot0_pic.o robot0_frame.o robot0_anim.o robot0_envelopes.o robot0_cueball.o staxptr1.o options.o -ldict
 
 # Qordl, 128K RAM disk version
 $(tdir)/xlBasicDisable.o: xlBasicDisable.asm
 $(tdir)/xeCheck.o: xeCheck.asm
-$(tdir)/aqordl128k.o: aqordl128k.c mo_qordl.h mq_puz.h mw_puz.h vw_tiny.h vw_base.h vfm_fontmanager.h ds_screendriver.h dk_kbdriver.h aqordlFont.h title.h bankswitch.h vo_robot.h vo_anim.h vo_base.h
-$(bindir)/aqordl128k.xex: aqordl128k.cfg aqordl128k.o md_pickA.o mo_qordlA.o mo_qordl.o mq_puzA.o mq_puz.o mw_puz.o mw_puzA.o vw_tinyA.o vw_baseA.o vfm_fontmanager.o vfm_fontmanagerA.o ds_screendriverA.o ds_copyPic.o ds_screendriverI.o ds_screendriver.o da_audioDriverI.o da_audioDriverA.o dk_kbdriver.o title_aqordl128k.o xeBankswitch.o md_dict.o yield.o vo_base.o vo_anim.o vo_animA.o vo_robotA.o vo_robot.o vu_letters.o md_volume.o md_volA.o md_wordA.o aqordlDict.o aqordlFont.o interactFont.o robot0_pic.o robot0_frame.o robot0_anim.o robot0_envelopes.o robot0_cueball.o staxptr1.o xlBasicDisable.o options.o xeCheck.o -ldict -lda_envelopes
+$(tdir)/aqordl_disk.o: aqordl_disk.c mo_qordl.h mq_puz.h mw_puz.h vw_tiny.h vw_base.h vfm_fontmanager.h ds_screendriver.h dk_kbdriver.h aqordlFont.h title.h bankswitch.h vo_robot.h vo_anim.h vo_base.h
+$(bindir)/aqordl_disk.xex: aqordl_disk.cfg aqordl_disk.o md_pickA.o mo_qordlA.o mo_qordl.o mq_puzA.o mq_puz.o mw_puz.o mw_puzA.o vw_tinyA.o vw_baseA.o vfm_fontmanager.o vfm_fontmanagerA.o ds_screendriverA.o ds_copyPic.o ds_screendriverI.o ds_screendriver.o da_audioDriverI.o da_audioDriverA.o dk_kbdriver.o title_aqordl_disk.o xeBankswitch.o md_dict.o yield.o vo_base.o vo_anim.o vo_animA.o vo_robotA.o vo_robot.o vu_letters.o md_volume.o md_volA.o md_wordA.o aqordlDict.o aqordlFont.o interactFont.o robot0_pic.o robot0_frame.o robot0_anim.o robot0_envelopes.o robot0_cueball.o staxptr1.o xlBasicDisable.o options.o xeCheck.o -ldict -lda_envelopes
 
 # Dictionaries
 
