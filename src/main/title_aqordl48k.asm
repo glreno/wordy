@@ -10,26 +10,30 @@
 ; Title definitions
 ;
     ; 7 char string, used for copyright messages in ROM
-    .define title7char  "Aqordl "
+    .define title7char  "AQolite"
 
     ; 10 char string, used for copyright messages in Gr.0 text
-    .define title10char "   Aqordl "
+    .define title10char "   AQolite"
 
     ; 20 char string, used for title messages in Gr.2 text
     ; so do not mix case!
-    .define title20char  "       aqordl       "
+    .define title20char "aqolite - text mode "
 
     ; Two lines of 20-char text for game description
     .define description1 " a word puzzle game "
     .define description2 "                    "
     ; Two lines of 40-char text for sub description
-    .define description3 "                                        "
-    .define description4 "      with a very small dictionary      "
-    .define description5 "                                        "
-    .define description6 "       48K Disk version - Text Only Mode"
-    .define descriptionLoad "LOADING GAME        "
+    .define description3 " A smaller AQordl                       "
+    .define description4 "                 with no dancing robots "
+    ; Two lines of 20-char text for press C/L
+    .define description5    "                    "
+    .define description6    "    800 DISK VERSION"
+;                            01234567890123456789
+    .define descriptionLoad "NOT LOADING ROBOT   "
     .define      creditLoad "LOADING DICTIONARY. "
-    .define     licenseLoad "  LOADING GAME...       "
+    .define     licenseLoad "  LOADING DICTIONARY..  "
+
+
 
     ; Two lines of 20-char text for game instructions
     .define instruction1 "  nine attempts to  "
@@ -39,9 +43,11 @@
 ;                                             01234567890123456789
     .define instruction3 "GREEN letters are correct.              "
     .define instruction4 "YELLOW letters are in the wrong place.  "
-    .define instruction5 "To change palette, press 1-9 (0 for b/w)"
-    .define instruction6 "To mute, guess 'PLEASE QUIET'           "
-    .define instructionLoad "STARTING GAME...    "
+    ; Two lines of 20-char text for press C/L
+    .define instruction5 "PRESS C FOR CREDITS "
+    .define instruction6 "PRESS L FOR LICENSE "
+    .define instructionLoad "LOADING GAME...     "
+
 ;
 ; Title screen template package
 ;
@@ -53,12 +59,18 @@
 ; The rule is that you need to know where
 ; the FIRST and LAST segments are in the chunk.
 ; since the header is start and end ADDRESS.
+; There's defined symbols for the memory chunk,
+; UNLESS there is BSS in there, which doesn't get written to disk.
+; Also note that the loader basically follows the order
+; that the segments are in the .cfg file, but always
+; loads the chunk in the order RO - RW - BSS
+
     INITAD = $02E2
 
     .segment "TITLE_HDR"
-    .import __TITLE_PAGE_LOAD__,__TITLE_PAGE_SIZE__
-    .word __TITLE_PAGE_LOAD__
-    .word __TITLE_PAGE_LOAD__+__TITLE_PAGE_SIZE__-1
+    .import __TITLE_START__,__TITLE_LAST__
+    .word __TITLE_START__
+    .word __TITLE_LAST__ -1
 
     .segment "TITLE_TRL"
     .word INITAD
@@ -66,9 +78,9 @@
     .word _title_show_title_screen
 
     .segment "TITLEC_HDR"
-    .import __TITLEC_PAGE_LOAD__,__TITLEC_PAGE_SIZE__
-    .word __TITLEC_PAGE_LOAD__
-    .word __TITLEC_PAGE_LOAD__+__TITLEC_PAGE_SIZE__-1
+    .import __TITLECRED_START__,__TITLECRED_LAST__
+    .word __TITLECRED_START__
+    .word __TITLECRED_LAST__ -1
 
     .segment "TITLEC_TRL"
     .word INITAD
@@ -76,41 +88,43 @@
     .word _title_show_credits_screen
 
     .segment "TITLEI_HDR"
-    .import __TITLEI_PAGE_LOAD__,__TITLEI_PAGE_SIZE__
-    .word __TITLEI_PAGE_LOAD__
-    .word __TITLEI_PAGE_LOAD__+__TITLEI_PAGE_SIZE__-1
+    .import __TITLEINST_START__,__TITLEINST_LAST__
+    .word __TITLEINST_START__
+    .word __TITLEINST_LAST__ -1
 
-;   .segment "TITLEI_TRL"
-;   .word INITAD
-;   .word INITAD+1
-;   .word _title_show_instruction_screen
-
-    .segment "BIGHDR"
-    .import __CODE_LOAD__
-    .import __COPYRIGHT_ROM_LOAD__,__COPYRIGHT_ROM_SIZE__
-    .word __CODE_LOAD__
-    .word __COPYRIGHT_ROM_LOAD__+__COPYRIGHT_ROM_SIZE__-1
+    .segment "TITLEI_TRL"
+    .word INITAD
+    .word INITAD+1
+    .word _title_show_instruction_screen
 
     .segment "TITLEL_HDR"
-    .import __TITLEL_PAGE_LOAD__,__TITLEL_PAGE_SIZE__
-    .word __TITLEL_PAGE_LOAD__
-    .word __TITLEL_PAGE_LOAD__+__TITLEL_PAGE_SIZE__-1
+    .import __TITLELIC_START__,__TITLELIC_LAST__
+    .word __TITLELIC_START__
+    .word __TITLELIC_LAST__ -1
 
     .segment "TITLEL_TRL"
     .word INITAD
     .word INITAD+1
     .word _title_show_license_screen
 
-    .segment "DICTHDR"
-    .import __DICT_BANK_1_LOAD__
-    .import __DICT_BANK_4_LOAD__,__DICT_BANK_4_SIZE__
-    .word __DICT_BANK_1_LOAD__
-    .word __DICT_BANK_4_LOAD__+__DICT_BANK_4_SIZE__-1
+    .segment "BIG1HDR"
+    .import __BIG1_START__,__BIG1_LAST__
+    .word __BIG1_START__
+    .word __BIG1_LAST__ -1
 
-    .segment "RESTHDR"
-    .import __TRAMPOLINES_LOAD__
-    .import __COPYRIGHT_LOAD__,__COPYRIGHT_SIZE__
-    .word __TRAMPOLINES_LOAD__
-    .word __COPYRIGHT_LOAD__+__COPYRIGHT_SIZE__-1
+    .segment "BIG2HDR"
+    .import __BIG2_START__,__BIG2_LAST__
+    .word __BIG2_START__
+    .word __BIG2_LAST__ -1
+
+    .segment "DICT0_BANK_HDR"
+    .import __DICT0_START__,__DICT0_LAST__
+    .word __DICT0_START__
+    .word __DICT0_LAST__ -1
+
+    .segment "DICT1_BANK_HDR"
+    .import __DICT1_START__,__DICT1_LAST__
+    .word __DICT1_START__
+    .word __DICT1_LAST__ -1
 
 

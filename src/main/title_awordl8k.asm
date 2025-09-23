@@ -22,6 +22,9 @@
     ; Two lines of 20-char text for game instructions
     .define instruction1 "  six attempts to   "
     .define instruction2 "  guess four words  "
+    ; Two lines of 40-char text for sub description
+    .define instruction3 "GREEN letters are correct.              "
+    .define instruction4 "YELLOW letters are in the wrong place.  "
 
 
 ;

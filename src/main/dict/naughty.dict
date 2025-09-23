@@ -8,10 +8,7 @@
 
 @PRIORITY 7
 @DICT DICT_HA
-@DICT DICT_SA
-@DICT DICT_SS,x2
-@DICT DICT_SS_US,x2
-@DICT DICT_SS_UK,x2
+@DICT DICT_TS
 arses,np
 asses,np
 balls,np
@@ -35,6 +32,7 @@ craps,vc
 damns,vc
 dicks,np,vc
 dicky,n
+dongs,np
 dykes,np
 fagot,n ; this spelling really IS bundle of stick
 fanny,n

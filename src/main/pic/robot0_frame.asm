@@ -169,60 +169,60 @@ _voa_piclist:
 
 ; frame vor_frame_left_laser0
 ; left laser, green or yellow start, sound(4 or 5)
-    .word _robot0_lefty_head_pic, _robot0_main_shoulders_pic, _robot0_main_knees_pic, _robot0_main_toes_pic, $8000
+    .word _robot0_lefty_head_pic, _robot0_wrist1_shoulders_pic, _robot0_wrist1_knees_pic, _robot0_main_toes_pic, $8000
 
 ; frame vor_frame_left_laser10 ; (10/60, 0x0A)
-    .word _robot0_lefty_head_pic, _robot0_main_shoulders_pic, _robot0_main_knees_pic, _robot0_main_toes_pic, $8A00
+    .word _robot0_lefty_head_pic, _robot0_wrist1_shoulders_pic, _robot0_wrist1_knees_pic, _robot0_main_toes_pic, $8A00
 ; frame vor_frame_left_laser12 ; (12/60, 0x0C)
-    .word _robot0_lefty_head_pic, _robot0_main_shoulders_pic, _robot0_main_knees_pic, _robot0_main_toes_pic, $8C00
+    .word _robot0_lefty_head_pic, _robot0_wrist1_shoulders_pic, _robot0_wrist1_knees_pic, _robot0_main_toes_pic, $8C00
 ; frame vor_frame_left_laser15 ; (15/60, 0x0F)
-    .word _robot0_lefty_head_pic, _robot0_main_shoulders_pic, _robot0_main_knees_pic, _robot0_main_toes_pic, $8F00
+    .word _robot0_lefty_head_pic, _robot0_wrist1_shoulders_pic, _robot0_wrist1_knees_pic, _robot0_main_toes_pic, $8F00
 ; frame vor_frame_left_laser20 ; (20/60, 0x14)
-    .word _robot0_lefty_head_pic, _robot0_main_shoulders_pic, _robot0_main_knees_pic, _robot0_main_toes_pic, $9400
+    .word _robot0_lefty_head_pic, _robot0_wrist1_shoulders_pic, _robot0_wrist1_knees_pic, _robot0_main_toes_pic, $9400
 ; frame vor_frame_left_laser24 ; (24/60, 0x18)
-    .word _robot0_lefty_head_pic, _robot0_main_shoulders_pic, _robot0_main_knees_pic, _robot0_main_toes_pic, $9800
+    .word _robot0_lefty_head_pic, _robot0_wrist1_shoulders_pic, _robot0_wrist1_knees_pic, _robot0_main_toes_pic, $9800
 ; frame vor_frame_left_laser30 ; (30/60, 0x1E)
-    .word _robot0_lefty_head_pic, _robot0_main_shoulders_pic, _robot0_main_knees_pic, _robot0_main_toes_pic, $9E00
+    .word _robot0_lefty_head_pic, _robot0_wrist1_shoulders_pic, _robot0_wrist1_knees_pic, _robot0_main_toes_pic, $9E00
 ; frame vor_frame_left_laser36 ; (36/60, 0x24)
-    .word _robot0_lefty_head_pic, _robot0_main_shoulders_pic, _robot0_main_knees_pic, _robot0_main_toes_pic, $A400
+    .word _robot0_lefty_head_pic, _robot0_wrist1_shoulders_pic, _robot0_wrist1_knees_pic, _robot0_main_toes_pic, $A400
 ; frame vor_frame_left_laser40 ; (40/60, 0x28)
-    .word _robot0_lefty_head_pic, _robot0_main_shoulders_pic, _robot0_main_knees_pic, _robot0_main_toes_pic, $A800
+    .word _robot0_lefty_head_pic, _robot0_wrist1_shoulders_pic, _robot0_wrist1_knees_pic, _robot0_main_toes_pic, $A800
 ; frame vor_frame_left_laser45 ; (45/60, 0x2D)
-    .word _robot0_lefty_head_pic, _robot0_main_shoulders_pic, _robot0_main_knees_pic, _robot0_main_toes_pic, $AD00
+    .word _robot0_lefty_head_pic, _robot0_wrist1_shoulders_pic, _robot0_wrist1_knees_pic, _robot0_main_toes_pic, $AD00
 ; frame vor_frame_left_laser48 ; (48/60, 0x30)
-    .word _robot0_lefty_head_pic, _robot0_main_shoulders_pic, _robot0_main_knees_pic, _robot0_main_toes_pic, $B000
+    .word _robot0_lefty_head_pic, _robot0_wrist1_shoulders_pic, _robot0_wrist1_knees_pic, _robot0_main_toes_pic, $B000
 ; frame vor_frame_left_laser50 ; (50/60, 0x32)
-    .word _robot0_lefty_head_pic, _robot0_main_shoulders_pic, _robot0_main_knees_pic, _robot0_main_toes_pic, $B200
+    .word _robot0_lefty_head_pic, _robot0_wrist1_shoulders_pic, _robot0_wrist1_knees_pic, _robot0_main_toes_pic, $B200
 ; frame vor_frame_left_laser60 ; end (60/60, 0x3C)
-    .word _robot0_lefty_head_pic, _robot0_main_shoulders_pic, _robot0_main_knees_pic, _robot0_main_toes_pic, $BC00
+    .word _robot0_lefty_head_pic, _robot0_wrist1_shoulders_pic, _robot0_wrist1_knees_pic, _robot0_main_toes_pic, $BC00
 
 ; Right Laser Frames
 
 ; frame vor_frame_right_laser0
 ; right laser, green or yellow start, sound(4 or 5)
-    .word _robot0_right_head_pic, _robot0_main_shoulders_pic, _robot0_main_knees_pic, _robot0_main_toes_pic, $C000
+    .word _robot0_right_head_pic, _robot0_wrist1_shoulders_pic, _robot0_wrist1_knees_pic, _robot0_main_toes_pic, $C000
 
 ; frame vor_frame_right_laser10 ; (10/60, 0x0A)
-    .word _robot0_right_head_pic, _robot0_main_shoulders_pic, _robot0_main_knees_pic, _robot0_main_toes_pic, $CA00
+    .word _robot0_right_head_pic, _robot0_wrist1_shoulders_pic, _robot0_wrist1_knees_pic, _robot0_main_toes_pic, $CA00
 ; frame vor_frame_right_laser12 ; (12/60, 0x0C)
-    .word _robot0_right_head_pic, _robot0_main_shoulders_pic, _robot0_main_knees_pic, _robot0_main_toes_pic, $CC00
+    .word _robot0_right_head_pic, _robot0_wrist1_shoulders_pic, _robot0_wrist1_knees_pic, _robot0_main_toes_pic, $CC00
 ; frame vor_frame_right_laser15 ; (15/60, 0x0F)
-    .word _robot0_right_head_pic, _robot0_main_shoulders_pic, _robot0_main_knees_pic, _robot0_main_toes_pic, $CF00
+    .word _robot0_right_head_pic, _robot0_wrist1_shoulders_pic, _robot0_wrist1_knees_pic, _robot0_main_toes_pic, $CF00
 ; frame vor_frame_right_laser20 ; (20/60, 0x14)
-    .word _robot0_right_head_pic, _robot0_main_shoulders_pic, _robot0_main_knees_pic, _robot0_main_toes_pic, $D400
+    .word _robot0_right_head_pic, _robot0_wrist1_shoulders_pic, _robot0_wrist1_knees_pic, _robot0_main_toes_pic, $D400
 ; frame vor_frame_right_laser24 ; (24/60, 0x18)
-    .word _robot0_right_head_pic, _robot0_main_shoulders_pic, _robot0_main_knees_pic, _robot0_main_toes_pic, $D800
+    .word _robot0_right_head_pic, _robot0_wrist1_shoulders_pic, _robot0_wrist1_knees_pic, _robot0_main_toes_pic, $D800
 ; frame vor_frame_right_laser30 ; (30/60, 0x1E)
-    .word _robot0_right_head_pic, _robot0_main_shoulders_pic, _robot0_main_knees_pic, _robot0_main_toes_pic, $DE00
+    .word _robot0_right_head_pic, _robot0_wrist1_shoulders_pic, _robot0_wrist1_knees_pic, _robot0_main_toes_pic, $DE00
 ; frame vor_frame_right_laser36 ; (36/60, 0x24)
-    .word _robot0_right_head_pic, _robot0_main_shoulders_pic, _robot0_main_knees_pic, _robot0_main_toes_pic, $E400
+    .word _robot0_right_head_pic, _robot0_wrist1_shoulders_pic, _robot0_wrist1_knees_pic, _robot0_main_toes_pic, $E400
 ; frame vor_frame_right_laser40 ; (40/60, 0x28)
-    .word _robot0_right_head_pic, _robot0_main_shoulders_pic, _robot0_main_knees_pic, _robot0_main_toes_pic, $E800
+    .word _robot0_right_head_pic, _robot0_wrist1_shoulders_pic, _robot0_wrist1_knees_pic, _robot0_main_toes_pic, $E800
 ; frame vor_frame_right_laser45 ; (45/60, 0x2D)
-    .word _robot0_right_head_pic, _robot0_main_shoulders_pic, _robot0_main_knees_pic, _robot0_main_toes_pic, $ED00
+    .word _robot0_right_head_pic, _robot0_wrist1_shoulders_pic, _robot0_wrist1_knees_pic, _robot0_main_toes_pic, $ED00
 ; frame vor_frame_right_laser48 ; (48/60, 0x30)
-    .word _robot0_right_head_pic, _robot0_main_shoulders_pic, _robot0_main_knees_pic, _robot0_main_toes_pic, $F000
+    .word _robot0_right_head_pic, _robot0_wrist1_shoulders_pic, _robot0_wrist1_knees_pic, _robot0_main_toes_pic, $F000
 ; frame vor_frame_right_laser50 ; (50/60, 0x32)
-    .word _robot0_right_head_pic, _robot0_main_shoulders_pic, _robot0_main_knees_pic, _robot0_main_toes_pic, $F200
+    .word _robot0_right_head_pic, _robot0_wrist1_shoulders_pic, _robot0_wrist1_knees_pic, _robot0_main_toes_pic, $F200
 ; frame vor_frame_right_laser60 ; end (60/60, 0x3C)
-    .word _robot0_right_head_pic, _robot0_main_shoulders_pic, _robot0_main_knees_pic, _robot0_main_toes_pic, $FC00
+    .word _robot0_right_head_pic, _robot0_wrist1_shoulders_pic, _robot0_wrist1_knees_pic, _robot0_main_toes_pic, $FC00

@@ -270,15 +270,15 @@ int main(void)
 
     // Left side: PAGE#
     vw_writeTile(&grey,0,0,VW_GREY,'P');
-    vw_writeTile(&grey,1,0,VW_GREY,'A');
-    vw_writeTile(&grey,2,0,VW_GREY,'G');
-    vw_writeTile(&grey,3,0,VW_GREY,'E');
+    vw_writeTile(&grey,0,1,VW_GREY,'A');
+    vw_writeTile(&grey,0,2,VW_GREY,'G');
+    vw_writeTile(&grey,0,3,VW_GREY,'E');
     // Right side: FONT# (the number will be in the letter B)
     vw_writeTile(&yellow,0,0,VW_YELLOW,'B');
-    vw_writeTile(&yellow,1,0,VW_YELLOW,'F');
-    vw_writeTile(&yellow,2,0,VW_YELLOW,'O');
-    vw_writeTile(&yellow,3,0,VW_YELLOW,'N');
-    vw_writeTile(&yellow,4,0,VW_YELLOW,'T');
+    vw_writeTile(&yellow,0,1,VW_YELLOW,'F');
+    vw_writeTile(&yellow,0,2,VW_YELLOW,'O');
+    vw_writeTile(&yellow,0,3,VW_YELLOW,'N');
+    vw_writeTile(&yellow,0,4,VW_YELLOW,'T');
 
     // Print the characters for the graphics
     gotoxy(16,10);

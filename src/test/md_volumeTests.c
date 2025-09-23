@@ -16,16 +16,29 @@
 #include <conio.h>
 #include <_atarios.h>
 
-const md_wordInternal WORD[] = {
-    { "super" }, // , 6 },
-    { "supes" }, // , 8 },
-    { "today" }, // , 7 }
+// this is a private function
+const md_wordInternal *md_wordListGetInternal(const md_wordList *d, int index);
+
+md_wordInternal IWORD[3];
+
+const md_word WORD[] = {
+    { "snipe", 6 },
+    { "snips", 8 },
+    { "swipe", 7 }
 };
 
-const md_volume DICT = { 3, 0, WORD };
+md_wordList DICT = { 3, 'S', 0, IWORD };
+const md_lexicon *DICTL = (const md_lexicon*) &DICT;
 
-extern md_word cvcvcDict;
-const md_volume CVDICT = { 200, 0, &cvcvcDict };
+extern md_wordList wordListS;
+
+void buildDict(void)
+{
+    md_bankswitchIdx(); // BANK SWITCH!
+    md_wordToWordInternal(&IWORD[0],&WORD[0]);
+    md_wordToWordInternal(&IWORD[1],&WORD[1]);
+    md_wordToWordInternal(&IWORD[2],&WORD[2]);
+}
 
 void wordTests(void)
 {
@@ -34,74 +47,157 @@ void wordTests(void)
     printf("\x7DThe first Test\n");
     //printf("Storage: Word0 flag is: %d\n",WORD[0].wordflags);
     md_wordToString(buf0,&WORD[0]);
-    printf("Storage: Word0 is: [%s]\n",buf0);
+    printf("Storage: Word0 is: [%s]\n",buf0);   // snipe
     md_wordToString(buf1,&WORD[1]);
-    printf("Storage: Word1 is: [%s]\n",buf1);
+    printf("Storage: Word1 is: [%s]\n",buf1);   // snips
     md_wordToString(buf2,&WORD[2]);
-    printf("Storage: Word2 is: [%s]\n",buf2);
+    printf("Storage: Word2 is: [%s]\n",buf2);   // swipe
 
-    n = md_wordCmp(&WORD[0], &WORD[1]);
-    printf("Compare: %s %d %s\n",buf0,n,buf1);
+    // Note: md_wordCmpInternal does not compare the first letter!
+    n = md_wordCmpInternal(&IWORD[0], &IWORD[1]);
+    printf("Compare: %s %d %s\n",buf0,n,buf1);  // snipe -1 snips
 
-    n = md_wordCmp(&WORD[0], &WORD[2]);
-    printf("Compare: %s %d %s\n",buf0,n,buf2);
+    n = md_wordCmpInternal(&IWORD[0], &IWORD[2]);
+    printf("Compare: %s %d %s\n",buf0,n,buf2);  // snipe -1 swipe
 
-    n = md_wordCmp(&WORD[1], &WORD[0]);
-    printf("Compare: %s %d %s\n",buf1,n,buf0);
+    n = md_wordCmpInternal(&IWORD[1], &IWORD[0]);
+    printf("Compare: %s %d %s\n",buf1,n,buf0);  // snips +1 snipe
 
-    n = md_wordCmp(&WORD[0], &WORD[0]);
-    printf("Compare: %s %d %s\n",buf0,n,buf0);
+    n = md_wordCmpInternal(&IWORD[0], &IWORD[0]);
+    printf("Compare: %s %d %s\n",buf0,n,buf0);  // snipe =0 snipe
 
-    n = md_wordCmp(NULL, &WORD[0]);
-    printf("Compare: NULL %d %s\n",n,buf0);
+    n = md_wordCmpInternal(NULL, &IWORD[0]);
+    printf("Compare: NULL %d %s\n",n,buf0);     //  NULL +1 snipe
 
-    n = md_wordCmp(&WORD[0], NULL);
-    printf("Compare: %s %d NULL\n",buf0,n);
+    n = md_wordCmpInternal(&IWORD[0], NULL);
+    printf("Compare: %s %d NULL\n",buf0,n);     // snipe -1 NULL
 }
 
+void internalcopy(md_wordInternal *copy,md_wordInternal *src)
+{
+    copy->s[0]=src->s[0];
+    copy->s[1]=src->s[1];
+    copy->s[2]=src->s[2];
+}
+void compressionTest(char *src)
+{
+    int result;
+    int i;
+    char dest[6];
+    md_word w;
+    md_wordInternal compressed;
+    md_wordInternal copy;
+    md_wordList wl;
+    wl.firstLetter='A';
+    md_wordToWordInternal(&compressed,(md_word*)src);
+    md_wordInternalToWord(&w,&wl,&compressed);
+    md_wordToString(dest,&w);
+    result=strcmp(src,dest);
+    if ( result != 0 )
+    {
+        printf("strcmp FAILED! %s %d %s\n",src,result,dest);
+        for(;;)
+            ;
+    }
+    // Copy the word-internal and check that they are equal
+    internalcopy(&copy,&compressed);
+    result = md_wordCmpInternal(&copy,&compressed);
+    if ( result != 0 )
+    {
+        md_wordInternalToWord(&w,&wl,&copy);
+        md_wordToString(dest,&w);
+        printf("internal FAILED! %s %d %s\n",src,result,dest);
+        for(;;)
+            ;
+    }
+}
+
+// Set to Z for a more thourough compression test
+#define END 'B'
+void compressionTests(void)
+{
+    char a,b,c,d;
+    char src[6];
+    printf("\x7D Compression Test\n");
+    src[0]='A';
+    src[5]='\0';
+    for ( a='A';a<=END;++a) {
+        src[1]=a;
+        for ( b='A';b<=END;++b) {
+            src[2]=b;
+            for ( c='A';c<=END;++c) {
+                src[3]=c;
+                for ( d='A';d<=END;++d) {
+                    src[4]=d;
+                    compressionTest(src);
+                }
+            }
+        }
+        printf(src);
+        printf("\n");
+    }
+}
+
+int wordListFindString( md_wordList *dict, char *target)
+{
+    md_wordInternal compressed;
+    md_bankswitchIdx(); // BANK SWITCH!
+    md_wordToWordInternal(&compressed,(md_word*)target);
+    return md_wordListFind(dict, &compressed);
+}
 void dictTests(void)
 {
     char buf0[6];
     int i,j,n;
-    const md_word *w;
+    const md_wordInternal *wi;
+    md_word w;
 
     printf("\x7DThe Dictionary Test\n");
 
-    n = md_volumeFind(&DICT, (md_word*)"supes");
-    printf("[supes] is at %d\n",n);
+    n = wordListFindString(&DICT, "snips");
+    printf("[snips] is at %d\n",n);                 // 1
 
-    n = md_volumeFind(&DICT, (md_word*)"gloom");
+    n = wordListFindString(&DICT, "gloom");    // -1
     printf("[gloom] is not found: %d\n",n);
 
-    n = md_volumeSize(&DICT);
-    printf("Size(3): Dict contains: %d\n",n);
+    n = md_wordListSize(&DICT);
+    printf("Size(3): Dict contains: %d\n",n);       // 3
 
     for(i=0; i<n; i++)
     {
-        w = md_volumeGet(&DICT,i);
-        md_wordToString(buf0,w);
-        j = md_volumeFind(&DICT,(md_word*)buf0);
-        printf("%d: [%s] found at %d\n",i,buf0,j);
+        wi = md_wordListGetInternal(&DICT,i);
+        md_wordInternalToWord(&w,&DICT,wi);
+        md_wordToString(buf0,&w);
+        j = wordListFindString(&DICT,buf0);
+        printf("%d: [%s] found at %d\n",i,buf0,j);  // should return 0 1 2
     }
 
-    printf("get(-1) should return null: %d\n",md_volumeGet(&DICT,-1));
-    printf("get(len) should return null: %d\n",md_volumeGet(&DICT,n));
+    printf("get(-1) should return null: %d\n",md_wordListGetInternal(&DICT,-1)); // 1406???
+    printf("get(len) should return null: %d\n",md_wordListGetInternal(&DICT,n)); // 1406???
 
-    n = md_volumeFind(&CVDICT, (md_word*)"BABEL");
-    printf("0:[BABEL] is at %d\n",n);
+    n = wordListFindString(&wordListS, "SABLE");
+    printf("0:[SABLE] is at %d\n",n);               // 0
 
-    n = md_volumeFind(&CVDICT, (md_word*)"NASAL");
-    printf("199:[NASAL] is at %d\n",n);
+    n = wordListFindString(&wordListS, "SALVE");
+    printf("6:[SALVE] is at %d\n",n);
+        wi = md_wordListGetInternal(&wordListS,6);
+        md_wordInternalToWord(&w,&wordListS,wi);
+        md_wordToString(buf0,&w);
+    printf("Index 6   is %s\n",buf0);
 
-    n = md_volumeSize(&CVDICT);
-    printf("Size (200): CVDict contains: %d\n",n);
+    n = wordListFindString(&wordListS, "SPANK");
+    printf("199:[SPANK] is at %d\n",n);             // 199
+
+    n = md_wordListSize(&wordListS);
+    printf("Size (200): wordListS contains: %d\n",n);  // 200
 }
 
 void dictSpeedTests()
 {
     char buf0[6];
     int i,j,n;
-    const md_word *w;
+    const md_wordInternal *wi;
+    md_word w;
     unsigned int after;
     unsigned int diff;
     unsigned int max = 0;
@@ -109,14 +205,15 @@ void dictSpeedTests()
     unsigned int start = 0xffff;
 
     printf("Timing and verifying 200 finds\n",n);
-    n = md_volumeSize(&CVDICT);
+    n = md_wordListSize(&wordListS);
     OS.cdtmv2=start; /* timer 2: total time */
     for(i=0; i<n; i++)
     {
-        w = md_volumeGet(&CVDICT,i);
-        md_wordToString(buf0,w);
+        wi = md_wordListGetInternal(&wordListS,i);
+        md_wordInternalToWord(&w,&wordListS,wi);
+        md_wordToString(buf0,&w);
         OS.cdtmv1=start; /* timer 1: individual time */
-        j = md_volumeFind(&CVDICT,(md_word*)buf0);
+        j = wordListFindString(&wordListS,buf0);
         after=OS.cdtmv1;
         diff=start-after;
         if ( diff > max )
@@ -136,15 +233,16 @@ void dictSpeedTests()
     printf("Timing and verifying 200 not finds\n",n);
     total=0;
     max=0;
-    n = md_volumeSize(&CVDICT);
+    n = md_wordListSize(&wordListS);
     OS.cdtmv2=start; /* timer 2: total time */
     for(i=0; i<n; i++)
     {
-        w = md_volumeGet(&CVDICT,i);
-        md_wordToString(buf0,w);
+        wi = md_wordListGetInternal(&wordListS,i);
+        md_wordInternalToWord(&w,&wordListS,wi);
+        md_wordToString(buf0,&w);
         ++buf0[1]; /* increment the first vowel, this is NOT a word. */
         OS.cdtmv1=start; /* timer 1: individual time */
-        j = md_volumeFind(&CVDICT,(md_word*)buf0);
+        j = wordListFindString(&wordListS,buf0);
         after=OS.cdtmv1;
         diff=start-after;
         if ( diff > max )
@@ -247,7 +345,11 @@ int main(void)
 {
     char k;
     OS.coldst=1; // force cold start on warm reset
+    buildDict();
     wordTests();
+    printf("\nPress a key to continue\n");
+    k = cgetc();
+    compressionTests();
     printf("\nPress a key to continue\n");
     k = cgetc();
     dictTests();

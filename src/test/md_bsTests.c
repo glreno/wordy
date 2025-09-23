@@ -16,79 +16,45 @@
 #include <conio.h>
 #include <_atarios.h>
 
-const md_wordInternal WORD[] = {
-    { "super" }, //, 6 },
-    { "supes" }, //, 8 },
-    { "today" }, //, 7 }
-};
+extern md_dict CVDICT;
 
-const md_volume DICT1 = { 3, 0, WORD };
-const md_dict DICT = { 1, { &DICT1 } };
-
-// All volumes are at the same address! This is the location at the start of BANK 0,1,2 of an xegs32 cart.
-// And in this case, that's &cvcvcDict3
-extern const md_word cvcvcDict1[];
-extern const md_word cvcvcDict2[];
-extern const md_word cvcvcDict3[];
-const md_volume CVDICT1 = { 67, 0, cvcvcDict1 };
-const md_volume CVDICT2 = { 67, 1, cvcvcDict2 };
-const md_volume CVDICT3 = { 67, 2, cvcvcDict3 };
-const md_dict CVDICT = { 3, { &CVDICT1, &CVDICT2, &CVDICT3 } };
-
+void lookupTest(int expected,char *bufp)
+{
+    char buf0[6],buf1[6];
+    md_word tword;
+    int n = md_findWord(&CVDICT, (md_word*)bufp, &tword);
+    md_wordToString(buf0,&tword);
+    md_getWord(&CVDICT,n,&tword);
+    md_wordToString(buf1,&tword);
+    printf("%d:[%s] is at %d %s %s f:%d\n",expected,bufp,n,buf0,buf1,tword.wordflags);
+}
 
 void dictTests(void)
 {
-    char buf0[6];
-    int i,j,n;
-    //md_word *w;
+    int n;
     md_word tword;
 
-    printf("\x7DThe Dictionary Test\n");
+    printf("\x7DThe Dictionary BS\n");
 
-    n = md_findWord(&DICT, (md_word*)"supes", NULL);
-    printf("[supes] is at %d\n",n);
-
-    n = md_findWord(&DICT, (md_word*)"gloom", NULL);
-    printf("[gloom] is not found: %d\n",n);
-
-    n = md_size(&DICT);
-    printf("Size: Dict contains: %d\n",n);
-
-    for(i=0; i<n; i++)
-    {
-        md_getWord(&DICT,i,&tword);
-        md_wordToString(buf0,&tword);
-        j = md_findWord(&DICT,(md_word*)buf0, NULL);
-        printf("%d: [%s] found at %d f=%d\n",i,buf0,j,tword.wordflags);
-    }
-
-    md_getWord(&DICT,-1,&tword);
+    md_getWord(&CVDICT,-1,&tword);
     printf("get(-1) should return 0xff: %d\n",tword.wordflags);
-    md_getWord(&DICT,n,&tword);
+    md_getWord(&CVDICT,n,&tword);
     printf("get(len) should return 0xff: %d\n",tword.wordflags);
 
-    n = md_findWord(&CVDICT, (md_word*)"BABEL", &tword);
-    md_wordToString(buf0,&tword);
-    printf("0:[BABEL] is at %d %s f:%d\n",n,buf0,tword.wordflags);
-
-    n = md_findWord(&CVDICT, (md_word*)"FINAL", &tword);
-    md_wordToString(buf0,&tword);
-    printf("101:[FINAL] is at %d %s f:%d\n",n,buf0,tword.wordflags);
-
-    n = md_findWord(&CVDICT, (md_word*)"NATAL", &tword);
-    md_wordToString(buf0,&tword);
-    printf("200:[NATAL] is at %d %s f:%d\n",n,buf0,tword.wordflags);
+    lookupTest(0,"BABEL");
+    lookupTest(35,"BOSOM");
+    lookupTest(36,"CABAL");
+    lookupTest(67,"COVET");
+    lookupTest(68,"DAVIT");
+    lookupTest(200,"NATAL");
 
     n = md_findWord(&CVDICT, (md_word*)"!WORD", &tword);
     printf("[!WORD] is at %d f:%d\n",n,tword.wordflags);
 
-    n = md_size(&CVDICT);
-    printf("Size: CVDict contains: %d\n",n);
 }
 
 void dictSpeedTests()
 {
-    /* TODO this is just cloned from dictTests.c */
     char buf0[6];
     int i,j,n;
     //md_word *w;
@@ -99,8 +65,10 @@ void dictSpeedTests()
     unsigned int total = 0;
     unsigned int start = 0xffff;
 
-    printf("Timing and verifying 200 finds\n",n);
+    md_bankswitchIdx(); // BANK SWITCH!
     n = md_size(&CVDICT);
+    printf("Size: CVDict contains: %d\n",n);
+    printf("Timing and verifying %d finds\n",n);
     OS.cdtmv2=start; /* timer 2: total time */
     for(i=0; i<n; i++)
     {
@@ -125,10 +93,9 @@ for(;;) ;
     printf("Duration: %d jiffies, %d sec\n",total,total/60);
     printf("Avg %d jiffies per word, max %d\n",total/n,max);
 
-    printf("Timing and verifying 200 not finds\n",n);
+    printf("Timing and verifying 201 not finds\n",n);
     total=0;
     max=0;
-    n = md_size(&CVDICT);
     OS.cdtmv2=start; /* timer 2: total time */
     for(i=0; i<n; i++)
     {
@@ -153,11 +120,8 @@ for(;;) ;
 int main(void)
 {
     OS.coldst=1; // force cold start on warm reset
-    //char k;
     dictTests();
     dictSpeedTests();
-    //printf("\nPress a key to continue\n");
-    //k = cgetc();
     printf("\nAll done!\n");
     for(;;)
         ;

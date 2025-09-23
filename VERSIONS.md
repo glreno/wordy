@@ -1,5 +1,29 @@
 # Version History
 
+## 1.04
+
+Initial public release of AQo-lite
+
+### Fixes
+
+- Fixed defect #6, screen garbage on options and loading screens on 800XL
+- Added dictionary descriptions to options page
+- Fixed crash on warm boot of the disk version. If you didn't press option while turning the machine on, the disk version would disable BASIC for you. But on a warm boot, the BASIC would re-enable itself momentarily and re-open the screen, wiping out a portion of the game code.
+
+### Updates
+
+- Split game in to 'AQordl' (robot mode) and 'AQo-lite' (text mode).
+- Adjusted dictionary probabilities
+- Compressed dictionaries, improving load and search times
+- Disk version of AQo-lite, which only requires 48K RAM but still has the full dictionary
+- Improved laser animation for AQordl
+    - multicolor laser bolts
+    - laser is fired from the robot's antennae instead of the eyes, looks less like he's spitting
+    - made laser speed more consistent
+- Added animated computer to AQo-lite
+
+### Files
+
 ## 1.03a
 
 Dev release.
@@ -13,7 +37,7 @@ Dev release.
 - Dictionary defaults to "Normal" instead of "Hard"
 - Audio defaults to "Normal" instead of "Annoying"
 
-### files
+### Files
 
 - aqordl_robot_1.02.car     (Aqordl game XEGS cartridge for all Atari 8-bit)
 - aqordl_text_1.02.car      (Text-only game for very tiny machines)
@@ -30,7 +54,7 @@ Dev release.
 
 Initial public release of Aqordl
 
-### files
+### Files
 
 - aqordl_1.00.car       (Aqordl game XEGS cartridge for all Atari 8-bit)
 - aqordl_text_1.00.car  (Text-only game for very tiny machines)

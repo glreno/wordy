@@ -8,10 +8,7 @@
 
 @PRIORITY 5
 @DICT DICT_HA
-@DICT DICT_SA
-@DICT DICT_SS
-@DICT DICT_SS_US
-@DICT DICT_SS_UK
+@DICT DICT_TS,x2
 agone ; archaic alt form of ago
 agora,n
 aline ; alt spelling of align
@@ -38,11 +35,13 @@ berne,n
 besom,n
 blase
 blent,vp ; obs past of blend
+bobby,n
 bonze
 bourn
 bruit,n,v
 bundy,n
 burka ; alt of burqa
+burls,np
 buteo,n
 cadge,n,v
 canst
@@ -99,6 +98,7 @@ laura,n
 leafs,np ; alt of leaves
 llano,n
 loges,np
+maria,np
 matts,np
 mavin,n ; alt of maven
 mayst
@@ -154,6 +154,7 @@ swops,vc ; archaic of swaps
 tabus,np ; archaic of taboos
 tapis
 tempi,np
+terry
 thees
 thine
 thous

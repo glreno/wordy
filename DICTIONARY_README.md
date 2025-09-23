@@ -12,8 +12,8 @@ The words are separated into these files:
 
 1. top.dict - the most common words. Separate for 'easy' level games
 2. rare.dict - archaic words ("thine"), dialectal words ("bairn"), and outdated slang ("grody"). Separate for 'hard' level games
-3. naughty.dict - words that make teenagers giggle. Separate so that they can be used for word guesses, but not available when randomly choosing a puzzle solution.
-4. bad.dict - George Carlin's seven words. Plus the N word, which wasn't considered quite as bad when he created his list. Here for completeness.
+3. naughty.dict - words that are offenive or just make teenagers giggle. Separate so that they can be used for word guesses, but not available when randomly choosing a puzzle solution.
+4. carlin.dict - George Carlin's seven words. Plus the N word, which wasn't considered quite as bad when he created his list. Here for completeness.
 5. main.dict - everything else
 
 # Methodology
@@ -24,7 +24,7 @@ The words are separated into these files:
 4. Then the top.dict words were removed from main.dict.
 5. I manually removed all proper nouns from both main.dict and top.dict
 6. I then compared the top.dict with the top ten hundred word list from Thing Explainer, and moved several words from main.dict to top.dict
-7. I created the "naughty" list by manually scanning the two lists for anything that would make teenagers giggle.
+7. I created the "naughty" list by manually scanning the two lists for anything offensive or that would make teenagers giggle.
 8. I created the "rare" list manually by scanning the two lists for words that were obviously archaic, dialectal, or slangy. For any words that I did not already know, I followed the judgement of wiktionary.
 9. I manually tagged derived words (noun-plural, verb-conjugated) so that they can still be puzzle answers, just less likely.
 10. I manually tagged US/UK spellings so that no one gets tripped up by "jails" and "gaols".

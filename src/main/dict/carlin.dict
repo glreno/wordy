@@ -6,8 +6,6 @@
 ;
 ; http://www.apache.org/licenses/LICENSE-2.0
 
-@DICT DICT_SA
-
 clits,np
 cunts,np
 fucks,np,vc

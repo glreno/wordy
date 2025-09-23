@@ -20,7 +20,8 @@
 #include "mo_qordl.h"
 #include "vo_text.h"
 #include "dk_kbdriver.h"
-
+#include "md_pick.h"
+#include "vo_a400.h"
 
 /* VIDEO DATA */
 
@@ -29,18 +30,22 @@ unsigned char *SCREENRAM;
 ds_page *PAGE;
 
 unsigned char *FONTLIST1[1], *FONTLIST2[1];
-vfm_fontmanager fontmanager1, fontmanager2;
+vfm_fontmanager fontManagerTop, fontManagerBot;
 
 /* The dictionaries */
-extern md_dict DICT_ES_US;
-extern md_dict DICT_ES_UK;
-extern md_dict DICT_EA;
+extern md_dict DICT_HA;
 
 /* Game code (these don't need to be global, really) */
 mq gameModel;
 vo_text opponentView;
 moq opponentModel;
 void *vu_letters;
+md_dict *dict;
+                 // 012345678901234567890123456
+char titleText[] = "AQolite (text)   US/n";
+// titleText[18] should be S or K
+// titleText[20] should be e/n/h
+
 
 const unsigned char SPOTLIGHT[] = {
     0b01111100,
@@ -88,47 +93,41 @@ void mkDlist(ds_pageHeader *b)
 
 void initializeQordl()
 {
+    int a;
     char shown = 0;
-    unsigned char *FONT1, *FONT2;
-    unsigned char FONTBASE1,FONTBASE2;
 
     //
     // INITIALIZATION CODE AND LICENSE SCREEN
     //
 
-    //title_erase_loading_msg();
-    title_show_instruction_screen();
+    // The cartridge will have bankswitched to this bank already,
+    // but the zerobss will wipe out the LAST_BANKSWITCH field before calling main.
+    // So do it again.
+    bankswitchTitle();
+    title_erase_loading_msg();
+    //title_show_instruction_screen(); - already shown by file load
 
     // You may not bankswitch while the Title/License is on screen!
     // Before bankswitching, you must:
     // occasionaly check title_show_licence_on_L()
     // eventually title_show_press_a_key() and title_wait_for_key(shown);
     // build a display page, and page flip
-
-    // If someone presses L, show the license screen.
-    // This is something you call periodically while loading
     shown = shown || title_show_license_on_L();
 
-    // memory allocation based on APPMHI,
-    // which is MEMTOP minus a gr.0 screen minus __RESERVED_MEMORY__
-    // Remember that PAGE is a pmbase value, so must be on a 2K boundary.
-    // and that SCREENRAM needs dlist help if it crosses a 4K boundary.
+    // 800XL Disk version - hand-allocated memory!
+    // Can't touch anything below 0400 ever,
+    // or anything below 2000 before we're done using DOS.
+    // But we can put all the PAGE data in the DOS area no problem.
+    // The fonts go in the two volatile areas where the OS puts the screen on warmstart.
+    // Put the screen after the officially usable RAM
+    // in the reserved area, and let the loader figure out the rest.
+    // __RESERVED_RAM__ is set to 32K so that nothing gets
+    // allocated into the 130XE bank-switch area.
 
-    SCREENRAM = (unsigned char*) (OS.appmhi+1); // 26*40=1040 (0x410) bytes of screen RAM
-    FONT1 = (unsigned char*) SCREENRAM+0x410; // 1K font
-    FONT2 = (unsigned char*) (FONT1+1024); // 1K font after the other font
-    PAGE = (ds_page*) (FONT2+1024); // 2K page after the fonts
-
-    // Addresses:   8K      16K     32K+
-    // SCREENRAM    0BF0    2BF0    6BF0
-    // FONT1        1000    3000    7000
-    // FONT2        1400    3400    7400
-    // PAGE         1800    3800    7800
-
-    FONTBASE1 = ((unsigned int)FONT1)>>8;
-    FONTBASE2 = ((unsigned int)FONT2)>>8;
-    FONTLIST1[0]=FONT1;
-    FONTLIST2[0]=FONT2;
+    SCREENRAM = (unsigned char*)    0x2BF0; // 26*40=1040 (0x410) bytes of screen RAM ending at 3000
+    FONTLIST1[0] = (unsigned char*) 0x9C00; // because ram from 9C20...9FFF gets wiped on warmstart (basic)
+    FONTLIST2[0] = (unsigned char*) 0xBC00; // because ram from BC20...BFFF gets wiped on warmstart (no basic)
+    PAGE = (ds_page*) 0x0800; // 0800-1000, 2KB down where DOS isn't any more
 
     // Create a screen
     ds_initScreenRam(SCREENRAM, 40*26); // this sets SAVMSC and zeroes out the given amount of space
@@ -147,11 +146,17 @@ void initializeQordl()
     shown = shown || title_show_license_on_L();
 
     // Start font manager and build fonts
-    vfm_initialize(&fontmanager1,&AQORDLFONTDEF,1,FONTLIST1);
-    vfm_initialize(&fontmanager2,&AQORDLFONTDEF,1,FONTLIST2);
+    vfm_initialize(&fontManagerTop,&AQORDLFONTDEF,1,FONTLIST1);
+    vfm_initialize(&fontManagerBot,&AQORDLFONTDEF,1,FONTLIST2);
     ds_setFont(PAGE,0xe0,0,-3,0);
-    ds_setFont(PAGE,FONTBASE1,0,1,10);
-    ds_setFont(PAGE,FONTBASE2,0,11,24);
+        a=vfm_allocateFont(&fontManagerTop);
+        PAGE->page.fonts[0]=a;
+        a=vfm_getFontBase(a,&fontManagerTop);
+    ds_setFont(PAGE,a,0,1,10);
+        a=vfm_allocateFont(&fontManagerBot);
+        PAGE->page.fonts[1]=a;
+        a=vfm_getFontBase(a,&fontManagerBot);
+    ds_setFont(PAGE,a,0,11,24);
     ds_setFont(PAGE,0xE0,0,25,34);
 
     shown = shown || title_show_license_on_L();
@@ -162,8 +167,12 @@ void initializeQordl()
     shown = shown || title_show_license_on_L();
 
     // Initialize the game model
-    mq_initialize(&fontmanager1,&fontmanager2,&gameModel);
-    moq_initialize(vu_letters,&DICT_EA,&gameModel, &opponentModel);
+    mq_initialize(&fontManagerTop,&fontManagerBot,&gameModel);
+    moq_initialize(vu_letters,&DICT_HA,&gameModel, &opponentModel);
+
+    shown = shown || title_show_license_on_L();
+
+    vo4_initialize(FONTLIST1[0],FONTLIST2[0]);
 
     shown = shown || title_show_license_on_L();
 
@@ -175,6 +184,9 @@ void initializeQordl()
     // which means show the license -- unless you
     // already showed the license
     title_wait_for_key(shown);
+
+    show_options_screen(&(PAGE->pm.player0));
+    dict = md_pickDictionary(&titleText[18],&titleText[20],selectedDictionary);
 
     // Load the PAGE
     ds_init(PAGE);
@@ -197,14 +209,7 @@ void pickWord()
     char buf[6];
     for(i=0;i<4;++i)
     {
-        if ( (GTIA_READ.pal & 0xE) == 0xE )
-        {
-            md_pickRandomWord(&DICT_ES_US,&w1);
-        }
-        else
-        {
-            md_pickRandomWord(&DICT_ES_UK,&w1);
-        }
+        md_pickRandomWord(dict,&w1);
         md_wordToString(buf,&w1);
         buf[5]='\0';
         mw_setSolution(buf,&(gameModel.puzzles[i]));
@@ -213,20 +218,24 @@ void pickWord()
 
 #pragma code-name (pop)
 
+void enableWarmStart(void);
+
 //segment CODE - run by OS
 int main()
 {
+    enableWarmStart();
     initializeQordl();
     for(;;)
     {
+        md_bankswitchIdx(); // BANK SWITCH!
         pickWord();
-        moq_gameDriver("AQordl (text mode)",&opponentModel);
+        moq_gameDriver(titleText,&opponentModel);
         dk_getc();
         // Need to bankswitch to where the initialize code is!
         bankswitchStartup();
-        mq_initialize(&fontmanager1,&fontmanager2,&gameModel);
-        vfm_clearGreenLetters(&fontmanager1);
-        vfm_clearGreenLetters(&fontmanager2);
-        moq_initialize(vu_letters,&DICT_EA,&gameModel,&opponentModel);
+        mq_initialize(&fontManagerTop,&fontManagerBot,&gameModel);
+        vfm_clearGreenLetters(&fontManagerTop);
+        vfm_clearGreenLetters(&fontManagerBot);
+        moq_initialize(vu_letters,&DICT_HA,&gameModel,&opponentModel);
     }
 }

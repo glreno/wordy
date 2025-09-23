@@ -46,13 +46,6 @@ char titleText[] = "AQordl (robot)   US/n";
 // titleText[18] should be S or K
 // titleText[20] should be e/n/h
 
-const unsigned char LASER[] = {
-    0b00011000,
-    0b00111100,
-    0b00111100,
-    0b00011000
-};
-
 //
 // RUN-ONCE INITIALIZATION CODE
 //
@@ -140,7 +133,7 @@ void initializeQordl()
 
     // Create a screen
     ds_initScreenRam(SCREENRAM, 40*26); // this sets SAVMSC and zeroes out the given amount of space
-    vor_initialize(&opponentView, 0, PAGES, 4, LASER, SCREENRAM);
+    vor_initialize(&opponentView, 0, PAGES, SCREENRAM);
 
     shown = shown || title_show_license_on_L();
 
@@ -237,6 +230,7 @@ int main()
 
     for(;;)
     {
+        md_bankswitchIdx(); // BANK SWITCH!
         pickWord();
         moq_gameDriver(titleText, &opponentModel);
         dk_getc();

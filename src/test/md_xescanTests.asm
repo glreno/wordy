@@ -11,8 +11,8 @@
 
 ; This is support code for running md_scanTests using 130XE bank swapping instead of a cartridge.
 
-_title_show_title_screen:
-    .export _title_show_title_screen
+_title_show_instruction_screen:
+    .export _title_show_instruction_screen
     RTS
 
 ; All the file header definitions
@@ -23,21 +23,26 @@ _title_show_title_screen:
 
 
     .segment "LOWCODE_HDR"
-    .import __LOWCODE_LOAD__
-    .import __LOWCODE_LOAD__,__LOWCODE_SIZE__
-    .word __LOWCODE_LOAD__
-    .word __LOWCODE_LOAD__+__LOWCODE_SIZE__-1
+    .import __LOWCODEBANK_START__,__LOWCODEBANK_LAST__
+    .word __LOWCODEBANK_START__
+    .word __LOWCODEBANK_LAST__ -1
 
     .segment "XEBANK0_HDR"
-    .import __DICT_BANK_1_LOAD__
-    .import __DICT_BANK_2_LOAD__,__DICT_BANK_2_SIZE__
-    .word __DICT_BANK_1_LOAD__
-    .word __DICT_BANK_2_LOAD__+__DICT_BANK_2_SIZE__-1
+    .import __XEBANK0_START__,__XEBANK0_LAST__
+    .word __XEBANK0_START__
+    .word __XEBANK0_LAST__ -1
 
     .segment "XEBANK1_HDR"
-    .import __DICT_BANK_3_LOAD__
-    .import __DICT_BANK_4_LOAD__,__DICT_BANK_4_SIZE__
-    .word __DICT_BANK_3_LOAD__
-    .word __DICT_BANK_4_LOAD__+__DICT_BANK_4_SIZE__-1
+    .import __XEBANK1_START__,__XEBANK1_LAST__
+    .word __XEBANK1_START__
+    .word __XEBANK1_LAST__ -1
 
+    .segment "XEBANK2_HDR"
+    .import __XEBANK2_START__,__XEBANK2_LAST__
+    .word __XEBANK2_START__
+    .word __XEBANK2_LAST__ -1
 
+    .segment "XEBANK3_HDR"
+    .import __XEBANK3_START__,__XEBANK3_LAST__
+    .word __XEBANK3_START__
+    .word __XEBANK3_LAST__ -1

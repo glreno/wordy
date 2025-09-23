@@ -73,7 +73,7 @@ char mw_keypress(mw *model,char key)
     {
         key = (key & 0x5f); // convert to uppercase and not-inverse by removing bits 7 and 5
         model->currGuess[model->cur_x] = key;
-        vw_writeTile(&(model->view),model->cur_x,model->cur_y,VW_GREY,key);
+        vw_writeTile(&(model->view),model->cur_y,model->cur_x,VW_GREY,key);
         ++(model->cur_x);
         return 0;
     }

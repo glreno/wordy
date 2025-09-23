@@ -1,0 +1,27 @@
+; Copyright (c) 2025 Gerald Reno, Jr.
+;
+; Licensed under the Apache License, Version 2.0 (the "License");
+; you may not use this file except in compliance with the License.
+; You may obtain a copy of the License at
+;
+; http://www.apache.org/licenses/LICENSE-2.0
+
+    .macpack atari
+
+; a macro that adds 160 to uppercase chars, and runs scrcode for anything else
+.macro _scrcode160 char
+        .if (char >= 65) .and (char <= 95)
+            .byte ( char + 160 )
+        .else
+            _scrcode { char }
+        .endif
+.endmacro
+.macro scrcode160 arg1
+    ; unlike scrcode, this ONLY accepts strings
+    ; Uppercase characters will have 160 added to them,
+    ; everything else will be passed to _scrcode for normal processing
+    .repeat .strlen (arg1), i
+        _scrcode160    {.strat (arg1, i)}
+    .endrepeat
+.endmacro
+

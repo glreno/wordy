@@ -21,7 +21,7 @@
 #include "vo_text.h"
 #include "dk_kbdriver.h"
 #include "md_pick.h"
-
+#include "vo_a400.h"
 
 /* VIDEO DATA */
 
@@ -35,6 +35,7 @@ vfm_fontmanager fontmanager1, fontmanager2;
 /* The dictionaries */
 extern md_dict DICT_HA;
 
+
 /* Game code (these don't need to be global, really) */
 mq gameModel;
 vo_text opponentView;
@@ -42,10 +43,11 @@ moq opponentModel;
 void *vu_letters;
 md_dict *dict;
                  // 012345678901234567890123456
-char titleText[] = "AQordl (text)    US/n";
+char titleText[] = "AQolite (text)   US/n";
 // titleText[18] should be S or K
 // titleText[20] should be e/n/h
 
+/* Image data */
 
 const unsigned char SPOTLIGHT[] = {
     0b01111100,
@@ -169,6 +171,10 @@ void initializeQordl()
 
     shown = shown || title_show_license_on_L();
 
+    vo4_initialize(FONT1,FONT2);
+
+    shown = shown || title_show_license_on_L();
+
     // ok, loading is done
     // Clear the key buffer and show the press a key message
     title_show_press_a_key();
@@ -217,6 +223,7 @@ int main()
     initializeQordl();
     for(;;)
     {
+        md_bankswitchIdx(); // BANK SWITCH!
         pickWord();
         moq_gameDriver(titleText,&opponentModel);
         dk_getc();

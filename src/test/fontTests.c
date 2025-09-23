@@ -288,21 +288,21 @@ int main(void)
     {
         for(x=0;x<5;x++)
         {
-            vw_writeTile(&grey,x,y,VW_GREY,'A'+(y*5)+x);
+            vw_writeTile(&grey,y,x,VW_GREY,'A'+(y*5)+x);
             // VW_YELLOW will invert the chars
-            vw_writeTile(&yellow,x,y,VW_YELLOW,'A'+(y*5)+x);
+            vw_writeTile(&yellow,y,x,VW_YELLOW,'A'+(y*5)+x);
             // since we allocate the green letters manually in this test,
             // just tell it to print them in GREY, which doesn't mangle the character.
             // vw_writeTile(VW_GREEN) allocates a new green character.
-            vw_writeTile(&green,x,y,VW_GREY/*GREEN*/,'!'+(y*5)+x);
+            vw_writeTile(&green,y,x,VW_GREY/*GREEN*/,'!'+(y*5)+x);
         }
     }
     vw_writeTile(&zed,0,0,VW_GREY,'Z');
-    vw_writeTile(&zed,2,0,VW_YELLOW,'Z');
-    vw_writeTile(&zed,4,0,VW_GREY/*GREEN*/,':');
+    vw_writeTile(&zed,0,2,VW_YELLOW,'Z');
+    vw_writeTile(&zed,0,4,VW_GREY/*GREEN*/,':');
 
     // test cleartile by writing something then clearing it
-    vw_writeTile(&zed,3,0,VW_YELLOW,'Z');
+    vw_writeTile(&zed,0,3,VW_YELLOW,'Z');
     vw_clearTile(&zed,3,0);
 
     first = 1;

@@ -46,11 +46,11 @@ typedef struct md_wordStruct
 } md_word;
 /** This is what is actually stored. client code always gets a md_word,
 * but the ROM contains md_wordInternal, and the accessors convert it.
-* (i.e., add a flags byte)
+* (i.e., add the first letter and decompress)
 */
 typedef struct md_wordInternal
 {
-    char s[5];
+    char s[3];
 } md_wordInternal;
 
 /* Since md_wordStruct is exactly six characters,
@@ -59,11 +59,16 @@ typedef struct md_wordInternal
 *       n = md_volumeFind(&DICT, (md_word*)"LOSER");
 */
 
-/* Compare two words. Very much like strcmp. */
-signed char md_wordCmp(const md_word *a, const md_word *b);
+/** Convert a md_word to a md_wordInternal */
+void __fastcall__ md_wordToWordInternal( md_wordInternal *dest, const md_word* src);
 
-/* Compare two words. Very much like strcmp. */
-signed char md_wordCmpInternal(const md_wordInternal *a, const md_wordInternal *b);
+
+/* Compare two words. Very much like strcmp.
+ * 's' is the search term, and MAY NOT BE NULL and may not have flags.
+ * 'a' going to be from the dictionary, and may be null, and will have flags.
+ * Flags must be ignored in the comparison.
+ */
+signed char md_wordCmpInternal(const md_wordInternal *a, const md_wordInternal *s);
 
 /* Copy md_word.s to a buffer. dest must point to a char[] of length 6 or more. */
 void md_wordToString(char *dest, const md_word *src);
@@ -77,47 +82,60 @@ void md_wordToString(char *dest, const md_word *src);
 * The list of words can be in a bank-switched cartridge, but
 * this structure should be in non-swappable memory.
 */
-typedef struct md_volumeStruct
+typedef struct md_wordListStruct
 {
     unsigned int size; /* Number of words in list, so you can get this without bank-switching */
+    char firstLetter; /* first letter of EVERY WORD in the list */
     char bank; /* ID of cartridge 8K bank that contains list */
     const md_wordInternal *list;
-} md_volume;
+    // ...this is the thing that will be a union with "size==1 means the last three bytes are a word"
+} md_wordList;
+
+/** Convert a md_word to a md_wordInternal */
+void __fastcall__ md_wordInternalToWord( md_word *dest, const md_wordList *d, const md_wordInternal* src);
+
+
+typedef struct md_lexiconStruct
+{
+    unsigned char array_length; // if you create this in C, set length to 26!
+    md_wordList wordList[26];
+} md_lexicon;
 
 /* Size of volume. md_volumeGet(d,md_volumeSize(d)) will return null (out of range) */
-//unsigned int md_volumeSize(const md_volume *d);
-#define md_volumeSize(d) ((d)->size)
-
-/* Get a word.
- * DEPRECATED used only in tests. Uses a temp buffer to return.
-* Assumes correct bank is loaded.
-* Returns null if index<0 or index>=d.size
-* Since volumes can be bank switched, the returned pointer
-* will be invalid after an operation on another volumes.
-* So copy what you need, quickly
-*/
-const md_word * __fastcall__ md_volumeGet(const md_volume *d, int index);
+unsigned int __fastcall__ md_lexiconSize(const md_lexicon *d);
+unsigned int __fastcall__ md_lexiconSizeBefore(char letter,const md_lexicon *d);
+#define md_wordListSize(d) ((d)->size)
 
 /* Get a word, and copy it into the provided buffer.
 * Assumes correct bank is loaded.
 * If not found, sets dest->wordflags=0xff
 */
-void __fastcall__ md_volumeCopyWord(const md_volume *d, int index, md_word *dest);
+void __fastcall__ md_wordListCopyWord(md_word *dest, const md_wordList *d, int index );
 
 /* Find a word in the volume. Returns -1 if it's not there.
 * Assumes correct bank is loaded.
 * This should be a nice fast binary search.
 * After being found, the index will be stored in a transient lastfound, so
 * the next search can find it in a single operation. TODO
-* The search is on the string content of s; it is fine
-* to search on a plain C string of length 5, you need to cast it though:
-*       n = md_volumeFind(&VOL, (md_word*)"LOSER");
+* The search is on the content of s, not on a plain string.
 */
-int __fastcall__ md_volumeFind(const md_volume *d, const md_word *s);
+int __fastcall__ md_wordListFind(const md_wordList *d, const md_wordInternal *s);
 
 /* ######################################################### */
 /* #                DICTIONARY MODEL                       # */
 /* ######################################################### */
+
+/*
+* A lexicon, whose count can be multiplied.
+* Wrapper for a pointer to a single md_lexicon, combined with a multiplier.
+*/
+typedef struct md_multilex
+{
+    const unsigned char mult;       // 1 byte - number of times this volume appears
+                                    // Number of words is mult * words in volume
+    const md_lexicon *lexicon;       // 2 bytes - pointer to a lexicon
+                                    // A lexicon is 26 wordLists
+} md_multilex;
 
 /*
 * A Big Dictionary -- a collection of smaller dictionary volumes.
@@ -126,25 +144,13 @@ int __fastcall__ md_volumeFind(const md_volume *d, const md_word *s);
 */
 typedef struct md_dictStruct
 {
-    unsigned int size;
-    const md_volume *dictionaries[];
+    const unsigned char size; // number of structs in the array, NOT size of dictionary!
+    const md_multilex lexicons[]; // array of 3-byte struct
 } md_dict;
 
-/* Sum of the size of all dictionaries in the big dictionary */
+/* Sum of the size of all lexicons in the big dictionary.
+ * This includes the multiplier from md_multilex! */
 unsigned int __fastcall__ md_size(const md_dict *d);
-
-/* Find the dictionary a word is in. This is an internal function, really.
-* MAY BANK SWITCH.
-* If bank switching is involved, the correct bank will be left loaded
-* so that you can call md_volumeGet. So this WILL work, but be sure to
-* do the lookup immediately:
-*   md_volume = md_findVolume(bigdict,"LOSER");
-*   index = md_volumeFind(md_volume,"LOSER");
-*   word = md_volumeGet(md_volume,index);
-* TODO it's not clear that I need this function, since it's the same as md_findWord(d,s,NULL)
-* with the extra work to bank switch
-*/
-//md_volume *md_findVolume(const md_dict *d, const char *s);
 
 /* Get a word.
 * MAY BANK SWITCH.
@@ -172,5 +178,8 @@ int __fastcall__ md_findWord(const md_dict *d, const md_word *goal, md_word *des
 * as long as you can't predict what it is.
 */
 void __fastcall__ md_pickRandomWord(const md_dict *d, md_word *dest);
+
+/* Bankswitch to where the dictionary and volume indices are */
+void __fastcall__ md_bankswitchIdx(void);
 
 #endif

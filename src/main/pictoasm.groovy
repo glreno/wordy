@@ -3,6 +3,7 @@ import java.awt.image.BufferedImage;
 import groovy.json.JsonSlurper
 
 this.bankids = new TreeSet();
+this.paramblock = {};
 
 String grey(int b)
 {
@@ -23,9 +24,11 @@ void generatePic(Map map)
     File f = new File(dir,map.fn);
     BufferedImage im = ImageIO.read(f);
     name=map.name;
-    bankName = "VOR_"; // TODO do not hardcode!
-    picseg="PICS";
-    idxseg="IDX";
+//    bankName = "VOR_"; // TODO do not hardcode!
+//    picseg="PICS";
+//    idxseg="IDX";
+    picseg=paramblock.picsegment;
+    idxseg=paramblock.idxsegment;
     quot='\"';
 
     // Find source x,y (pixel coordinates)
@@ -49,7 +52,7 @@ void generatePic(Map map)
     srch=im.getHeight() - srcy;
     if ( srch>dsth*8 ) srch=dsth*8;
 
-    println("    .segment $quot$bankName$picseg$map.bank$quot");
+    println("    .segment $quot$picseg$map.bank$quot");
     println();
     int blockbytecount=0;
     int stripebytecount=0;
@@ -82,6 +85,9 @@ void generatePic(Map map)
         [76:4,90:4],
         [94:2,123:5,32:1]
     ];
+
+    if ( paramblock.makestripes != false )
+    {
 
     for(x=dstx;x<dstx+dstw;++x)
     {
@@ -124,14 +130,19 @@ void generatePic(Map map)
         stripebytecount+=2;
         println("    .byte ${buf}");
     }
+    }
+
     println("; Blocks: ${blockbytecount} bytes  Stripes: ${stripebytecount} bytes  ${name}");
 
+    if ( paramblock.makestripes != false )
+    {
+
     println();
-    println("    .segment $quot$bankName$idxseg$quot");
+    println("    .segment $quot$idxseg$quot");
     println();
     println("_${name}:");
     println("    .export _${name}");
-    bankid = "${bankName}${picseg}${map.bank}_BANK_ID";
+    bankid = "${picseg}${map.bank}_BANK_ID";
     println("    .byte <${bankid}");
     bankids.add(bankid);
     for(x=dstx;x<dstx+dstw;++x)
@@ -139,6 +150,7 @@ void generatePic(Map map)
         println("    .word _${name}_stripe_$x");
     }
     println("    .word 0");
+    }
 
 }
 
@@ -167,7 +179,15 @@ hfile.eachLine { line ->
             println("; dstx:"+map.dst[0]);
             println("; dsty:"+map.dst[1]);
 */
-            generatePic(map);
+            if ( map.containsKey("name") )
+            {
+                generatePic(map);
+            }
+            else
+            {
+                println("; This is parameters! "+map);
+                paramblock=map;
+            }
         }
     }
 }

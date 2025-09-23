@@ -19,14 +19,16 @@
 ; Application locations
 
     .export _DS_DLI
-    .export _DS_CURRPAGE
+    .exportzp _DS_CURRPAGE
     .export _DS_NEXTPAGE
     .export _DS_DLICBV
     .export _DS_ATCBV
     .export _DS_PFCBV
+    .export _DS_VBCBV
     .export _DS_DLICB
     .export _DS_ATCB
     .export _DS_PFCB
+    .export _DS_VBCB
     .export _DS_NOCB
     .export _DS_ATTIME
     .export _DS_TIMERHANDLER
@@ -49,7 +51,7 @@
 
     ; a couple zero-page bytes for storing addresses
     ; this is used during the page flip, so do not use in application,
-    ; but it is available for use during the PF and AT and DLI callbacks.
+    ; but it is available for use during the PF and VB and AT and DLI callbacks.
     ; DO NOT USE IN THE MAIN THREAD. The interrupt WILL overwrite it.
     _DS_ZTMPI: .word 0
     _DS_ZTMPIL = _DS_ZTMPI
@@ -64,6 +66,8 @@
     _DS_DLICB = _DS_DLICBV+1
     _DS_PFCBV:      .byte 0,0,0 ; JMP and an address
     _DS_PFCB = _DS_PFCBV+1
+    _DS_VBCBV:      .byte 0,0,0 ; JMP and an address
+    _DS_VBCB = _DS_VBCBV+1
     _DS_ATCBV:      .byte 0,0,0 ; JMP and an address
     _DS_ATCB = _DS_ATCBV+1
     _DS_ATTIME:     .word 0 ; duration of animation timer
@@ -77,6 +81,7 @@ _DS_CTOR:
     LDA #$60 ; opcode for RTS
     STA _DS_DLICBV
     STA _DS_PFCBV
+    STA _DS_VBCBV
     STA _DS_ATCBV
     ; clear the NEXTPAGE so the first VBI doesn't page flip to garbage
     LDA #0
@@ -86,6 +91,13 @@ _DS_CTOR:
     STA CDTMA1
     LDA # > _DS_TIMERHANDLER
     STA CDTMA1+1
+
+    ; set LSB of pointer to current page's font pointers
+    ; font list is at page+$24 (ds_page.page.fonts)
+    LDA #ds_pageHeader_fonts
+    STA DS_PAGEFONT ; zero page location for addr of font list
+    ; the MSB is the next byte, _DS_CURRPAGE, and changes every flip.
+
     RTS
 
 ;
@@ -147,6 +159,8 @@ DLI_DONE:
 ; and set the font pointer for the DLI
 ; Afterwards, call the Page Flip Callback _DS_PFCB if enabled
 ; and maybe restart the animation timer in CDTMV1
+; Call the Vbi Callback _DS_VBCB if enabled, after every
+; call, whether there was a flip or not.
 
 _DS_PAGEFLIP:
     ; skip if next page is 0
@@ -195,11 +209,6 @@ _DS_PAGEFLIP:
     DEY
     BPL @L2
 
-    ; copy page LSB to font pointers
-    ; font list is at page+$24 (ds_page.page.fonts)
-    LDA #ds_pageHeader_fonts
-    STA DS_PAGEFONT ; zero page location for addr of font list
-
     ; Set the state of the NEXT PAGE to ON SCREEN (0)
     ; The state was set to 1 when it was put there by ds_flipToPageNextVBI
     ; (_DS_ZTMPIH is still pointing at _DS_NEXTPAGE)
@@ -242,6 +251,8 @@ PAGEFLIPCB_DONE:
 
     ; and we are done
 PAGEFLIP_DONE:
+    ; call the Vbi callback if enabled
+    JSR _DS_VBCBV
     RTS
 
 ; ANIMATION TIMER HANDLER

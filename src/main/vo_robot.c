@@ -12,20 +12,24 @@
 #include "yield.h"
 #include "vfm_fontmanager.h"
 #include "robot0_anim.h"
-#include <_atarios.h>
+#include <atari.h>
 #include <conio.h>
 #include <string.h>
 
-extern char vor_blockAllMessages;
+// initialized by vor_initialize
 char vor_blockAllMessages;
-unsigned char vor_boredTimer = 0;
-unsigned char vor_amBored=0;
+
+// Initialized with first message
+unsigned char vor_boredTimer;
+unsigned char vor_amBored;
 extern void vor_bored();
+unsigned char lastprogress;
 
 
 // A dancing robot with laser eyes?
 
 void vor_handleYield(void);
+
 
 //
 // RUN-ONCE INITIALIZATION CODE
@@ -34,8 +38,10 @@ void vor_handleYield(void);
 #pragma rodata-name (push,"ONCE")
 #pragma local-strings (on)
 
+char lpf; // lasers-per-frame 5 for pal, 6 for ntsc
+
 //segment ONCE
-void __fastcall__ vor_initialize(vo_robot *this, char liney, ds_page **pages, char spotlightSize,const unsigned char *spotlightBmp,unsigned char *screenram)
+void __fastcall__ vor_initialize(vo_robot *this, char liney, ds_page **pages, unsigned char *screenram)
 {
     unsigned char x,y,i,c;
     vor_preinit();
@@ -51,8 +57,6 @@ void __fastcall__ vor_initialize(vo_robot *this, char liney, ds_page **pages, ch
     this->y = liney;
     this->x = 0;
     this->laserTargetCoords.w=0;
-    this->spotlightSize=spotlightSize;
-    this->spotlightBmp=spotlightBmp;
     vo_setYieldFunc(&vor_handleYield);
 
     // Fill in the opponent-animation area
@@ -74,6 +78,16 @@ void __fastcall__ vor_initialize(vo_robot *this, char liney, ds_page **pages, ch
 
     // Initialize all the pages. This is a separate function in vo_anim.c
     voa_initPages();
+    lastprogress=0;
+    if ( GTIA_READ.pal & 0xE == 0 )
+    {
+        // PAL system
+        lpf = 5;
+    }
+    else
+    {
+        lpf = 6;
+    }
 }
 
 #pragma local-strings (off)
@@ -94,7 +108,7 @@ void __fastcall__ vor_initialize(vo_robot *this, char liney, ds_page **pages, ch
 #pragma rodata-name (push,"VOR_IDX")
 #pragma local-strings (on)
 
-void __fastcall__ vor_doDrawLaser(unsigned char pageid,unsigned char x, unsigned char y);
+void __fastcall__ vor_doDrawLaser(unsigned char pageid);
 
 //segment VOR_CODE
 // Draw a laser on the letter being scored.
@@ -103,10 +117,14 @@ void __fastcall__ vor_drawLaser(unsigned char pageid, int sx, int sy, unsigned c
 void __fastcall__ vor_drawLaser(unsigned char pageid, int sx, int sy, unsigned char progress)
 {
     vo_robot *this=vor_singleton;
+    vo_anim *thisA=voa_singleton;
     int ex;
     int ey;
     int dx;
     int dy;
+    int chunksize;
+    int chunk;
+    int i;
     byteunion bu;
     bu.w=this->laserTargetCoords.w;
     if ( bu.w == 0 )
@@ -114,23 +132,32 @@ void __fastcall__ vor_drawLaser(unsigned char pageid, int sx, int sy, unsigned c
         // nothing was in the queue
         return;
     }
+    if ( lastprogress>59 )
+    {
+        lastprogress=0;
+    }
     ex=48+4*bu.lsb;
     ey=32+8*bu.msb;
 
-    dx = progress*(ex-sx)/60;
-    dy = progress*(ey-sy)/60;
+    // The laser is moving from (sx,sy) to (ex,ey)
+    // Divide the range from lastprogress(exclusive) to progress (inclusive) into 5 or 6 chunks,
+    // so that you have 5 or 6 numbers that differ by chunksize.
+    chunksize=(lastprogress-progress)/lpf;
+    for(i=0;i<lpf;++i)
+    {
+        // note that those 60s are NOT related to pal or ntsc, just progress
+        chunk = progress+chunksize*(i+1);
+        dx = chunk*(ex-sx)/60;
+        dy = chunk*(ey-sy)/60;
 
-    vor_doDrawLaser(pageid,sx+dx,sy+dy);
-}
-//segment VOR_CODE
-// Draw a laser on the letter being scored.
-void __fastcall__ vor_doDrawLaser(unsigned char pageid,unsigned char x, unsigned char y)
-{
-    vo_anim *thisA=voa_singleton;
-    vo_robot *this=vor_singleton;
-    memcpy(thisA->pages[pageid]->pm.player2+y,this->spotlightBmp,this->spotlightSize);
-    thisA->pages[pageid]->colors.pcolr2=0x72;
-    thisA->pages[pageid]->colors.hposp2=x;
+        // Store the laser coordinates in the page.freespace
+        // so that the VBI can draw the laser there
+        thisA->pages[pageid]->page.freespace[0x000+i]=((sx+dx)&0xff);
+        thisA->pages[pageid]->page.freespace[0x100+i]=((sy+dy)&0xff);
+    }
+    thisA->pages[pageid]->page.freespace[0x3D]=lpf-1;
+
+    lastprogress=progress;
 }
 
 //segment VOR_CODE
@@ -140,7 +167,7 @@ void __fastcall__ vor_clearLaser(unsigned char pageid)
 {
     vo_robot *this=vor_singleton;
     vo_anim *thisA=voa_singleton;
-    bzero(thisA->pages[pageid]->pm.player2,255);
+    bzero(thisA->pages[pageid]->pm.player2,512);
     thisA->pages[pageid]->colors.hposp2=0;
 }
 
@@ -195,20 +222,26 @@ void __fastcall__ vor_renderFrame(unsigned char pageid)
             if ( ret & 0x40 )
             {
                 // Bit 6 set -- it's a RIGHT laser
-                laserstartx = 136;
+                laserstartx = 126;
             }
             else
             {
                 // it's a LEFT laser
-                laserstartx = 114;
+                laserstartx = 122;
             }
             // Read the progress bits - this is a number from 0-60
             ret = (ret & 0x3f);
-            vor_drawLaser( pageid, laserstartx, 88, ret );
+            vor_drawLaser( pageid, laserstartx, 74, ret );
             if ( ret >= 60 )
             {
                 vor_finishLaser();
             }
+    }
+    else
+    {
+        // No laser! Clear the laser X coordinate so it doesn't get drawn
+        picid=this->pages[pageid]->page.freespace[0]=0;     // X coord of first laser; 0 means do not draw
+        picid=this->pages[pageid]->page.freespace[0x3D]=0;  // index of laser coord to draw
     }
     ds_copyBelt(fontbaseTop,fontbaseBot);
     voa_playCue();
@@ -247,14 +280,63 @@ void __fastcall__ vor_handleCommand(const char *guess)
 
 //segment VOR_CODE
 extern char* vor_laser_anim_list[];
-void vor_startLaserAnimation(unsigned char x);
-// Look up the correct animation in void_laser_anim_list for the given X coordinate.
+void vor_startLaserAnimation(unsigned char yellow);
+// Look up the correct animation in void_laser_anim_list for the this->laserTargetCoords.
+// Set yellow=1 for yellow, 0 for green.
 // The green and yellow lists are in the same array; yellow is offset by 1.
 // So for x==7, the green is at 7 but the yellow is at 6.
 // This only works because the coordinates are known, and always two apart.
-void vor_startLaserAnimation(unsigned char x)
+void vor_startLaserAnimation(unsigned char yellow)
 {
-    voa_startAnimationLoop( *vor_laser_anim_list[ x ]);
+    vo_robot *this=vor_singleton;
+    unsigned char tilex;
+    unsigned char centerx;
+    unsigned char right;
+    int ex,ey;
+    int dx,dy,distsq;
+    byteunion bu;
+    int frames=0;
+
+    bu.w=this->laserTargetCoords.w;
+    if ( bu.w == 0 )
+    {
+        // nothing was in the queue
+        return;
+    }
+    tilex=bu.lsb;
+    if ( tilex > 0x12 )
+    {
+        right=8; // multiplier for array index
+        centerx=126;
+    }
+    else
+    {
+        right=0;
+        centerx=122;
+    }
+    ex=48+4*tilex;
+    ey=32+8*bu.msb;
+    dx=centerx-ex;
+    dy=74-ey;
+    distsq=(dx*dx)+(dy*dy);
+
+    // distsq will be a number from 125 to 18824.
+    // No need to actually take the square root,
+    // we just need to know to take 1,2,3, or 4 frames.
+    if ( distsq > 1225 ) ++frames;
+    if ( distsq > 4761 ) ++frames;
+    if ( distsq > 10609 ) ++frames;
+    // that's actually going to be 0..3 but that's what
+    // we need for an index anyway.
+
+    // The array index is:
+    //  0..3    green left
+    //  4..7    yellow left
+    //  8..11   green right
+    // 12..15   yellow right
+    yellow=yellow*4;
+
+    voa_startAnimationLoop( *vor_laser_anim_list[ frames+yellow+right ]);
 }
 
 // qcpy and qcat should move to vo_baseA.asm
@@ -355,18 +437,17 @@ char vor_queueMessage()
             return 0;
         case MSG_LETTER_IS_YELLOW: // 14
             vor_blockAllMessages=1;
-            // Subtract one from the X to indicate that it is yellow
-            vor_startLaserAnimation(this->laserTargetCoords.lsb -1);
+            vor_startLaserAnimation(1); // 1 means yellow
             return 0;
         case MSG_LETTER_IS_GREEN: // 15
             vor_blockAllMessages=1;
-            vor_startLaserAnimation(this->laserTargetCoords.lsb );
+            vor_startLaserAnimation(0); // 0 means green
             return 0;
         case MSG_BAD_KEY_PRESSED: // 23
             voa_startAnimationLoop( vor_anim_angry_badkey ); // angry
             return 0;
         case MSG_GREEN_WORD_COUNT: // 17
-            voa_startAnimationLoop( vor_anim_standby ); // standby
+            //voa_startAnimationLoop( vor_anim_standby ); // standby
             return 0;
         case MSG_KEY_ACCEPTED: // 24
             // finish whatever animation and return to standby

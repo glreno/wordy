@@ -16,23 +16,45 @@
 #include <conio.h>
 #include <_atarios.h>
 
-const md_wordInternal WORD[] = {
-    { "super" },
-    { "supes" },
-    { "today" }
+md_wordInternal IWORD[3];
+
+const md_word WORD[] = {
+    { "Snipe", 6 },
+    { "Snips", 8 },
+    { "Swipe", 7 }
 };
 
-const md_volume DICT1 = { 3, 0, WORD };
-const md_dict DICT = { 1, { &DICT1 } };
+md_lexicon DICT1L; // empty list of 26 md_wordList
+const md_dict DICT = { 1, { 1, &DICT1L }};
+                    // ^    ^
+                    // |    |
+                    // |    +--- volume count
+                    // +- array size
 
-extern md_word cvcvcDict1;
-extern md_word cvcvcDict2;
-extern md_word cvcvcDict3;
-const md_volume CVDICT1 = { 67, 0, &cvcvcDict1 };
-const md_volume CVDICT2 = { 67, 0, &cvcvcDict2 };
-const md_volume CVDICT3 = { 67, 0, &cvcvcDict3 };
-const md_dict CVDICT = { 3, { &CVDICT1, &CVDICT2, &CVDICT3 } };
+extern md_dict CVDICT;
 
+void buildDict(void)
+{
+    md_wordToWordInternal(&IWORD[0],&WORD[0]);
+    md_wordToWordInternal(&IWORD[1],&WORD[1]);
+    md_wordToWordInternal(&IWORD[2],&WORD[2]);
+    DICT1L.array_length=26;
+    DICT1L.wordList[18].size=3;
+    DICT1L.wordList[18].firstLetter='S';
+    DICT1L.wordList[18].bank=0;
+    DICT1L.wordList[18].list=IWORD;
+}
+
+void lookupTest(int expected,char *bufp)
+{
+    char buf0[6],buf1[6];
+    md_word tword;
+    int n = md_findWord(&CVDICT, (md_word*)bufp, &tword);
+    md_wordToString(buf0,&tword);
+    md_getWord(&CVDICT,n,&tword);
+    md_wordToString(buf1,&tword);
+    printf("%d:[%s] is at %d %s %s f:%d\n",expected,bufp,n,buf0,buf1,tword.wordflags);
+}
 
 void dictTests(void)
 {
@@ -43,12 +65,13 @@ void dictTests(void)
 
     printf("\x7DThe Dictionary Test\n");
 
-    n = md_findWord(&DICT, (md_word*)"supes", NULL);
-    printf("[supes] is at %d\n",n);
+    n = md_findWord(&DICT, (md_word*)"Snips", NULL);
+    printf("[Snips] is at %d\n",n);
 
-    n = md_findWord(&DICT, (md_word*)"gloom", NULL);
-    printf("[gloom] is not found: %d\n",n);
+    n = md_findWord(&DICT, (md_word*)"Gloom", NULL);
+    printf("[Gloom] is not found: %d\n",n);
 
+    md_bankswitchIdx(); // BANK SWITCH!
     n = md_size(&DICT);
     printf("Size: Dict contains: %d\n",n);
 
@@ -65,28 +88,19 @@ void dictTests(void)
     md_getWord(&DICT,n,&tword);
     printf("get(len) should return 0xff: %d\n",tword.wordflags);
 
-    n = md_findWord(&CVDICT, (md_word*)"BABEL", &tword);
-    md_wordToString(buf0,&tword);
-    printf("0:[BABEL] is at %d %s f:%d\n",n,buf0,tword.wordflags);
-
-    n = md_findWord(&CVDICT, (md_word*)"FINAL", &tword);
-    md_wordToString(buf0,&tword);
-    printf("101:[FINAL] is at %d %s f:%d\n",n,buf0,tword.wordflags);
-
-    n = md_findWord(&CVDICT, (md_word*)"NATAL", &tword);
-    md_wordToString(buf0,&tword);
-    printf("200:[NATAL] is at %d %s f:%d\n",n,buf0,tword.wordflags);
+    lookupTest(0,"BABEL");
+    lookupTest(35,"BOSOM");
+    lookupTest(36,"CABAL");
+    lookupTest(67,"COVET");
+    lookupTest(68,"DAVIT");
+    lookupTest(200,"NATAL");
 
     n = md_findWord(&CVDICT, (md_word*)"!WORD", &tword);
     printf("[!WORD] is at %d f:%d\n",n,tword.wordflags);
-
-    n = md_size(&CVDICT);
-    printf("Size: CVDict contains: %d\n",n);
 }
 
 void dictSpeedTests()
 {
-    /* TODO this is just cloned from dictTests.c */
     char buf0[6];
     int i,j,n;
     //md_word *w;
@@ -97,8 +111,10 @@ void dictSpeedTests()
     unsigned int total = 0;
     unsigned int start = 0xffff;
 
-    printf("Timing and verifying 200 finds\n",n);
+    md_bankswitchIdx(); // BANK SWITCH!
     n = md_size(&CVDICT);
+    printf("Size: CVDict contains: %d\n",n);
+    printf("Timing and verifying %d finds\n",n);
     OS.cdtmv2=start; /* timer 2: total time */
     for(i=0; i<n; i++)
     {
@@ -122,10 +138,10 @@ void dictSpeedTests()
     printf("Duration: %d jiffies, %d sec\n",total,total/60);
     printf("Avg %d jiffies per word, max %d\n",total/n,max);
 
-    printf("Timing and verifying 200 not finds\n",n);
+    printf("Timing and verifying 201 not finds\n",n);
     total=0;
     max=0;
-    n = md_size(&CVDICT);
+    md_bankswitchIdx(); // BANK SWITCH!
     OS.cdtmv2=start; /* timer 2: total time */
     for(i=0; i<n; i++)
     {
@@ -149,15 +165,16 @@ void dictSpeedTests()
 
 int main(void)
 {
-    if ( OS.ramtop < 0xA0 ) { cputs("Min 40K"); for(;;); } // 9C20 in the cfg file
+    //if ( OS.ramtop < 0xA0 ) { cputs("Min 40K"); for(;;); } // 9C20 in the cfg file
 
     OS.coldst=1; // force cold start on warm reset
     //char k;
+    buildDict();
     dictTests();
     dictSpeedTests();
     //printf("\nPress a key to continue\n");
     //k = cgetc();
-    printf("\nAll done!\n");
+    printf("All done!\n");
     for(;;)
         ;
     return 1;

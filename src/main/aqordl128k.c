@@ -46,13 +46,6 @@ char titleText[] = "AQordl (robot)   US/N";
 // titleText[18] should be S or K
 // titleText[20] should be e/n/h
 
-const unsigned char LASER[] = {
-    0b00011000,
-    0b00111100,
-    0b00111100,
-    0b00011000
-};
-
 //
 // RUN-ONCE INITIALIZATION CODE
 //
@@ -120,22 +113,20 @@ void initializeQordl()
     // __RESERVED_RAM__ is set to 32K so that nothing gets
     // allocated into the 130XE bank-switch area.
 
-    SCREENRAM = (unsigned char*)    0x3BF0; // 26*40=1040 (0x410) bytes of screen RAM ending at 4000
-    FONTLIST1[0] = (unsigned char*) 0x9C00;
-    FONTLIST1[1] = (unsigned char*) 0xA000;
-    FONTLIST1[2] = (unsigned char*) 0xA400;
-    // I think there's room at 3000 3400 3800
-    // but I'd rather overwrite DOS than smash the stack.
+    SCREENRAM = (unsigned char*)    0x2BF0; // 26*40=1040 (0x410) bytes of screen RAM ending at 3000
+    FONTLIST1[0] = (unsigned char*) 0x0800;
+    FONTLIST1[1] = (unsigned char*) 0x0C00;
+    FONTLIST1[2] = (unsigned char*) 0x1000;
     FONTLIST2[0] = (unsigned char*) 0x1400;
     FONTLIST2[1] = (unsigned char*) 0x1800;
     FONTLIST2[2] = (unsigned char*) 0x1C00;
-    PAGES[0] = (ds_page*) 0xA800;
-    PAGES[1] = (ds_page*) 0xB000;
-    PAGES[2] = (ds_page*) 0xB800;
+    PAGES[0] = (ds_page*) 0x3800;
+    PAGES[1] = (ds_page*) 0x9800; // because ram from 9C20...BFFF gets wiped on warmstart (basic)
+    PAGES[2] = (ds_page*) 0xB800; // because ram from BC20...BFFF gets wiped on warmstart (no basic)
 
     // Create a screen
     ds_initScreenRam(SCREENRAM, 40*26); // this sets SAVMSC and zeroes out the given amount of space
-    vor_initialize(&opponentView, 0, PAGES, 4, LASER, SCREENRAM);
+    vor_initialize(&opponentView, 0, PAGES, SCREENRAM);
 
     shown = shown || title_show_license_on_L();
 
@@ -237,6 +228,7 @@ int main()
 
     for(;;)
     {
+        md_bankswitchIdx(); // BANK SWITCH!
         pickWord();
         moq_gameDriver(titleText, &opponentModel);
         dk_getc();

@@ -18,14 +18,8 @@
 @DICTD DICT_HS
 @DICTD DICT_HS_US
 @DICTD DICT_HS_UK
-@DICT DICT_SA
-@DICTD DICT_SA
-@DICT DICT_SS,x2
-@DICT DICT_SS_US,x2
-@DICT DICT_SS_UK,x2
-@DICTD DICT_SS
-@DICTD DICT_SS_US
-@DICTD DICT_SS_UK
+@DICT DICT_TS,x2
+@DICTD DICT_TS
 ; MAIN WORD LIST
 abaci,np
 aback
@@ -297,6 +291,7 @@ biked,vc
 biker
 bilge
 bilks,vc
+billy,n
 bimbo
 binge
 bingo
@@ -492,6 +487,7 @@ caret
 cargo
 carne
 carob
+carol,n
 carom
 carps,np,vc
 carte
@@ -1525,6 +1521,7 @@ jibes,vc
 jiffy
 jihad
 jilts,vc
+jimmy,v
 jinni
 jinns,np
 jived,vc

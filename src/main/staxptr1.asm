@@ -10,11 +10,19 @@
 ; A couple utilities for handling ptr1
 
     .importzp ptr1
+    .importzp ptr2
 
     .CODE
+
 staxptr1:
     .export staxptr1
     STA ptr1
     STX ptr1+1
+    RTS
+
+staxptr2:
+    .export staxptr2
+    STA ptr2
+    STX ptr2+1
     RTS
 

@@ -14,9 +14,10 @@
 #
 
 all: tests disks carts
-tests: md_volumeTests.rom md_dictTests.rom md_bsTests.rom md_xebsTests.xex md_spdTests.rom md_wordCount.rom md_scanTests.rom md_xescanTests.xex md_usUkTests.rom md_randTests.rom randy.rom daMetronome.rom dsTests.rom dkTests.rom fontTests.rom fontTestSmall.rom fontTestTiny.rom fontMgrTest.rom vu_letterTest.rom titleTest.rom mw_scoreTest.rom
+tests: md_volumeTests.rom md_dictTests.rom md_bsTests.rom md_xebsTests.xex md_justDict.xex md_wordCount.rom md_scanTests.rom md_xescanTests.xex md_usUkTests.rom md_randTests.rom randy.rom daMetronome.rom dsTests.rom dkTests.rom fontTests.rom fontTestSmall.rom fontTestTiny.rom fontMgrTest.rom vu_letterTest.rom titleTest.rom mw_scoreTest.rom palTest.xex
 carts: awordl8k.rom aqordl8k.rom aqordl16k.rom
-disks: aqordl128k.xex
+disks: aqordl128k.xex aqordl48k.xex
+maintests: useless1.rom useless2.xex useless3.rom useless4.rom useless5.xex xegs32test.rom xegs64test.rom zlibTest.rom
 
 # Location of cc65 6502 cross-compiler
 CC65HOME = c:/builds/cc65
@@ -78,6 +79,8 @@ $(tdir)/%.s: %.c
 &   $(CC65)/cc65.exe -g -t atari -O -o $@ -I $(srcdir)/include -I $(srcdir)/pic $<
 
 clean:
+
+# Bankswitch tests
 &   rm $(tdir)/* $(bindir)/*
 
 #
@@ -98,6 +101,8 @@ $(tdir)/useless2.o: useless2.c
 $(tdir)/useless3.o: useless3.c
 $(tdir)/useless4.o: useless4.asm
 $(tdir)/useless5.o: useless5.asm
+
+# Bankswitch tests
 $(bindir)/xegs32test.rom: xegs32test.cfg xegs32test.o xegs32testA.o
 $(tdir)/xegs32test.o: xegs32test.c
 $(tdir)/xegs32testA.o: xegs32testA.asm
@@ -105,6 +110,9 @@ $(bindir)/xegs64test.rom: xegs64test.cfg xegs64test.o xegs64testA.o
 $(tdir)/xegs64test.o: xegs64test.c
 $(tdir)/xegs64testA.o: xegs64testA.asm
 
+# Compression tests
+$(tdir)/zlibTest.o: zlibTest.c
+$(bindir)/zlibTest.rom: zlibTest.cfg zlibTest.o
 
 ###################################
 
@@ -119,6 +127,7 @@ $(tdir)/noBankswitch.o: noBankswitch.asm
 $(tdir)/xeBankswitch.o: xeBankswitch.asm
 $(tdir)/title_awordl8k.o: title_awordl8k.asm title_template.inc title.h bankswitch.h version.inc
 $(tdir)/title_aqordl8k.o: title_aqordl8k.asm title_template.inc title.h bankswitch.h version.inc
+$(tdir)/title_aqordl48k.o: title_aqordl48k.asm title_template.inc title.h bankswitch.h version.inc
 $(tdir)/title_aqordl128k.o: title_aqordl128k.asm title_template_disk.inc title.h bankswitch.h version.inc
 $(bindir)/titleTest.rom: titleTest.o title_awordl8k.o bankswitch.o
 $(tdir)/copydata.o: copydata.asm
@@ -129,13 +138,14 @@ $(tdir)/options.o: options.asm
 # Dictionary Model
 $(tdir)/yield.o: yield.asm
 $(tdir)/md_wordA.o: md_wordA.asm
+$(tdir)/md_volA.o: md_volA.asm
 $(tdir)/md_volume.o: md_volume.c md_dict.h
 $(tdir)/md_dict.o: md_dict.c md_dict.h yield.h
 $(tdir)/md_volumeTests.o: md_volumeTests.c md_dict.h
 $(tdir)/md_dictTests.o: md_dictTests.c md_dict.h
 $(tdir)/md_bsTests.o: md_bsTests.c md_dict.h
 $(tdir)/md_xebsTests.o: md_xebsTests.asm
-$(tdir)/md_spdTests.o: md_spdTests.c md_dict.h
+$(tdir)/md_justDict.o: md_justDict.asm
 $(tdir)/md_wordCount.o: md_wordCount.c md_dict.h
 $(tdir)/md_scanTests.o: md_scanTests.c md_dict.h
 $(tdir)/md_xescanTests.o: md_xescanTests.asm
@@ -143,22 +153,24 @@ $(tdir)/md_usUkTests.o: md_usUkTests.c md_dict.h
 $(tdir)/md_randTests.o: md_randTests.c md_dict.h
 $(tdir)/md_pickA.o: md_pickA.asm
 $(tdir)/randy.o: randy.c
+$(tdir)/palTest.o: palTest.asm
+$(tdir)/volTestDictS.o: volTestDictS.asm
 $(tdir)/cvcvcDict.o: cvcvcDict.asm
 $(tdir)/cvcvcDict1.o: cvcvcDict1.asm
 $(tdir)/cvcvcDict2.o: cvcvcDict2.asm
 $(tdir)/cvcvcDict3.o: cvcvcDict3.asm
-$(tdir)/spdTestDict.o: spdTestDict.s
-$(bindir)/md_volumeTests.rom: md_volumeTests.o md_volume.o md_wordA.o cvcvcDict.o staxptr1.o
-$(bindir)/md_dictTests.rom: md_dictTests.o md_dict.o yield.o noBankswitch.o md_volume.o md_wordA.o cvcvcDict1.o cvcvcDict2.o cvcvcDict3.o staxptr1.o
-$(bindir)/md_bsTests.rom: md_bsTests.cfg md_bsTests.o md_dict.o yield.o bankswitch.o md_volume.o md_wordA.o cvcvcDict1.o cvcvcDict2.o cvcvcDict3.o staxptr1.o
-$(bindir)/md_xebsTests.xex: md_xebsTests.cfg md_xebsTests.o md_bsTests.o md_dict.o yield.o xeBankswitch.o md_volume.o md_wordA.o cvcvcDict1.o cvcvcDict2.o cvcvcDict3.o staxptr1.o
-$(bindir)/md_spdTests.rom: md_spdTests.o md_dict.o yield.o bankswitch.o md_volume.o md_wordA.o spdTestDict.o staxptr1.o
-$(bindir)/md_wordCount.rom: md_wordCount.cfg md_wordCount.o md_dict.o yield.o bankswitch.o md_volume.o md_wordA.o aqordlDict.o staxptr1.o -ldict
-$(bindir)/md_scanTests.rom: md_scanTests.cfg md_scanTests.o md_dict.o yield.o bankswitch.o md_volume.o md_wordA.o aqordlDict.o staxptr1.o -ldict
-$(bindir)/md_xescanTests.xex: md_xescanTests.cfg md_xescanTests.o md_scanTests.o md_dict.o yield.o xeBankswitch.o md_volume.o md_wordA.o aqordlDict.o staxptr1.o -ldict
-$(bindir)/md_usUkTests.rom: md_usUkTests.o md_dict.o yield.o bankswitch.o md_volume.o md_wordA.o aqordlDict.o staxptr1.o -ldict
-$(bindir)/md_randTests.rom: md_randTests.o md_dict.o yield.o bankswitch.o md_volume.o md_wordA.o aqordlDict.o staxptr1.o -ldict
+$(bindir)/md_volumeTests.rom: md_volumeTests.o md_volume.o md_volA.o md_wordA.o volTestDictS.o staxptr1.o noBankswitch.o
+$(bindir)/md_dictTests.rom: md_dictTests.o md_dict.o yield.o noBankswitch.o md_volume.o md_volA.o md_wordA.o cvcvcDict1.o cvcvcDict2.o cvcvcDict3.o cvcvcDict.o staxptr1.o
+$(bindir)/md_bsTests.rom: md_bsTests.cfg md_bsTests.o md_dict.o yield.o bankswitch.o md_volume.o md_volA.o md_wordA.o cvcvcDict1.o cvcvcDict2.o cvcvcDict3.o cvcvcDict.o staxptr1.o
+$(bindir)/md_xebsTests.xex: md_xebsTests.cfg md_xebsTests.o md_bsTests.o md_dict.o yield.o xeBankswitch.o md_volume.o md_volA.o md_wordA.o cvcvcDict1.o cvcvcDict2.o cvcvcDict3.o cvcvcDict.o staxptr1.o
+$(bindir)/md_justDict.xex: md_justDict.cfg md_justDict.o -ldict
+$(bindir)/md_wordCount.rom: md_wordCount.cfg md_wordCount.o md_dict.o yield.o bankswitch.o md_volume.o md_volA.o md_wordA.o aqordlDict.o staxptr1.o -ldict
+$(bindir)/md_scanTests.rom: md_scanTests.cfg md_scanTests.o md_dict.o yield.o bankswitch.o md_volume.o md_volA.o md_wordA.o aqordlDict.o staxptr1.o -ldict
+$(bindir)/md_xescanTests.xex: md_xescanTests.cfg md_xescanTests.o md_scanTests.o md_dict.o yield.o xeBankswitch.o md_volume.o md_volA.o md_wordA.o aqordlDict.o staxptr1.o -ldict
+$(bindir)/md_usUkTests.rom: md_usUkTests.o md_dict.o yield.o bankswitch.o md_volume.o md_volA.o md_wordA.o aqordlDict.o staxptr1.o -ldict
+$(bindir)/md_randTests.rom: md_randTests.o md_dict.o yield.o bankswitch.o md_volume.o md_volA.o md_wordA.o aqordlDict.o staxptr1.o -ldict
 $(bindir)/randy.rom: randy.o
+$(bindir)/palTest.xex: palTest.o
 
 # Screen driver
 $(tdir)/ds_screendriver.o: ds_screendriver.c ds_screendriver.h
@@ -187,7 +199,6 @@ $(tdir)/da_envelopes.lib: ae_simple.o ae_abrupt.o ae_drum.o ae_trailing.o
 &   $(CC65)/ar65.exe r $@ $^
 
 # Single Puzzle View
-$(tdir)/vw_base.o: vw_base.c vw_base.h ds_screendriver.h vfm_fontmanager.h
 $(tdir)/vw_baseA.o: vw_baseA.asm
 $(tdir)/vw_small.o: vw_small.c vw_small.h vw_base.h ds_screendriver.h vfm_fontmanager.h
 $(tdir)/vw_tinyA.o: vw_tinyA.asm
@@ -199,14 +210,14 @@ $(tdir)/fontTests.o: fontTests.c vw_small.h vw_base.h vfm_fontmanager.h ds_scree
 $(tdir)/awordlFont.o: awordlFont.c awordlFont.h
 $(tdir)/aqordlFont.o: aqordlFont.c aqordlFont.h
 $(tdir)/interactFont.o: interactFont.asm
-$(bindir)/fontTests.rom: fontTests.cfg fontTests.o vw_small.o vw_base.o vw_baseA.o vfm_fontmanager.o vfm_fontmanagerA.o ds_screendriverA.o ds_screendriverI.o ds_screendriver.o noBankswitch.o staxptr1.o
+$(bindir)/fontTests.rom: fontTests.cfg fontTests.o vw_small.o vw_baseA.o vfm_fontmanager.o vfm_fontmanagerA.o ds_screendriverA.o ds_screendriverI.o ds_screendriver.o noBankswitch.o staxptr1.o
 $(tdir)/fontTestSmall.o: fontTestSmall.c vw_small.h vw_base.h vfm_fontmanager.h ds_screendriver.h awordlFont.h
 $(tdir)/fontTestTiny.o: fontTestTiny.c vw_tiny.h vw_base.h vfm_fontmanager.h ds_screendriver.h aqordlFont.h
-$(bindir)/fontTestSmall.rom: fontTestSmall.cfg fontTestSmall.o vw_small.o vw_base.o vw_baseA.o vfm_fontmanager.o vfm_fontmanagerA.o ds_screendriverA.o ds_screendriverI.o ds_screendriver.o awordlFont.o noBankswitch.o staxptr1.o
-$(bindir)/fontTestTiny.rom: fontTestTiny.cfg fontTestTiny.o vw_tinyA.o vw_base.o vw_baseA.o vfm_fontmanager.o vfm_fontmanagerA.o ds_screendriverA.o ds_screendriverI.o ds_screendriver.o aqordlFont.o interactFont.o noBankswitch.o staxptr1.o
+$(bindir)/fontTestSmall.rom: fontTestSmall.cfg fontTestSmall.o vw_small.o vw_baseA.o vfm_fontmanager.o vfm_fontmanagerA.o ds_screendriverA.o ds_screendriverI.o ds_screendriver.o awordlFont.o noBankswitch.o staxptr1.o
+$(bindir)/fontTestTiny.rom: fontTestTiny.cfg fontTestTiny.o vw_tinyA.o vw_baseA.o vfm_fontmanager.o vfm_fontmanagerA.o ds_screendriverA.o ds_screendriverI.o ds_screendriver.o aqordlFont.o interactFont.o noBankswitch.o staxptr1.o
 $(tdir)/fontMgrTest.o: fontMgrTest.c vw_small.h vw_base.h vfm_fontmanager.h ds_screendriver.h awordlFont.h
 $(tdir)/fontMgrTestA.o: fontMgrTestA.asm ds_screendriverA.inc
-$(bindir)/fontMgrTest.rom: fontMgrTest.cfg fontMgrTest.o fontMgrTestA.o vw_small.o vw_base.o vw_baseA.o vfm_fontmanager.o vfm_fontmanagerA.o vfm_fontmanagerB.o ds_screendriverA.o ds_screendriverI.o ds_screendriver.o awordlFont.o noBankswitch.o staxptr1.o
+$(bindir)/fontMgrTest.rom: fontMgrTest.cfg fontMgrTest.o fontMgrTestA.o vw_small.o vw_baseA.o vfm_fontmanager.o vfm_fontmanagerA.o vfm_fontmanagerB.o ds_screendriverA.o ds_screendriverI.o ds_screendriver.o awordlFont.o noBankswitch.o staxptr1.o
 $(tdir)/vu_letterTest.o: vu_letterTest.c vu_letters.h ds_screendriver.h
 $(bindir)/vu_letterTest.rom: vu_letterTest.cfg vu_letterTest.o vu_letters.o ds_screendriverA.o ds_screendriverI.o ds_screendriver.o interactFont.o noBankswitch.o staxptr1.o
 
@@ -214,7 +225,7 @@ $(bindir)/vu_letterTest.rom: vu_letterTest.cfg vu_letterTest.o vu_letters.o ds_s
 $(tdir)/mw_puz.o: mw_puz.c mw_puz.h vw_small.h vw_base.h vfm_fontmanager.h
 $(tdir)/mw_puzA.o: mw_puzA.asm trampoline.inc
 $(tdir)/mw_scoreTest.o: mw_scoreTest.c mw_puz.h vw_small.h vw_base.h vfm_fontmanager.h vfm_fontmanagerA.o ds_screendriver.h awordlFont.h
-$(bindir)/mw_scoreTest.rom: mw_scoreTest.o mw_puz.o mw_puzA.o vw_small.o vw_base.o vw_baseA.o vfm_fontmanager.o vfm_fontmanagerA.o ds_screendriverA.o ds_screendriverI.o ds_screendriver.o awordlFont.o noBankswitch.o staxptr1.o
+$(bindir)/mw_scoreTest.rom: mw_scoreTest.o mw_puz.o mw_puzA.o vw_small.o vw_baseA.o vfm_fontmanager.o vfm_fontmanagerA.o ds_screendriverA.o ds_screendriverI.o ds_screendriver.o awordlFont.o noBankswitch.o staxptr1.o
 
 # Four Puzzle Model
 $(tdir)/mq_puzA.o: mq_puzA.asm
@@ -228,14 +239,21 @@ $(tdir)/vo_text.o: vo_text.c vo_text.h vo_base.h da_audioDriver.h
 # Wordl only, 8K RAM version
 $(tdir)/mo_wordl.o: mo_wordl.c mo_wordl.h mw_puz.h mw_puz.h vw_tiny.h vw_base.h vfm_fontmanager.h ds_screendriver.h da_audioDriver.h dk_kbdriver.h aqordlFont.h title.h bankswitch.h vo_base.h vu_letters.h
 $(tdir)/awordl8k.o: awordl8k.c mo_wordl.h mw_puz.h vw_small.h vw_base.h vfm_fontmanager.h ds_screendriver.h awordlFont.h title.h bankswitch.h vo_text.h vo_base.h
-$(bindir)/awordl8k.rom: awordl8k.cfg awordl8k.o mo_wordl.o mw_puz.o mw_puzA.o vw_small.o vw_base.o vw_baseA.o vfm_fontmanager.o vfm_fontmanagerA.o ds_screendriverA.o ds_screendriverI.o ds_screendriver.o da_audioDriverI.o da_audioDriverA.o dk_kbdriver.o title_awordl8k.o bankswitch.o md_dict.o yield.o vo_base.o vo_textA.o vo_text.o vu_letters.o md_volume.o md_wordA.o aqordlDict.o interactFont.o awordlFont.o staxptr1.o -ldict
+$(bindir)/awordl8k.rom: awordl8k.cfg awordl8k.o mo_wordl.o mw_puz.o mw_puzA.o vw_small.o vw_baseA.o vfm_fontmanager.o vfm_fontmanagerA.o ds_screendriverA.o ds_screendriverI.o ds_screendriver.o da_audioDriverI.o da_audioDriverA.o dk_kbdriver.o title_awordl8k.o bankswitch.o md_dict.o yield.o vo_base.o vo_textA.o vo_text.o vu_letters.o md_volume.o md_volA.o md_wordA.o aqordlDict.o interactFont.o awordlFont.o staxptr1.o -ldict
 
-# Qordl, 8K RAM version
+# Qordl, 8K RAM cart version
 $(tdir)/mo_qordlA.o: mo_qordlA.asm
+$(tdir)/vo_a400.o: vo_a400.c vo_a400.h a400_pic.h
+$(tdir)/vo_a400A.o: vo_a400A.asm
 $(tdir)/mo_qordl.o: mo_qordl.c mo_qordl.h mq_puz.h mw_puz.h vw_tiny.h vw_base.h vfm_fontmanager.h ds_screendriver.h da_audioDriver.h dk_kbdriver.h aqordlFont.h title.h bankswitch.h vo_text.h vo_base.h vu_letters.h
-$(tdir)/aqordl8k.o: aqordl8k.c mo_qordl.h mq_puz.h mw_puz.h vw_tiny.h vw_base.h vfm_fontmanager.h ds_screendriver.h dk_kbdriver.h aqordlFont.h title.h bankswitch.h vo_text.h vo_base.h
-$(bindir)/aqordl8k.rom: aqordl8k.cfg aqordl8k.o md_pickA.o mo_qordlA.o mo_qordl.o mq_puzA.o mq_puz.o mw_puz.o mw_puzA.o vw_tinyA.o vw_base.o vw_baseA.o vfm_fontmanager.o vfm_fontmanagerA.o ds_screendriverA.o ds_screendriverI.o ds_screendriver.o da_audioDriverI.o da_audioDriverA.o dk_kbdriver.o title_aqordl8k.o bankswitch.o md_dict.o yield.o vo_base.o vo_textA.o vo_text.o vu_letters.o md_volume.o md_wordA.o aqordlDict.o aqordlFont.o interactFont.o copydata.o staxptr1.o options.o -ldict
+$(tdir)/aqordl8k.o: aqordl8k.c mo_qordl.h mq_puz.h mw_puz.h vw_tiny.h vw_base.h vfm_fontmanager.h ds_screendriver.h dk_kbdriver.h aqordlFont.h title.h bankswitch.h vo_text.h vo_base.h vo_a400.h
+$(bindir)/aqordl8k.rom: aqordl8k.cfg aqordl8k.o md_pickA.o mo_qordlA.o mo_qordl.o mq_puzA.o mq_puz.o mw_puz.o mw_puzA.o vw_tinyA.o vw_baseA.o vfm_fontmanager.o vfm_fontmanagerA.o ds_screendriverA.o ds_screendriverI.o ds_screendriver.o da_audioDriverI.o da_audioDriverA.o dk_kbdriver.o title_aqordl8k.o bankswitch.o md_dict.o yield.o vo_base.o vo_textA.o vo_text.o vo_a400.o vo_a400A.o vu_letters.o md_volume.o md_volA.o md_wordA.o aqordlDict.o aqordlFont.o a400_pic.o interactFont.o copydata.o staxptr1.o options.o -ldict
 
+# Qordl, 48K RAM disk version
+$(tdir)/memCheck48k.o: memCheck48k.asm
+$(tdir)/warmstart.o: warmstart.asm
+$(tdir)/aqordl48k.o: aqordl48k.c mo_qordl.h mq_puz.h mw_puz.h vw_tiny.h vw_base.h vfm_fontmanager.h ds_screendriver.h dk_kbdriver.h aqordlFont.h title.h bankswitch.h vo_text.h vo_base.h vo_a400.h
+$(bindir)/aqordl48k.xex: aqordl48k.cfg aqordl48k.o md_pickA.o mo_qordlA.o mo_qordl.o mq_puzA.o mq_puz.o mw_puz.o mw_puzA.o vw_tinyA.o vw_baseA.o vfm_fontmanager.o vfm_fontmanagerA.o ds_screendriverA.o ds_screendriverI.o ds_screendriver.o da_audioDriverI.o da_audioDriverA.o dk_kbdriver.o title_aqordl48k.o noBankswitch.o md_dict.o yield.o vo_base.o vo_textA.o vo_text.o vo_a400.o vo_a400A.o vu_letters.o md_volume.o md_volA.o md_wordA.o aqordlDict.o aqordlFont.o a400_pic.o interactFont.o staxptr1.o xlBasicDisable.o memCheck48k.o warmstart.o options.o -ldict -lda_envelopes
 
 # Robot opponent view
 $(tdir)/vo_anim.o: vo_anim.c ds_screendriver.h vo_robot.h vo_anim.h vo_base.h da_audioDriver.h
@@ -254,6 +272,10 @@ $(tdir)/robot0_pic.o: robot0_pic.s
 $(tdir)/robot0_pic.s: robot0_pic.h robot0.24x128.png robot0.angry.png robot0.wrist1.png robot0.wrist2.png robot0.wrist3.png robot0.left.png robot0.leftpoint.png robot0.leftkick.png robot0.leftkickback.png robot0.right.png robot0.rightpoint.png robot0.rightkick.png robot0.rightkickback.png robot0.jump1.png robot0.jump2.png robot0.jump5.png
 &    groovy src/main/pictoasm.groovy $^ > $(tdir)/robot0_pic.s
 
+$(tdir)/a400_pic.o: a400_pic.s
+$(tdir)/a400_pic.s: a400_pic.h a401.png
+&    groovy src/main/pictoasm.groovy $^ > $(tdir)/a400_pic.s
+
 $(tdir)/robot0_pic.inc: robot0_pic.h
 &    groovy src/main/pictoinc.groovy $^ > $(tdir)/robot0_pic.inc
 
@@ -271,35 +293,32 @@ $(tdir)/robot0_cueball.o: robot0_cueball.asm robot0_envelopes.inc cueballmac.inc
 $(tdir)/robot0_cueball.inc: robot0_cueball.asm cueballmac.inc
 &    groovy src/main/cueballtoinc.groovy $^ > $(tdir)/robot0_cueball.inc
 
-# Qordl, 16K RAM version
+# Qordl, 16K RAM cart version
 $(tdir)/aqordl16k.o: aqordl16k.c mo_qordl.h mq_puz.h mw_puz.h vw_tiny.h vw_base.h vfm_fontmanager.h ds_screendriver.h dk_kbdriver.h aqordlFont.h title.h bankswitch.h vo_robot.h vo_anim.h vo_base.h
-$(bindir)/aqordl16k.rom: aqordl16k.cfg aqordl16k.o md_pickA.o mo_qordlA.o mo_qordl.o mq_puzA.o mq_puz.o mw_puz.o mw_puzA.o vw_tinyA.o vw_base.o vw_baseA.o vfm_fontmanager.o vfm_fontmanagerA.o ds_screendriverA.o ds_copyPic.o ds_screendriverI.o ds_screendriver.o da_audioDriverI.o da_audioDriverA.o dk_kbdriver.o title_aqordl16k.o bankswitch.o md_dict.o yield.o vo_base.o vo_anim.o vo_animA.o vo_robotA.o vo_robot.o vu_letters.o md_volume.o md_wordA.o aqordlDict.o aqordlFont.o interactFont.o copydata.o robot0_pic.o robot0_frame.o robot0_anim.o robot0_envelopes.o robot0_cueball.o staxptr1.o options.o -ldict
+$(bindir)/aqordl16k.rom: aqordl16k.cfg aqordl16k.o md_pickA.o mo_qordlA.o mo_qordl.o mq_puzA.o mq_puz.o mw_puz.o mw_puzA.o vw_tinyA.o vw_baseA.o vfm_fontmanager.o vfm_fontmanagerA.o ds_screendriverA.o ds_copyPic.o ds_screendriverI.o ds_screendriver.o da_audioDriverI.o da_audioDriverA.o dk_kbdriver.o title_aqordl16k.o bankswitch.o md_dict.o yield.o vo_base.o vo_anim.o vo_animA.o vo_robotA.o vo_robot.o vu_letters.o md_volume.o md_volA.o md_wordA.o aqordlDict.o aqordlFont.o interactFont.o copydata.o robot0_pic.o robot0_frame.o robot0_anim.o robot0_envelopes.o robot0_cueball.o staxptr1.o options.o -ldict
 
-# Qordl, 128K RAM version
+# Qordl, 128K RAM disk version
 $(tdir)/xlBasicDisable.o: xlBasicDisable.asm
 $(tdir)/xeCheck.o: xeCheck.asm
 $(tdir)/aqordl128k.o: aqordl128k.c mo_qordl.h mq_puz.h mw_puz.h vw_tiny.h vw_base.h vfm_fontmanager.h ds_screendriver.h dk_kbdriver.h aqordlFont.h title.h bankswitch.h vo_robot.h vo_anim.h vo_base.h
-$(bindir)/aqordl128k.xex: aqordl128k.cfg aqordl128k.o md_pickA.o mo_qordlA.o mo_qordl.o mq_puzA.o mq_puz.o mw_puz.o mw_puzA.o vw_tinyA.o vw_base.o vw_baseA.o vfm_fontmanager.o vfm_fontmanagerA.o ds_screendriverA.o ds_copyPic.o ds_screendriverI.o ds_screendriver.o da_audioDriverI.o da_audioDriverA.o dk_kbdriver.o title_aqordl128k.o xeBankswitch.o md_dict.o yield.o vo_base.o vo_anim.o vo_animA.o vo_robotA.o vo_robot.o vu_letters.o md_volume.o md_wordA.o aqordlDict.o aqordlFont.o interactFont.o copydata.o robot0_pic.o robot0_frame.o robot0_anim.o robot0_envelopes.o robot0_cueball.o staxptr1.o xlBasicDisable.o options.o xeCheck.o -ldict -lda_envelopes
+$(bindir)/aqordl128k.xex: aqordl128k.cfg aqordl128k.o md_pickA.o mo_qordlA.o mo_qordl.o mq_puzA.o mq_puz.o mw_puz.o mw_puzA.o vw_tinyA.o vw_baseA.o vfm_fontmanager.o vfm_fontmanagerA.o ds_screendriverA.o ds_copyPic.o ds_screendriverI.o ds_screendriver.o da_audioDriverI.o da_audioDriverA.o dk_kbdriver.o title_aqordl128k.o xeBankswitch.o md_dict.o yield.o vo_base.o vo_anim.o vo_animA.o vo_robotA.o vo_robot.o vu_letters.o md_volume.o md_volA.o md_wordA.o aqordlDict.o aqordlFont.o interactFont.o robot0_pic.o robot0_frame.o robot0_anim.o robot0_envelopes.o robot0_cueball.o staxptr1.o xlBasicDisable.o options.o xeCheck.o -ldict -lda_envelopes
 
 # Dictionaries
 
-$(tdir)/spdTestDict.s: src/test/mkSpdTestDict.groovy
-&    groovy src/test/mkSpdTestDict.groovy > $(tdir)/spdTestDict.s
-
-$(tdir)/aqordlDict.s: main.dict main_us.dict main_uk.dict top.dict top_us.dict top_uk.dict bad.dict naughty.dict rare.dict
+$(tdir)/aqordlDict.s: main.dict main_us.dict main_uk.dict top.dict top_us.dict top_uk.dict carlin.dict naughty.dict rare.dict
 &    groovy src/main/buildDict.groovy $^
 
-# VOL_*.s and DICT_*.s are all made from the same buildDict.groovy, at the same time
+# LEX_*.s and DICT_*.s are all made from the same buildDict.groovy, at the same time
 # The .o is automatically built from the .s, but we need a couple empty rules to say where to get the .s from
 
 $(tdir)/DICT_%.s: aqordlDict.s
 &
-$(tdir)/VOL_%.s: aqordlDict.s
+$(tdir)/LEX_%.s: aqordlDict.s
 &
 
 $(tdir)/aqordlDict.o: aqordlDict.s version.inc
 
-$(tdir)/dict.lib: $(tdir)/DICT_EA.o $(tdir)/DICT_HA.o $(tdir)/DICT_MA.o $(tdir)/DICT_SA.o $(tdir)/DICT_ES.o $(tdir)/DICT_ES_US.o $(tdir)/DICT_ES_UK.o $(tdir)/DICT_MS.o $(tdir)/DICT_MS_US.o $(tdir)/DICT_MS_UK.o $(tdir)/DICT_HS.o $(tdir)/DICT_HS_US.o $(tdir)/DICT_HS_UK.o $(tdir)/DICT_SS.o $(tdir)/DICT_SS_US.o $(tdir)/DICT_SS_UK.o $(tdir)/VOL_main1.o $(tdir)/VOL_main2.o $(tdir)/VOL_main_us1.o $(tdir)/VOL_main_uk1.o $(tdir)/VOL_main1D.o $(tdir)/VOL_main2D.o $(tdir)/VOL_main_us1D.o $(tdir)/VOL_main_uk1D.o $(tdir)/VOL_top1.o $(tdir)/VOL_top_us1.o $(tdir)/VOL_top_uk1.o $(tdir)/VOL_top1D.o $(tdir)/VOL_top_us1D.o $(tdir)/VOL_top_uk1D.o $(tdir)/VOL_rare1.o $(tdir)/VOL_naughty1.o $(tdir)/VOL_bad1.o
+$(tdir)/dict.lib: $(tdir)/DICT_EA.o $(tdir)/DICT_HA.o $(tdir)/DICT_MA.o $(tdir)/DICT_ES.o $(tdir)/DICT_ES_US.o $(tdir)/DICT_ES_UK.o $(tdir)/DICT_MS.o $(tdir)/DICT_MS_US.o $(tdir)/DICT_MS_UK.o $(tdir)/DICT_HS.o $(tdir)/DICT_HS_US.o $(tdir)/DICT_HS_UK.o $(tdir)/DICT_TS.o $(tdir)/LEX_main.o $(tdir)/LEX_main_us.o $(tdir)/LEX_main_uk.o $(tdir)/LEX_mainD.o $(tdir)/LEX_main_usD.o $(tdir)/LEX_main_ukD.o $(tdir)/LEX_top.o $(tdir)/LEX_top_us.o $(tdir)/LEX_top_uk.o $(tdir)/LEX_topD.o $(tdir)/LEX_top_usD.o $(tdir)/LEX_top_ukD.o $(tdir)/LEX_rare.o $(tdir)/LEX_naughty.o $(tdir)/LEX_carlin.o
 &   $(CC65)/ar65.exe r $@ $^
 
 ###################################

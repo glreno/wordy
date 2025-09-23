@@ -25,8 +25,10 @@
     ; Two lines of 40-char text for sub description
     .define description3 "                                        "
     .define description4 "          but not social media          "
-    .define description5 "                                        "
-    .define description6 "                     130XE Disk version "
+    ; Two lines of 20-char text for press C/L
+    .define description5    "                    "
+    .define description6    "  130XE DISK VERSION"
+;                            01234567890123456789
     .define descriptionLoad "LOADING ROBOT       "
     .define      creditLoad "LOADING DICTIONARY. "
     .define     licenseLoad "  LOADING DICTIONARY..  "
@@ -41,8 +43,9 @@
 ;                                             01234567890123456789
     .define instruction3 "GREEN letters are correct.              "
     .define instruction4 "YELLOW letters are in the wrong place.  "
-    .define instruction5 "                                        "
-    .define instruction6 "To adjust colors, press 1-9 (0 for b/w) "
+    ; Two lines of 20-char text for press C/L
+    .define instruction5 "PRESS C FOR CREDITS "
+    .define instruction6 "PRESS L FOR LICENSE "
     .define instructionLoad "LOADING GAME...     "
 
 ;
@@ -56,18 +59,18 @@
 ; The rule is that you need to know where
 ; the FIRST and LAST segments are in the chunk.
 ; since the header is start and end ADDRESS.
+; There's defined symbols for the memory chunk,
+; UNLESS there is BSS in there, which doesn't get written to disk.
+; Also note that the loader basically follows the order
+; that the segments are in the .cfg file, but always
+; loads the chunk in the order RO - RW - BSS
+
     INITAD = $02E2
 
-    .segment "LOWCODE_HDR"
-    .import __LOWCODE_LOAD__
-    .import __LOWCODE_LOAD__,__LOWCODE_SIZE__
-    .word __LOWCODE_LOAD__
-    .word __LOWCODE_LOAD__+__LOWCODE_SIZE__-1
-
     .segment "TITLE_HDR"
-    .import __TITLE_PAGE_LOAD__,__TITLE_PAGE_SIZE__
-    .word __TITLE_PAGE_LOAD__
-    .word __TITLE_PAGE_LOAD__+__TITLE_PAGE_SIZE__-1
+    .import __TITLE_START__,__TITLE_LAST__
+    .word __TITLE_START__
+    .word __TITLE_LAST__ -1
 
     .segment "TITLE_TRL"
     .word INITAD
@@ -75,9 +78,9 @@
     .word _title_show_title_screen
 
     .segment "TITLEC_HDR"
-    .import __TITLEC_PAGE_LOAD__,__TITLEC_PAGE_SIZE__
-    .word __TITLEC_PAGE_LOAD__
-    .word __TITLEC_PAGE_LOAD__+__TITLEC_PAGE_SIZE__-1
+    .import __TITLECRED_START__,__TITLECRED_LAST__
+    .word __TITLECRED_START__
+    .word __TITLECRED_LAST__ -1
 
     .segment "TITLEC_TRL"
     .word INITAD
@@ -85,9 +88,9 @@
     .word _title_show_credits_screen
 
     .segment "TITLEI_HDR"
-    .import __TITLEI_PAGE_LOAD__,__TITLEI_PAGE_SIZE__
-    .word __TITLEI_PAGE_LOAD__
-    .word __TITLEI_PAGE_LOAD__+__TITLEI_PAGE_SIZE__-1
+    .import __TITLEINST_START__,__TITLEINST_LAST__
+    .word __TITLEINST_START__
+    .word __TITLEINST_LAST__ -1
 
     .segment "TITLEI_TRL"
     .word INITAD
@@ -95,54 +98,47 @@
     .word _title_show_instruction_screen
 
     .segment "TITLEL_HDR"
-    .import __TITLEL_PAGE_LOAD__,__TITLEL_PAGE_SIZE__
-    .word __TITLEL_PAGE_LOAD__
-    .word __TITLEL_PAGE_LOAD__+__TITLEL_PAGE_SIZE__-1
+    .import __TITLELIC_START__,__TITLELIC_LAST__
+    .word __TITLELIC_START__
+    .word __TITLELIC_LAST__ -1
 
     .segment "TITLEL_TRL"
     .word INITAD
     .word INITAD+1
     .word _title_show_license_screen
 
-    .segment "BIGHDR"
-    .import __CODE_LOAD__
-    .import __DATA_LOAD__,__DATA_SIZE__
-    .word __CODE_LOAD__
-    .word __DATA_LOAD__+__DATA_SIZE__-1
+    .segment "BIG1HDR"
+    .import __BIG1_START__,__BIG1_LAST__
+    .word __BIG1_START__
+    .word __BIG1_LAST__ -1
+
+    .segment "BIG2HDR"
+    .import __BIG2_START__,__BIG2_LAST__
+    .word __BIG2_START__
+    .word __BIG2_LAST__ -1
 
     .segment "XEBANK0_HDR"
-    .import __DICT_BANK_1_LOAD__
-    .import __DICT_BANK_2_LOAD__,__DICT_BANK_2_SIZE__
-    .word __DICT_BANK_1_LOAD__
-    .word __DICT_BANK_2_LOAD__+__DICT_BANK_2_SIZE__-1
+    .import __DICT0_START__,__DICT0_LAST__
+    .word __DICT0_START__
+    .word __DICT0_LAST__ -1
 
     .segment "XEBANK1_HDR"
-    .import __DICT_BANK_3_LOAD__
-    .import __DICT_BANK_4_LOAD__,__DICT_BANK_4_SIZE__
-    .word __DICT_BANK_1_LOAD__
-    .word __DICT_BANK_4_LOAD__+__DICT_BANK_4_SIZE__-1
+    .import __DICT1_START__,__DICT1_LAST__
+    .word __DICT1_START__
+    .word __DICT1_LAST__ -1
 
     .segment "XEBANK2_HDR"
-    .import __COPYRIGHT_ROM_LOAD__
-    .import __VOR_CODE_LOAD__,__VOR_CODE_SIZE__
-    .word __COPYRIGHT_ROM_LOAD__
-    .word __VOR_CODE_LOAD__+__VOR_CODE_SIZE__-1
-
-    ; duplicate of XEBANK4_LOAD because we keep having to switch back
-    .segment "XEBANK4_LOADB"
-    .import bankswitch130xe4
-    .word INITAD
-    .word INITAD+1
-    .word bankswitch130xe4
-
-    .segment "XEBANK4_LOADC"
-    .word INITAD
-    .word INITAD+1
-    .word bankswitch130xe4
+    .import __VOR_START__,__VOR_LAST__
+    .word __VOR_START__
+    .word __VOR_LAST__ -1
 
     .segment "TRAMPHDR"
-    .import __TRAMPOLINED_LOAD__
-    .import __COPYRIGHT_LOAD__,__COPYRIGHT_SIZE__
-    .word __TRAMPOLINED_LOAD__
-    .word __COPYRIGHT_LOAD__+__COPYRIGHT_SIZE__-1
+    .import __TRAMP_START__,__TRAMP_LAST__
+    .word __TRAMP_START__
+    .word __TRAMP_LAST__ -1
+
+    .segment "FONTSHDR"
+    .import __FONTS_START__,__FONTS_LAST__
+    .word __FONTS_START__
+    .word __FONTS_LAST__ -1
 

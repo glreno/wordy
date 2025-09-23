@@ -19,40 +19,19 @@
 #pragma code-name (push,"MD")
 
 //segment MD
-const md_wordInternal *md_volumeGetInternal(const md_volume *d, int index)
+const md_wordInternal *md_wordListGetInternal(const md_wordList *d, int index)
 {
     // Port to assmebler, if possible, currently 0x53 bytes
-    int sz = md_volumeSize(d);
+    int sz = md_wordListSize(d);
     if ( index < 0 || index >= sz )
     {
         return NULL;
     }
     return &((d->list)[index]);
 }
-md_word RETURNBUF;
-const md_word *md_volumeGet(const md_volume *d, int index)
-{
-    md_wordInternal *found = md_volumeGetInternal(d,index);
-    strcpy(RETURNBUF.s,found->s);
-    return &RETURNBUF;
-}
 
 //segment MD
-void md_volumeCopyWord(const md_volume *d, int index, md_word *dest)
-{
-    const md_wordInternal *w=md_volumeGetInternal(d,index);
-    if ( w == NULL )
-    {
-        // Error condition - index out of range
-        dest->wordflags=0xff;
-        return;
-    }
-    dest->wordflags=0;
-    memcpy(dest,w,5);
-}
-
-//segment MD
-int md_volumeFindRecurse(const md_volume *d, const md_word *s,int first,int last)
+int md_wordListFindRecurse(const md_wordList *d, const md_wordInternal *si,int first,int last)
 {
     const md_wordInternal *firstw, *lastw, *midw;
     int mid;
@@ -60,15 +39,15 @@ int md_volumeFindRecurse(const md_volume *d, const md_word *s,int first,int last
 
     /* Make sure it's not first or last.*/
 
-    firstw=md_volumeGetInternal(d,first);
+    firstw=md_wordListGetInternal(d,first);
 
-    cmp = md_wordCmpInternal(s,firstw);
+    cmp = md_wordCmpInternal(firstw,si);
     if ( cmp == 0 )
     {
         /** Cool, first in the list */
         return first;
     }
-    else if (cmp < 0)
+    else if (cmp > 0)
     {
         /** Word should be before first, so we are done here. */
         return -1;
@@ -79,14 +58,14 @@ int md_volumeFindRecurse(const md_volume *d, const md_word *s,int first,int last
         return -1;
     }
     /* search for last here */
-    lastw=md_volumeGetInternal(d,last);
-    cmp = md_wordCmpInternal(s,lastw);
+    lastw=md_wordListGetInternal(d,last);
+    cmp = md_wordCmpInternal(lastw,si);
     if ( cmp == 0 )
     {
         /** Cool, last in the list */
         return last;
     }
-    else if (cmp > 0)
+    else if (cmp < 0)
     {
         /** Word should be after last, so we are done here. */
         return -1;
@@ -99,31 +78,56 @@ int md_volumeFindRecurse(const md_volume *d, const md_word *s,int first,int last
 
     /* find the midpoint and check that */
     mid = ( last - first ) / 2 + first;
-    midw=md_volumeGetInternal(d,mid);
+    midw=md_wordListGetInternal(d,mid);
     /* Is it before,at, or after the midpoint? */
-    cmp = md_wordCmpInternal(s,midw);
+    cmp = md_wordCmpInternal(midw,si);
     if ( cmp == 0 )
     {
         /* Found it! */
         return mid;
     }
-    else if ( cmp < 0 )
+    else if ( cmp > 0 )
     {
-        return md_volumeFindRecurse(d,s,first+1,mid-1);
+        // it might be worth checking to see if first+1==mid, in which case we are done
+        // but it doesn't actually save any time in reality.
+        return md_wordListFindRecurse(d,si,first+1,mid-1);
     }
     else
     {
-        return md_volumeFindRecurse(d,s,mid+1,last-1);
+        // it might be worth checking to see if last-1==mid, in which case we are done
+        // but it doesn't actually save any time in reality.
+        return md_wordListFindRecurse(d,si,mid+1,last-1);
     }
 }
 
-//segment MD
-int md_volumeFind(const md_volume *d, const md_word *s)
-{
-    /* TODO check to see if lastfound points to the word already */
-    int sz = md_volumeSize(d);
-    return md_volumeFindRecurse(d,s,0,sz-1);
-}
-
 #pragma code-name (pop)
+#pragma code-name (push,"DICT_IDX")
+
+//segment DICT_IDX
+unsigned int __fastcall__ md_lexiconSizeBefore(char before,const md_lexicon *d)
+{
+    int i;
+    int ret=0;
+    int n=d->array_length;
+    for(i=0;i<n;++i)
+    {
+        if ( d->wordList[i].firstLetter == before )
+        {
+            return ret;
+        }
+        ret += md_wordListSize(&(d->wordList[i]));
+    }
+    return ret;
+}
+unsigned int __fastcall__ md_lexiconSize(const md_lexicon *d)
+{
+    int i;
+    int ret=0;
+    int n=d->array_length;
+    for(i=0;i<n;++i)
+    {
+        ret += md_wordListSize(&(d->wordList[i]));
+    }
+    return ret;
+}
 

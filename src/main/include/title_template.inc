@@ -10,11 +10,12 @@
     .import         _bankswitchTitle
     .import copydata, copyrodata
     .import start, _cgetc
-    .macpack atari
+    ; .macpack atari - included by scrcode160
+    .include "include/scrcode160.mac"
     .include "include/version.inc"
 
     .define copyright_long .concat(title7char,aqordl_version," Copyright (c) ",year," Gerald Reno, Jr.")
-    .define copyright_noname .concat(aqordl_version," Copyright (c) ",year," Gerald Reno, Jr.")
+    .define copyright_noname .concat(aqordl_version," Copyright (c)",year," Gerald Reno, Jr. ")
     .define copyright_short title7char,aqordl_version," (c)",year," Reno"
 
 ; OS LOCATIONS
@@ -133,8 +134,8 @@ title_screen_name:
 title_screen:
     scrcode instruction1 ; "  nine attempts to  "
     scrcode instruction2 ; "  guess four words  "
-    scrcode "To change palette, press 1-9 (0 for b/w)"
-    scrcode "                                        "
+    scrcode instruction3 ; "GREEN letters are correct.              "
+    scrcode instruction4 ; "YELLOW letters are in the wrong place.  "
     scrcode "PRESS C FOR CREDITS " ; mode 6 text high-bits 00, orange
     scrcode "PRESS L FOR LICENSE " ; mode 6 text high-bits 00, orange
     ;        01234567890123456789
@@ -160,27 +161,7 @@ credits_screen:
 press_a_key_to_begin_wide:
     .byte 0,0
 press_a_key_to_begin:
-    .byte 'P'+160
-    .byte 'R'+160
-    .byte 'E'+160
-    .byte 'S'+160
-    .byte 'S'+160
-    .byte 0
-    .byte 'A'+160
-    .byte 0
-    .byte 'K'+160
-    .byte 'E'+160
-    .byte 'Y'+160
-    .byte 0
-    .byte 'T'+160
-    .byte 'O'+160
-    .byte 0
-    .byte 'B'+160
-    .byte 'E'+160
-    .byte 'G'+160
-    .byte 'I'+160
-    .byte 'N'+160
-    .byte 0
+    scrcode160 "PRESS A KEY TO BEGIN "
 
 ;
 ; display list for hardcoded title screen
@@ -202,12 +183,12 @@ title_display_list:
     .word title_screen
     .byte $40
     .byte 6             ; guess four words
-    .byte $70,$70,$70,$70
+    .byte $70,$70,$70
 ; documentation
-    .byte 2             ; To change palette....
-    .byte 2             ; To mute....
+    .byte 2             ; Green letters....
+    .byte 2             ; Yellow letters...
 ; keypress text
-    .byte $70
+    .byte $70,$70
     .byte 6             ; Press L for license
     .byte 6             ; Press C for credits
     .byte $70

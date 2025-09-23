@@ -6,73 +6,101 @@
 ;
 ; http://www.apache.org/licenses/LICENSE-2.0
 
+; Store letters 2,3,4,5 of the 5-letter string
+    .macro entry s
+;   .byte .strat(s,1), .strat(s,2), .strat(s,3), .strat(s,4)
+
+    .byte ((.strat(s,1) & $1F)<<3 ) | (( .strat(s,2)&$1F ) >>2 )
+    .byte ((.strat(s,2) & $03)<<6 ) | (( .strat(s,3)&$1F ) <<1 ) | (( .strat(s,4)&$10 )>>4)
+    .byte (( .strat(s,4)&$0F ) << 4)
+    .endmacro
+
 .segment "CARTBANK1"
-    .export _cvcvcDict2
-_cvcvcDict2:
-    .byte "COVET"
-    .byte "DAVIT"
-    .byte "DEBAR"
-    .byte "DEBIT"
-    .byte "DECAF"
-    .byte "DECAL"
-    .byte "DECOR"
-    .byte "DEFER"
-    .byte "DEMON"
-    .byte "DENIM"
-    .byte "DEPOT"
-    .byte "DETER"
-    .byte "DEVIL"
-    .byte "DIGIT"
-    .byte "DIMER"
-    .byte "DINER"
-    .byte "DIRER"
-    .byte "DIVAN"
-    .byte "DIVER"
-    .byte "DIVOT"
-    .byte "DONOR"
-    .byte "FACET"
-    .byte "FAGOT"
-    .byte "FAKER"
-    .byte "FAKIR"
-    .byte "FATAL"
-    .byte "FAVOR"
-    .byte "FECAL"
-    .byte "FELON"
-    .byte "FERAL"
-    .byte "FETAL"
-    .byte "FEVER"
-    .byte "FIBER"
-    .byte "FILET"
-    .byte "FINAL"
-    .byte "FINER"
-    .byte "FIVER"
-    .byte "FOCAL"
-    .byte "GAMER"
-    .byte "GAMIN"
-    .byte "GAVEL"
-    .byte "GIVEN"
-    .byte "GOFER"
-    .byte "GONER"
-    .byte "HABIT"
-    .byte "HALER"
-    .byte "HALON"
-    .byte "HAREM"
-    .byte "HATER"
-    .byte "HAVEN"
-    .byte "HAVOC"
-    .byte "HELOT"
-    .byte "HERON"
-    .byte "HIKER"
-    .byte "HOGAN"
-    .byte "HOMER"
-    .byte "HONOR"
-    .byte "HOTEL"
-    .byte "HOVEL"
-    .byte "HOVER"
-    .byte "KABOB"
-    .byte "KAPOK"
-    .byte "KARAT"
-    .byte "KEBAB"
-    .byte "KEBOB"
-    .byte "KOPEK"
-    .byte "LABEL"
+    .export _wordsD
+_wordsD:
+    entry "DAVIT"
+    entry "DEBAR"
+    entry "DEBIT"
+    entry "DECAF"
+    entry "DECAL"
+    entry "DECOR"
+    entry "DEFER"
+    entry "DEMON"
+    entry "DENIM"
+    entry "DEPOT"
+    entry "DETER"
+    entry "DEVIL"
+    entry "DIGIT"
+    entry "DIMER"
+    entry "DINER"
+    entry "DIRER"
+    entry "DIVAN"
+    entry "DIVER"
+    entry "DIVOT"
+    entry "DONOR"
+.export _wordCountD = (* - _wordsD)/3
+
+    .export _wordsF
+_wordsF:
+    entry "FACET"
+    entry "FAKER"
+    entry "FAKIR"
+    entry "FATAL"
+    entry "FAVOR"
+    entry "FECAL"
+    entry "FELON"
+    entry "FERAL"
+    entry "FETAL"
+    entry "FEVER"
+    entry "FIBER"
+    entry "FILET"
+    entry "FINAL"
+    entry "FINER"
+    entry "FIVER"
+    entry "FOCAL"
+.export _wordCountF = (* - _wordsF)/3
+
+    .export _wordsG
+_wordsG:
+    entry "GAMER"
+    entry "GAMIN"
+    entry "GAVEL"
+    entry "GIVEN"
+    entry "GOFER"
+    entry "GONER"
+.export _wordCountG = (* - _wordsG)/3
+
+    .export _wordsH
+_wordsH:
+    entry "HABIT"
+    entry "HALER"
+    entry "HALON"
+    entry "HAREM"
+    entry "HATER"
+    entry "HAVEN"
+    entry "HAVOC"
+    entry "HELOT"
+    entry "HERON"
+    entry "HIKER"
+    entry "HOGAN"
+    entry "HOMER"
+    entry "HONOR"
+    entry "HOTEL"
+    entry "HOVEL"
+    entry "HOVER"
+.export _wordCountH = (* - _wordsH)/3
+
+    .export _wordsJ
+_wordsJ:
+    entry "JOKEY"
+.export _wordCountJ = (* - _wordsJ)/3
+
+    .export _wordsK
+_wordsK:
+    entry "KABOB"
+    entry "KAPOK"
+    entry "KARAT"
+    entry "KEBAB"
+    entry "KEBOB"
+    entry "KOPEK"
+.export _wordCountK = (* - _wordsK)/3
