@@ -15,9 +15,9 @@
 
 
 
-    .define copyright_long .concat(title7char,aqordl_version," Copyright (c) ",year," Gerald Reno, Jr.")
-    .define copyright_noname .concat(aqordl_version," Copyright (c)",year," Gerald Reno, Jr. ")
-    .define copyright_short title7char,aqordl_version," (c)",year," Reno"
+    .define copyright_long .concat(title7char," ",aqordl_version," Copyright(c)",year," Gerald Reno, Jr.")
+    .define copyright_noname .concat(aqordl_version," Copyright(c)",year," Gerald Reno, Jr. ")
+    .define copyright_short title7char," ",aqordl_version,"(c)",year," Reno"
 
 ; OS LOCATIONS
     DOSVEC = $A
@@ -42,7 +42,7 @@ _COPYRIGHT_NOTICE:
 ; This is the first thing in the title page cartridge bank
     .byte copyright_short
 _COPYRIGHT_NOTICE_INTERNAL_WIDE:
-    scrcode title10char
+    scrcode title10char," "
 _COPYRIGHT_NOTICE_INTERNAL:
 .export _COPYRIGHT_NOTICE_INTERNAL
     scrcode copyright_noname

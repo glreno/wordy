@@ -49,21 +49,22 @@ The order of the words does not matter. If you get stuck on one word, work on a 
 
 - Retrogames **THE400**
   - Plug a keyboard into one of the USB ports
-  - Copy the aqordl_robot_1.04.car and aqordl_text_1.04.car file on to a thumb drive, and plug it into one of the USB ports.
+  - Copy the aqordl_1.04.car and aqolite_1.04.car file on to a thumb drive, and plug it into one of the USB ports.
   - Select "Media Access" from the carousel
-  - Select the aqordl_robot_1.04 or aqordl_text_1.04 image
+  - Select the aqordl_1.04 or aqolite_1.04 image
   - Press the Menu button to change the game settings
   - Any settings will work, but the emulator detects PAL instead of NTSC if there is no settings file. So just open the settings menu, select "400" and close it.
   - Press Home to start the game
 
 - Emulators
-  - Pretty much any settings should work for the .car images
-  - The .xex and .atr images require 128K (AQordl) or 48K (AQolite)
+  - Pretty much any settings should work for the .car images. AQordl requires 16K and AQolite requires 8K.
+  - The AQordl .xex and .atr images require 128K
+  - The AQolite .xex and .atr images require 48K
 
 - A **Real** Atari
-  - Copy the aqordl_robot_1.04.atr or aqordl_text_1.04.atr image to a blank single-density floppy. The image includes myPicoDos, and will boot directly into the game
-  - Or you can load the aqordl_robot_1.04.xex or aqordl_text_1.04.xex file using your favourite method of loading .exe files
-  - Either way, it's going to take a long time to load
+  - Copy the aqordl_1.04.atr or aqolite_1.04.atr image to a blank single-density floppy. The image includes myPicoDos, and will boot directly into the game
+  - (I need to get a disk compressor in here so both games fit on one disk!)
+  - Or you can load the aqordl_1.04.xex or aqolite_1.04.xex file using your favourite method of loading .exe files
   - AQordl does use all 128K, so do not use with a RAM disk
 
 - A real cartridge

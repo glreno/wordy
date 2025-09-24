@@ -127,7 +127,7 @@ $(tdir)/noBankswitch.o: noBankswitch.asm
 $(tdir)/xeBankswitch.o: xeBankswitch.asm
 $(tdir)/title_awordl_cart.o: title_awordl_cart.asm title_template.inc title.h bankswitch.h version.inc
 $(tdir)/title_aqolite_cart.o: title_aqolite_cart.asm title_template.inc title.h bankswitch.h version.inc
-$(tdir)/title_aqolite_disk.o: title_aqolite_disk.asm title_template.inc title.h bankswitch.h version.inc
+$(tdir)/title_aqolite_disk.o: title_aqolite_disk.asm title_template_disk.inc title.h bankswitch.h version.inc
 $(tdir)/title_aqordl_disk.o: title_aqordl_disk.asm title_template_disk.inc title.h bankswitch.h version.inc
 $(bindir)/titleTest.rom: titleTest.o title_awordl_cart.o bankswitch.o
 $(tdir)/copydata.o: copydata.asm
