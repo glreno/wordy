@@ -1,5 +1,9 @@
 # Version History
 
+## 1.05a
+
+Dev release.
+
 ## 1.04
 
 Initial public release of AQolite
@@ -23,6 +27,16 @@ Initial public release of AQolite
 - Added animated computer to AQolite
 
 ### Files
+
+- aqordl_1.04.car       (AQordl game XEGS cartridge for all Atari 8-bit)
+- aqordl_1.04.atr       (130XE disk version - bootable disk image)
+- aqordl_1_04.xex       (130XE disk version - Atari executable file)
+- aqolite_1.04.car      (Text-only game for very tiny machines)
+- aqolite_1.04.atr      (48K disk version - bootable disk image)
+- aqolite_1_04.xex      (48K disk version - Atari executable file)
+- README.md, LICENSE.md, VERSIONS.md
+- aqordl_1.04.zip       (all the other files)
+
 
 ## 1.03a
 
