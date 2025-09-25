@@ -49,7 +49,7 @@ void __fastcall__ vw_initialize( vfm_fontmanager *fontmanager, char nrows, char 
  * If you're using a complete green alphabet, then the letter is
  * from ! to ;
  */
-void __fastcall__ vw_writeTile(vw_base *this, char col, char row, char color, char letter);
+void __fastcall__ vw_writeTile(vw_base *this, char row, char col, char color, char letter);
 
 /** Remove the letter from a tile. Used for backspace,
  *  basically the same as vw_writeTile(row,col,VW_GREY,' ')

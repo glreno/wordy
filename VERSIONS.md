@@ -1,5 +1,29 @@
 # Version History
 
+## 1.04
+
+Initial public release of AQolite
+
+### Fixes
+
+- Fixed defect #6, screen garbage on options and loading screens on 800XL
+- Added dictionary descriptions to options page
+- Fixed crash on warm boot of the disk version. If you didn't press option while turning the machine on, the disk version would disable BASIC for you. But on a warm boot, the BASIC would re-enable itself momentarily and re-open the screen, wiping out a portion of the game code.
+
+### Updates
+
+- Split game in to 'AQordl' (robot mode) and 'AQolite' (text mode).
+- Adjusted dictionary probabilities
+- Compressed dictionaries, improving load and search times
+- Disk version of AQolite, which only requires 48K RAM but still has the full dictionary
+- Improved laser animation for AQordl
+    - multicolor laser bolts
+    - laser is fired from the robot's antennae instead of the eyes, looks less like he's spitting
+    - made laser speed more consistent
+- Added animated computer to AQolite
+
+### Files
+
 ## 1.03a
 
 Dev release.
@@ -13,9 +37,9 @@ Dev release.
 - Dictionary defaults to "Normal" instead of "Hard"
 - Audio defaults to "Normal" instead of "Annoying"
 
-### files
+### Files
 
-- aqordl_robot_1.02.car     (Aqordl game XEGS cartridge for all Atari 8-bit)
+- aqordl_robot_1.02.car     (AQordl game XEGS cartridge for all Atari 8-bit)
 - aqordl_text_1.02.car      (Text-only game for very tiny machines)
 - aqordl_robot_1.02.atr     (130XE disk version - bootable disk image)
 - aqordl_robot_1_02.xex     (130XE disk version - Atari executable file)
@@ -28,11 +52,11 @@ Dev release.
 
 ## v1.00
 
-Initial public release of Aqordl
+Initial public release of AQordl
 
-### files
+### Files
 
-- aqordl_1.00.car       (Aqordl game XEGS cartridge for all Atari 8-bit)
+- aqordl_1.00.car       (AQordl game XEGS cartridge for all Atari 8-bit)
 - aqordl_text_1.00.car  (Text-only game for very tiny machines)
 - aqordl_1.00.atr       (130XE disk version - bootable disk image)
 - AQORDL_1.XEX          (130XE disk version - Atari executable file)

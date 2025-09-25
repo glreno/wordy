@@ -23,8 +23,7 @@ extern md_dict DICT_MS;
 extern md_dict DICT_MA;
 extern md_dict DICT_HS;
 extern md_dict DICT_HA;
-extern md_dict DICT_SS;
-extern md_dict DICT_SA;
+extern md_dict DICT_TS;
 
 void lookupTest(md_dict *d,const char *expDict, const char *target)
 {
@@ -48,18 +47,18 @@ void dictTests(md_dict *d)
     lookupTest(d,"HA","ZOMBI"); // rare.dict last word
     lookupTest(d,"HA","ARSES"); // naughty.dict first word
     lookupTest(d,"HA","WOODY"); // naughty.dict last word
-    lookupTest(d,"SA","CLITS"); // bad.dict first word
-    lookupTest(d,"SA","TWATS"); // bad.dict last word
     lookupTest(d,"00","!WORD");
 }
 
 void dictSpeedTests(md_dict *d)
 {
     char buf[6];
+    char buf2[6];
     char *scr = (char*) OS.savmsc;
     int i,j,n;
     //md_word *w;
     md_word tword;
+    md_word fword;
     unsigned int after;
     unsigned int diff;
     unsigned int max = 0;
@@ -68,6 +67,7 @@ void dictSpeedTests(md_dict *d)
     unsigned long total2 = 0;
     unsigned int start = 0xffff;
 
+    md_bankswitchIdx(); // BANK SWITCH!
     n = md_size(d);
     printf("Timing and verifying %d finds\n",n);
     // point the timer vectors to a handy RTS
@@ -100,6 +100,23 @@ void dictSpeedTests(md_dict *d)
             printf("FAILED to find %s\n",buf);
 for(;;) ;
         }
+/*
+        else if ( j!=i )
+        {
+                printf("FAILED to find %d %s, got %d instead\n",i,buf,j);
+for(;;) ;
+        }
+*/
+        else
+        {
+            md_getWord(d,j,&fword);
+            md_wordToString(buf2,&fword);
+            if ( strcmp(buf,buf2) )
+            {
+                printf("FAILED to find %d %s, got %d %s\n",i,buf,j,buf2);
+for(;;) ;
+            }
+        }
     }
     after=OS.cdtmv2;
     total=start-after;
@@ -113,7 +130,6 @@ for(;;) ;
     total1=0;
     total2=0;
     max=0;
-    n = md_size(d);
     OS.cdtmv2=start; /* timer 2: total time */
     for(i=0; i<n; i++)
     {
@@ -179,8 +195,7 @@ int main(void)
     test(&DICT_MA,"MA");
     test(&DICT_HS,"HS");
     test(&DICT_HA,"HA");
-    test(&DICT_SS,"SS");
-    test(&DICT_SA,"SA");
+    test(&DICT_TS,"TS");
     printf("\nAll done!\n");
     for(;;)
         ;

@@ -273,25 +273,19 @@ extern int vor_anim_laserwait; // fast wrist computer check for between lasers
 // { "pic":"vor_frame_wrist3", "sfxlevel":3, "sound":"cueRobotsOfDeath_HIGH", "exit":"true" }
 // { "pic":"vor_frame_wrist2", "next":"vor_anim_laserwait", "exit":"true" }
 
-extern int vor_anim_laserleft5; // Left laser to tile 5
+extern int vor_anim_laserleft1; // Left laser distance 1
 // { "pic":"vor_frame_left_laser60", "next":"vor_anim_laserwait" }
-extern int vor_anim_laserleft4; // Left laser to tile 4
+extern int vor_anim_laserleft2; // Left laser distance 2
 // { "pic":"vor_frame_left_laser30" }
 // { "pic":"vor_frame_left_laser60", "next":"vor_anim_laserwait" }
-extern int vor_anim_laserleft3; // Left laser to tile 3
+extern int vor_anim_laserleft3; // Left laser distance 3
 // { "pic":"vor_frame_left_laser20" }
 // { "pic":"vor_frame_left_laser40" }
 // { "pic":"vor_frame_left_laser60", "next":"vor_anim_laserwait" }
-extern int vor_anim_laserleft2; // Left laser to tile 2
+extern int vor_anim_laserleft4; // Left laser distance 4
 // { "pic":"vor_frame_left_laser15" }
 // { "pic":"vor_frame_left_laser30" }
 // { "pic":"vor_frame_left_laser45" }
-// { "pic":"vor_frame_left_laser60", "next":"vor_anim_laserwait" }
-extern int vor_anim_laserleft1; // Left laser to tile 1
-// { "pic":"vor_frame_left_laser12" }
-// { "pic":"vor_frame_left_laser24" }
-// { "pic":"vor_frame_left_laser36" }
-// { "pic":"vor_frame_left_laser48" }
 // { "pic":"vor_frame_left_laser60", "next":"vor_anim_laserwait" }
 
 extern int vor_anim_laserleft_yellow; // Left laser
@@ -304,8 +298,6 @@ extern int vor_anim_laserleft3_yellow; // Left laser
 // { "pic":"vor_frame_left_laser0", "sfxlevel":1, "sound":"cueLaserYellow", "next":"vor_anim_laserleft3" }
 extern int vor_anim_laserleft4_yellow; // Left laser
 // { "pic":"vor_frame_left_laser0", "sfxlevel":1, "sound":"cueLaserYellow", "next":"vor_anim_laserleft4" }
-extern int vor_anim_laserleft5_yellow; // Left laser
-// { "pic":"vor_frame_left_laser0", "sfxlevel":1, "sound":"cueLaserYellow", "next":"vor_anim_laserleft5" }
 extern int vor_anim_laserleft_green; // Left laser
 // { "pic":"vor_frame_left_laser0", "sfxlevel":1, "sound":"cueLaserGreen", "next":"vor_anim_laserleft3" }
 extern int vor_anim_laserleft1_green; // Left laser
@@ -316,38 +308,42 @@ extern int vor_anim_laserleft3_green; // Left laser
 // { "pic":"vor_frame_left_laser0", "sfxlevel":1, "sound":"cueLaserGreen", "next":"vor_anim_laserleft3" }
 extern int vor_anim_laserleft4_green; // Left laser
 // { "pic":"vor_frame_left_laser0", "sfxlevel":1, "sound":"cueLaserGreen", "next":"vor_anim_laserleft4" }
-extern int vor_anim_laserleft5_green; // Left laser
-// { "pic":"vor_frame_left_laser0", "sfxlevel":1, "sound":"cueLaserGreen", "next":"vor_anim_laserleft5" }
 
-extern int vor_anim_laserright; // Right laser
+extern int vor_anim_laserright1; // Left laser distance 1
+// { "pic":"vor_frame_right_laser60", "next":"vor_anim_laserwait" }
+extern int vor_anim_laserright2; // Left laser distance 2
+// { "pic":"vor_frame_right_laser30" }
+// { "pic":"vor_frame_right_laser60", "next":"vor_anim_laserwait" }
+extern int vor_anim_laserright3; // Left laser distance 3
 // { "pic":"vor_frame_right_laser20" }
 // { "pic":"vor_frame_right_laser40" }
 // { "pic":"vor_frame_right_laser60", "next":"vor_anim_laserwait" }
+extern int vor_anim_laserright4; // Left laser distance 4
+// { "pic":"vor_frame_right_laser15" }
+// { "pic":"vor_frame_right_laser30" }
+// { "pic":"vor_frame_right_laser45" }
+// { "pic":"vor_frame_right_laser60", "next":"vor_anim_laserwait" }
 
 extern int vor_anim_laserright_yellow; // Right laser
-// { "pic":"vor_frame_right_laser0", "sfxlevel":1, "sound":"cueLaserYellow", "next":"vor_anim_laserright" }
+// { "pic":"vor_frame_right_laser0", "sfxlevel":1, "sound":"cueLaserYellow", "next":"vor_anim_laserright3" }
 extern int vor_anim_laserright1_yellow; // Right laser
-// { "pic":"vor_frame_right_laser0", "sfxlevel":1, "sound":"cueLaserYellow", "next":"vor_anim_laserright" }
+// { "pic":"vor_frame_right_laser0", "sfxlevel":1, "sound":"cueLaserYellow", "next":"vor_anim_laserright1" }
 extern int vor_anim_laserright2_yellow; // Right laser
-// { "pic":"vor_frame_right_laser0", "sfxlevel":1, "sound":"cueLaserYellow", "next":"vor_anim_laserright" }
+// { "pic":"vor_frame_right_laser0", "sfxlevel":1, "sound":"cueLaserYellow", "next":"vor_anim_laserright2" }
 extern int vor_anim_laserright3_yellow; // Right laser
-// { "pic":"vor_frame_right_laser0", "sfxlevel":1, "sound":"cueLaserYellow", "next":"vor_anim_laserright" }
+// { "pic":"vor_frame_right_laser0", "sfxlevel":1, "sound":"cueLaserYellow", "next":"vor_anim_laserright3" }
 extern int vor_anim_laserright4_yellow; // Right laser
-// { "pic":"vor_frame_right_laser0", "sfxlevel":1, "sound":"cueLaserYellow", "next":"vor_anim_laserright" }
-extern int vor_anim_laserright5_yellow; // Right laser
-// { "pic":"vor_frame_right_laser0", "sfxlevel":1, "sound":"cueLaserYellow", "next":"vor_anim_laserright" }
+// { "pic":"vor_frame_right_laser0", "sfxlevel":1, "sound":"cueLaserYellow", "next":"vor_anim_laserright4" }
 extern int vor_anim_laserright_green; // Right laser
-// { "pic":"vor_frame_right_laser0", "sfxlevel":1, "sound":"cueLaserGreen", "next":"vor_anim_laserright" }
+// { "pic":"vor_frame_right_laser0", "sfxlevel":1, "sound":"cueLaserGreen", "next":"vor_anim_laserright3" }
 extern int vor_anim_laserright1_green; // Right laser
-// { "pic":"vor_frame_right_laser0", "sfxlevel":1, "sound":"cueLaserGreen", "next":"vor_anim_laserright" }
+// { "pic":"vor_frame_right_laser0", "sfxlevel":1, "sound":"cueLaserGreen", "next":"vor_anim_laserright1" }
 extern int vor_anim_laserright2_green; // Right laser
-// { "pic":"vor_frame_right_laser0", "sfxlevel":1, "sound":"cueLaserGreen", "next":"vor_anim_laserright" }
+// { "pic":"vor_frame_right_laser0", "sfxlevel":1, "sound":"cueLaserGreen", "next":"vor_anim_laserright2" }
 extern int vor_anim_laserright3_green; // Right laser
-// { "pic":"vor_frame_right_laser0", "sfxlevel":1, "sound":"cueLaserGreen", "next":"vor_anim_laserright" }
+// { "pic":"vor_frame_right_laser0", "sfxlevel":1, "sound":"cueLaserGreen", "next":"vor_anim_laserright3" }
 extern int vor_anim_laserright4_green; // Right laser
-// { "pic":"vor_frame_right_laser0", "sfxlevel":1, "sound":"cueLaserGreen", "next":"vor_anim_laserright" }
-extern int vor_anim_laserright5_green; // Right laser
-// { "pic":"vor_frame_right_laser0", "sfxlevel":1, "sound":"cueLaserGreen", "next":"vor_anim_laserright" }
+// { "pic":"vor_frame_right_laser0", "sfxlevel":1, "sound":"cueLaserGreen", "next":"vor_anim_laserright4" }
 
 extern int vor_anim_fistpump_loop; // Green word
 // { "pic":"vor_frame_wrist2", "exit":"true" }

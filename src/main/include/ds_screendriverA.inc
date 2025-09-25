@@ -27,7 +27,8 @@
     ds_pageHeader_spare0 = $08 ; int 0 of spare
     ds_pageHeader_spare1 = $0A ; int 1 of spare
     ds_pageHeader_spare2 = $0C ; int 1 of spare
-    ds_pageHeader_pmpos = $0E ; 13 bytes of PM color and position data
+    ds_pageHeader_pmpos = $0E ; 13 bytes of PM size and position data
+                              ; (VB copies this to D000-D00C)
     ds_pageHeader_pcolors = $1B ; 4 bytes of color data
     ds_pageHeader_colors = $1F ; 5 bytes of color data
     ds_pageHeader_fonts = $24 ; 156 bytes of font addresses (MSB only)

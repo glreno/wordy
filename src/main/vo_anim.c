@@ -16,6 +16,8 @@
 #include <string.h>
 #include <conio.h>
 
+// initialized in voa_preinit
+unsigned int animExitTo;
 
 //
 // RUN-ONCE INITIALIZATION CODE
@@ -95,7 +97,6 @@ int __fastcall__ voa_checkForCleanPage()
     return pageid;
 }
 
-unsigned int animExitTo=0xffff;
 
 //segment VOR_VIEW very very small - FIVE bytes, no need to port
 // Return true if there is an animation loop queued in animExitTo
@@ -157,7 +158,7 @@ vo_anim_frame_node *voa_frameQueuePeek()
 
 unsigned char animCountdown;
 unsigned int animCountdownDest;
-char *animCountdownCompleteFlag=NULL;
+char *animCountdownCompleteFlag;
 
 //segment VOR_VIEW but works fine in VIEW
 void voa_setLoopCountdown(unsigned char loops, int dest,char *flag)

@@ -20,7 +20,8 @@
 #include "mo_qordl.h"
 #include "vo_text.h"
 #include "dk_kbdriver.h"
-
+#include "md_pick.h"
+#include "vo_a400.h"
 
 /* VIDEO DATA */
 
@@ -32,15 +33,21 @@ unsigned char *FONTLIST1[1], *FONTLIST2[1];
 vfm_fontmanager fontmanager1, fontmanager2;
 
 /* The dictionaries */
-extern md_dict DICT_ES_US;
-extern md_dict DICT_ES_UK;
-extern md_dict DICT_EA;
+extern md_dict DICT_HA;
+
 
 /* Game code (these don't need to be global, really) */
 mq gameModel;
 vo_text opponentView;
 moq opponentModel;
 void *vu_letters;
+md_dict *dict;
+                 // 012345678901234567890123456
+char titleText[] = "AQolite (text)   US/n";
+// titleText[18] should be S or K
+// titleText[20] should be e/n/h
+
+/* Image data */
 
 const unsigned char SPOTLIGHT[] = {
     0b01111100,
@@ -95,9 +102,6 @@ void initializeQordl()
     //
     // INITIALIZATION CODE AND LICENSE SCREEN
     //
-
-    //title_erase_loading_msg();
-    title_show_instruction_screen();
 
     // You may not bankswitch while the Title/License is on screen!
     // Before bankswitching, you must:
@@ -163,7 +167,11 @@ void initializeQordl()
 
     // Initialize the game model
     mq_initialize(&fontmanager1,&fontmanager2,&gameModel);
-    moq_initialize(vu_letters,&DICT_EA,&gameModel, &opponentModel);
+    moq_initialize(vu_letters,&DICT_HA,&gameModel, &opponentModel);
+
+    shown = shown || title_show_license_on_L();
+
+    vo4_initialize(FONT1,FONT2);
 
     shown = shown || title_show_license_on_L();
 
@@ -175,6 +183,9 @@ void initializeQordl()
     // which means show the license -- unless you
     // already showed the license
     title_wait_for_key(shown);
+
+    show_options_screen(&(PAGE->pm.player0));
+    dict = md_pickDictionary(&titleText[18],&titleText[20],selectedDictionary);
 
     // Load the PAGE
     ds_init(PAGE);
@@ -197,14 +208,7 @@ void pickWord()
     char buf[6];
     for(i=0;i<4;++i)
     {
-        if ( (GTIA_READ.pal & 0xE) == 0xE )
-        {
-            md_pickRandomWord(&DICT_ES_US,&w1);
-        }
-        else
-        {
-            md_pickRandomWord(&DICT_ES_UK,&w1);
-        }
+        md_pickRandomWord(dict,&w1);
         md_wordToString(buf,&w1);
         buf[5]='\0';
         mw_setSolution(buf,&(gameModel.puzzles[i]));
@@ -219,14 +223,15 @@ int main()
     initializeQordl();
     for(;;)
     {
+        md_bankswitchIdx(); // BANK SWITCH!
         pickWord();
-        moq_gameDriver("AQordl (text mode)",&opponentModel);
+        moq_gameDriver(titleText,&opponentModel);
         dk_getc();
         // Need to bankswitch to where the initialize code is!
         bankswitchStartup();
         mq_initialize(&fontmanager1,&fontmanager2,&gameModel);
         vfm_clearGreenLetters(&fontmanager1);
         vfm_clearGreenLetters(&fontmanager2);
-        moq_initialize(vu_letters,&DICT_EA,&gameModel,&opponentModel);
+        moq_initialize(vu_letters,&DICT_HA,&gameModel,&opponentModel);
     }
 }

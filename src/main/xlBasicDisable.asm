@@ -36,6 +36,12 @@
 ; The next step of the load process should be to check the available RAM,
 ; either xeCheck or the cc65 SYSCHK
 
+; And then there's the third-party RAM expansions.
+; On Rambo, bit 4=0 enables extended RAM, and bits 2,3,5,6,7 select which bank.
+; Bit 4 is therefore the same as on the 130XE, and 2,3 are still bank selectors,
+; so Rambo is basically compatible -- except that Antic sees the same RAM as the CPU,
+; and trying to enable the selftest ROM while bankswitching won't work.
+
     .segment "BASICCHK"
 
     RTS     ; for older DOSes which unconditionally run the first load chunk
@@ -62,16 +68,16 @@ found40K:
     ; to $A000 to make sure there actually IS ram there.
     ; (This still might be a 40K Atari 800!)
 
-    LDY #$10
-chkloop:
-    TYA
-    STA tmp
-    STA $A000,Y
-    LDA $A000,Y
-    CMP tmp
+    LDA $A000
+    TAY ; stash it
+    EOR #$FF
+    STA $A000
+    CMP $A000
     BNE done ; mismatch! Not RAM!
-    DEY
-    BPL chkloop
+    ; OK, I believe you, you're RAM
+    ; Restore the original value
+    TYA
+    STA $A000
 
     ; OK, I'm convinced there is RAM there
     ; Update the memory size. It WAS $A0,
@@ -84,7 +90,6 @@ chkloop:
     LDA MEMTOP+1
     ADC #$20
     STA MEMTOP+1
-    LDA #$C0
 
     ; Having moved MEMTOP, re-open the screen
     LDX #0      ; IOCB 0, E:

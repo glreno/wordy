@@ -10,10 +10,10 @@
 ; Title definitions
 ;
     ; 7 char string, used for copyright messages in ROM
-    .define title7char  "Aqordl "
+    .define title7char  "AQordl "
 
     ; 10 char string, used for copyright messages in Gr.0 text
-    .define title10char "   Aqordl "
+    .define title10char "   AQordl "
 
     ; 20 char string, used for title messages in Gr.2 text
     ; so do not mix case!
@@ -22,6 +22,9 @@
     ; Two lines of 20-char text for game instructions
     .define instruction1 "  nine attempts to  "
     .define instruction2 "  guess four words  "
+    ; Two lines of 40-char text for sub description
+    .define instruction3 "GREEN letters are correct.              "
+    .define instruction4 "YELLOW letters are in the wrong place.  "
 
 ;
 ; Minimum Memory Check

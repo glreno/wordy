@@ -6,206 +6,99 @@
 ;
 ; http://www.apache.org/licenses/LICENSE-2.0
 
-.RODATA
-    .export _cvcvcDict
-_cvcvcDict:
-    .byte "BABEL"
-    .byte "BACON"
-    .byte "BAGEL"
-    .byte "BAKER"
-    .byte "BANAL"
-    .byte "BARER"
-    .byte "BARON"
-    .byte "BASAL"
-    .byte "BASER"
-    .byte "BASIC"
-    .byte "BASIL"
-    .byte "BASIN"
-    .byte "BATIK"
-    .byte "BATON"
-    .byte "BEBOP"
-    .byte "BEFIT"
-    .byte "BEFOG"
-    .byte "BEGAN"
-    .byte "BEGAT"
-    .byte "BEGET"
-    .byte "BEGIN"
-    .byte "BEGOT"
-    .byte "BERET"
-    .byte "BESET"
-    .byte "BESOM"
-    .byte "BESOT"
-    .byte "BEVEL"
-    .byte "BICEP"
-    .byte "BIDET"
-    .byte "BIGOT"
-    .byte "BIKER"
-    .byte "BISON"
-    .byte "BONER"
-    .byte "BORER"
-    .byte "BORON"
-    .byte "BOSOM"
-    .byte "CABAL"
-    .byte "CABIN"
-    .byte "CADET"
-    .byte "CALIF"
-    .byte "CAMEL"
-    .byte "CANAL"
-    .byte "CANON"
-    .byte "CAPER"
-    .byte "CAPON"
-    .byte "CARAT"
-    .byte "CARET"
-    .byte "CAROL"
-    .byte "CAROM"
-    .byte "CATER"
-    .byte "CAVIL"
-    .byte "CEDAR"
-    .byte "CIDER"
-    .byte "CIGAR"
-    .byte "CIVET"
-    .byte "CIVIC"
-    .byte "CIVIL"
-    .byte "COLIC"
-    .byte "COLON"
-    .byte "COLOR"
-    .byte "COMER"
-    .byte "COMET"
-    .byte "COMIC"
-    .byte "CONIC"
-    .byte "CORAL"
-    .byte "COVEN"
-    .byte "COVER"
-    .byte "COVET"
-    .byte "DAVIT"
-    .byte "DEBAR"
-    .byte "DEBIT"
-    .byte "DECAF"
-    .byte "DECAL"
-    .byte "DECOR"
-    .byte "DEFER"
-    .byte "DEMON"
-    .byte "DENIM"
-    .byte "DEPOT"
-    .byte "DETER"
-    .byte "DEVIL"
-    .byte "DIGIT"
-    .byte "DIMER"
-    .byte "DINER"
-    .byte "DIRER"
-    .byte "DIVAN"
-    .byte "DIVER"
-    .byte "DIVOT"
-    .byte "DONOR"
-    .byte "FACET"
-    .byte "FAGOT"
-    .byte "FAKER"
-    .byte "FAKIR"
-    .byte "FATAL"
-    .byte "FAVOR"
-    .byte "FECAL"
-    .byte "FELON"
-    .byte "FERAL"
-    .byte "FETAL"
-    .byte "FEVER"
-    .byte "FIBER"
-    .byte "FILET"
-    .byte "FINAL"
-    .byte "FINER"
-    .byte "FIVER"
-    .byte "FOCAL"
-    .byte "GAMER"
-    .byte "GAMIN"
-    .byte "GAVEL"
-    .byte "GIVEN"
-    .byte "GOFER"
-    .byte "GONER"
-    .byte "HABIT"
-    .byte "HALER"
-    .byte "HALON"
-    .byte "HAREM"
-    .byte "HATER"
-    .byte "HAVEN"
-    .byte "HAVOC"
-    .byte "HELOT"
-    .byte "HERON"
-    .byte "HIKER"
-    .byte "HOGAN"
-    .byte "HOMER"
-    .byte "HONOR"
-    .byte "HOTEL"
-    .byte "HOVEL"
-    .byte "HOVER"
-    .byte "KABOB"
-    .byte "KAPOK"
-    .byte "KARAT"
-    .byte "KEBAB"
-    .byte "KEBOB"
-    .byte "KOPEK"
-    .byte "LABEL"
-    .byte "LABOR"
-    .byte "LADEN"
-    .byte "LAGER"
-    .byte "LAMER"
-    .byte "LAPEL"
-    .byte "LASER"
-    .byte "LATER"
-    .byte "LEGAL"
-    .byte "LEGIT"
-    .byte "LEMON"
-    .byte "LEPER"
-    .byte "LEVEL"
-    .byte "LEVER"
-    .byte "LIBEL"
-    .byte "LICIT"
-    .byte "LIFER"
-    .byte "LIKEN"
-    .byte "LIKER"
-    .byte "LILAC"
-    .byte "LIMIT"
-    .byte "LINEN"
-    .byte "LINER"
-    .byte "LITER"
-    .byte "LIVEN"
-    .byte "LIVER"
-    .byte "LOCAL"
-    .byte "LOGIC"
-    .byte "LOGIN"
-    .byte "LOGON"
-    .byte "LONER"
-    .byte "LOSER"
-    .byte "LOVER"
-    .byte "MADAM"
-    .byte "MAGIC"
-    .byte "MAKER"
-    .byte "MANIC"
-    .byte "MANOR"
-    .byte "MASON"
-    .byte "MAVEN"
-    .byte "MAVIN"
-    .byte "MEDAL"
-    .byte "MEDIC"
-    .byte "MELON"
-    .byte "MERIT"
-    .byte "METAL"
-    .byte "METER"
-    .byte "MILER"
-    .byte "MIMIC"
-    .byte "MINER"
-    .byte "MINIM"
-    .byte "MINOR"
-    .byte "MISER"
-    .byte "MITER"
-    .byte "MODAL"
-    .byte "MODEL"
-    .byte "MODEM"
-    .byte "MOLAR"
-    .byte "MORAL"
-    .byte "MORON"
-    .byte "MOTEL"
-    .byte "MOTIF"
-    .byte "MOTOR"
-    .byte "MOVER"
-    .byte "NABOB"
-    .byte "NADIR"
-    .byte "NASAL"
+    .segment "DICT_IDX"
+
+; md_lexicon: array of 26 md_wordList
+; md_wordList:  int size, byte bankID, md_wordInternal*
+; If there is nothing: 5 zero bytes
+_cvcvc_lexicon:
+    .export _cvcvc_lexicon
+
+    .byte 11 ; lexicon array length
+
+    ; Lex entry 0:B
+    .import _wordCountB, _wordsB
+    .word _wordCountB
+    .byte 'B'
+    .byte 0
+    .word _wordsB
+
+    ; Lex entry 1:C
+    .import _wordCountC, _wordsC
+    .word _wordCountC
+    .byte 'C'
+    .byte 0
+    .word _wordsC
+
+    ; Lex entry 2:D
+    .import _wordCountD, _wordsD
+    .word _wordCountD
+    .byte 'D'
+    .byte 1
+    .word _wordsD
+
+    ; Lex entry 3:F
+    .import _wordCountF, _wordsF
+    .word _wordCountF
+    .byte 'F'
+    .byte 1
+    .word _wordsF
+
+    ; Lex entry 4:G
+    .import _wordCountG, _wordsG
+    .word _wordCountG
+    .byte 'G'
+    .byte 1
+    .word _wordsG
+
+    ; Lex entry 5:H
+    .import _wordCountH, _wordsH
+    .word _wordCountH
+    .byte 'H'
+    .byte 1
+    .word _wordsH
+
+    ; Lex entry 6:J
+    .import _wordCountJ, _wordsJ
+    .word _wordCountJ
+    .byte 'J'
+    .byte 1
+    .word _wordsJ
+
+    ; Lex entry 7:K
+    .import _wordCountK, _wordsK
+    .word _wordCountK
+    .byte 'K'
+    .byte 1
+    .word _wordsK
+
+    ; Lex entry 8:L
+    .import _wordCountL, _wordsL
+    .word _wordCountL
+    .byte 'L'
+    .byte 2
+    .word _wordsL
+
+    ; Lex entry 9:M
+    .import _wordCountM, _wordsM
+    .word _wordCountM
+    .byte 'M'
+    .byte 2
+    .word _wordsM
+
+    ; Lex entry 10:N
+    .import _wordCountN, _wordsN
+    .word _wordCountN
+    .byte 'N'
+    .byte 2
+    .word _wordsN
+
+
+; md_dict: byte number of multilex, then a list of multilex
+; md_multilex: byte multiplier, md_lexicon*
+_CVDICT:
+    .export _CVDICT
+    .byte 1
+    .byte 1
+    .word _cvcvc_lexicon
+

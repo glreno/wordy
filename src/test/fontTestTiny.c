@@ -156,15 +156,15 @@ int main(void)
     {
         for(x=0;x<5;x++)
         {
-            vw_writeTile(&grey,x,y,VW_GREY,'A'+(y*5)+x);
-            vw_writeTile(&yellow,x,y,VW_YELLOW,'A'+(y*5)+x);
+            vw_writeTile(&grey,y,x,VW_GREY,'A'+(y*5)+x);
+            vw_writeTile(&yellow,y,x,VW_YELLOW,'A'+(y*5)+x);
         }
     }
     vw_writeTile(&zed,0,0,VW_GREY,'Z');
-    vw_writeTile(&zed,2,0,VW_YELLOW,'Z');
+    vw_writeTile(&zed,0,2,VW_YELLOW,'Z');
 
     // test cleartile by writing something then clearing it
-    vw_writeTile(&zed,3,0,VW_YELLOW,'Z');
+    vw_writeTile(&zed,0,3,VW_YELLOW,'Z');
     vw_clearTile(&zed,3,0);
 
     // page flip to page, and build the font
@@ -172,17 +172,17 @@ int main(void)
 
     for(x=0;x<5;x++)
     {
-        vw_writeTile(&green1,x,0,VW_GREEN,'A'+x);
+        vw_writeTile(&green1,0,x,VW_GREEN,'A'+x);
 
-        vw_writeTile(&green2,x,0,VW_GREEN,'F'+x);
+        vw_writeTile(&green2,0,x,VW_GREEN,'F'+x);
 
-        vw_writeTile(&green2,x,1,VW_GREEN,'K'+x);
+        vw_writeTile(&green2,1,x,VW_GREEN,'K'+x);
 
-        vw_writeTile(&green3,x,0,VW_GREEN,'P'+x);
+        vw_writeTile(&green3,0,x,VW_GREEN,'P'+x);
 
-        vw_writeTile(&green3,x,1,VW_GREEN,'U'+x);
+        vw_writeTile(&green3,1,x,VW_GREEN,'U'+x);
     }
-    vw_writeTile(&zed,4,0,VW_GREEN,'Z');
+    vw_writeTile(&zed,0,4,VW_GREEN,'Z');
 
     for(;;)
     {

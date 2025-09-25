@@ -193,6 +193,7 @@ void __fastcall__ moq_gameDriver(const char *title,moq *this)
             vo_waitUntilMessageReceived();
             if ( k == 4 )
             {
+                mq_nextRow(gm); // update stillInPlay flags even though we're done
                 vo_message( MSG_WINNER,0); //"We have a winner!");
                 vo_waitUntilMessageReceived();
                 return;

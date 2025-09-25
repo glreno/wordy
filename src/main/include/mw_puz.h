@@ -74,7 +74,7 @@ void __fastcall__ mw_scoreRow(mw *model);
  * This is done one column at a time for animation purposes.
  */
 //void mw_colorLetter(mw *model, char col);
-#define mw_colorLetter(model, col) vw_writeTile(&((model)->view),(col),(model)->cur_y,(model)->currColors[(col)],(model)->currGuess[(col)])
+#define mw_colorLetter(model, col) vw_writeTile(&((model)->view),(model)->cur_y,(col),(model)->currColors[(col)],(model)->currGuess[(col)])
 
 /* Did I win? Return 1 if all five letters are green. */
 char __fastcall__ mw_isWon(mw *model);

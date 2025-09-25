@@ -19,6 +19,8 @@
 
 #include <stdlib.h>
 
+// { "params":"this is a parameter block","picsegment":"VOR_PICS","idxsegment":"VOR_IDX" }
+
 // Bank destinations:
 // bank 0: Cart bank 0 (audio cues, trampolined functions)
 // bank 1: Cart bank 1 (mostly-full dictionary bank)
@@ -71,7 +73,7 @@ extern void *robot0_angry_shoulders_pic[];
 // {"name":"robot0_angry_shoulders_pic","fn":"robot0.angry.png","src":[0,48],"size":[6,2],"dst":[0,6],"bank":0}
 
 extern void *robot0_angry_knees_pic[];
-// {"name":"robot0_angry_knees_pic","fn":"robot0.angry.png","src":[0,64],"size":[6,5],"dst":[0,0],"bank":1}
+// {"name":"robot0_angry_knees_pic","fn":"robot0.angry.png","src":[0,64],"size":[6,5],"dst":[0,0],"bank":4}
 
 extern void *robot0_angry_toes_pic[];
 // {"name":"robot0_angry_toes_pic","fn":"robot0.angry.png","src":[0,104],"size":[6,2],"dst":[0,5],"bank":0}
@@ -164,7 +166,7 @@ extern void *robot0_leftpoint_toes_pic[];
 // Left facing image - Kickback - end of kick
 
 extern void *robot0_leftkickback_head_pic[];
-// {"name":"robot0_leftkickback_head_pic","fn":"robot0.leftkickback.png","src":[0,16],"size":[5,4],"dst":[0,2],"bank":5}
+// {"name":"robot0_leftkickback_head_pic","fn":"robot0.leftkickback.png","src":[0,16],"size":[5,4],"dst":[0,2],"bank":4}
 
 extern void *robot0_leftkickback_shoulders_pic[];
 // #{"name":"robot0_leftkickback_shoulders_pic","fn":"robot0.leftkickback.png","src":[0,48],"size":[6,2],"dst":[0,6],"bank":0}
@@ -178,7 +180,7 @@ extern void *robot0_leftkickback_toes_pic[];
 // Left facing image - Kick
 
 extern void *robot0_leftkick_head_pic[];
-// {"name":"robot0_leftkick_head_pic","fn":"robot0.leftkick.png","src":[0,16],"size":[5,4],"dst":[0,2],"bank":5}
+// {"name":"robot0_leftkick_head_pic","fn":"robot0.leftkick.png","src":[0,16],"size":[5,4],"dst":[0,2],"bank":4}
 
 extern void *robot0_leftkick_shoulders_pic[];
 // {"name":"robot0_leftkick_shoulders_pic","fn":"robot0.leftkick.png","src":[0,48],"size":[6,2],"dst":[0,6],"bank":0}
@@ -213,7 +215,7 @@ extern void *robot0_rightpoint_shoulders_pic[];
 // #{"name":"robot0_rightpoint_shoulders_pic","fn":"robot0.rightpoint.png","src":[0,48],"size":[6,2],"dst":[0,6],"bank":0}
 
 extern void *robot0_rightpoint_knees_pic[];
-// {"name":"robot0_rightpoint_knees_pic","fn":"robot0.rightpoint.png","src":[4,64],"size":[4,5],"dst":[1,0],"bank":5}
+// {"name":"robot0_rightpoint_knees_pic","fn":"robot0.rightpoint.png","src":[4,64],"size":[4,5],"dst":[1,0],"bank":4}
 
 extern void *robot0_rightpoint_toes_pic[];
 // {"name":"robot0_rightpoint_toes_pic","fn":"robot0.rightpoint.png","src":[0,104],"size":[6,2],"dst":[0,5],"bank":0}
@@ -221,7 +223,7 @@ extern void *robot0_rightpoint_toes_pic[];
 // Right facing image - Kickback - end of kick
 
 extern void *robot0_rightkickback_head_pic[];
-// {"name":"robot0_rightkickback_head_pic","fn":"robot0.rightkickback.png","src":[4,16],"size":[5,4],"dst":[1,2],"bank":5}
+// {"name":"robot0_rightkickback_head_pic","fn":"robot0.rightkickback.png","src":[4,16],"size":[5,4],"dst":[1,2],"bank":4}
 
 extern void *robot0_rightkickback_shoulders_pic[];
 // #{"name":"robot0_rightkickback_shoulders_pic","fn":"robot0.rightkickback.png","src":[0,48],"size":[6,2],"dst":[0,6],"bank":0}
@@ -235,13 +237,13 @@ extern void *robot0_rightkickback_toes_pic[];
 // Right facing image - kick
 
 extern void *robot0_rightkick_head_pic[];
-// {"name":"robot0_rightkick_head_pic","fn":"robot0.rightkick.png","src":[4,16],"size":[5,4],"dst":[1,2],"bank":5}
+// {"name":"robot0_rightkick_head_pic","fn":"robot0.rightkick.png","src":[4,16],"size":[5,4],"dst":[1,2],"bank":4}
 
 extern void *robot0_rightkick_shoulders_pic[];
 // {"name":"robot0_rightkick_shoulders_pic","fn":"robot0.rightkick.png","src":[0,48],"size":[6,2],"dst":[0,6],"bank":0}
 
 extern void *robot0_rightkick_knees_pic[];
-// {"name":"robot0_rightkick_knees_pic","fn":"robot0.rightkick.png","src":[4,64],"size":[4,5],"dst":[1,0],"bank":5}
+// {"name":"robot0_rightkick_knees_pic","fn":"robot0.rightkick.png","src":[4,64],"size":[4,5],"dst":[1,0],"bank":4}
 
 extern void *robot0_rightkick_toes_pic[];
 // {"name":"robot0_rightkick_toes_pic","fn":"robot0.rightkick.png","src":[0,104],"size":[6,2],"dst":[0,5],"bank":0}
@@ -278,13 +280,13 @@ extern void *robot0_jump2_toes_pic[];
 // Note that a row moves from knees to shoulders
 
 extern void *robot0_jump3_head_pic[];
-// {"name":"robot0_jump3_head_pic","fn":"robot0.jump1.png","src":[0,16],"size":[6,4],"dst":[0,1],"bank":2}
+// {"name":"robot0_jump3_head_pic","fn":"robot0.jump1.png","src":[0,16],"size":[6,4],"dst":[0,1],"bank":4}
 
 extern void *robot0_jump3_shoulders_pic[];
 // {"name":"robot0_jump3_shoulders_pic","fn":"robot0.jump1.png","src":[0,48],"size":[6,3],"dst":[0,5],"bank":4}
 
 extern void *robot0_jump3_knees_pic[];
-// {"name":"robot0_jump3_knees_pic","fn":"robot0.jump1.png","src":[0,72],"size":[6,4],"dst":[0,0],"bank":5}
+// {"name":"robot0_jump3_knees_pic","fn":"robot0.jump1.png","src":[0,72],"size":[6,4],"dst":[0,0],"bank":4}
 
 extern void *robot0_jump3_toes_pic[];
 // {"name":"robot0_jump3_toes_pic","fn":"robot0.jump1.png","src":[0,104],"size":[6,2],"dst":[0,4],"bank":0}
@@ -293,7 +295,7 @@ extern void *robot0_jump3_toes_pic[];
 // i.e. jump2_knees main_toes
 
 extern void *robot0_jump4_knees_pic[];
-// {"name":"robot0_jump4_knees_pic","fn":"robot0.jump2.png","src":[0,72],"size":[6,4],"dst":[0,0],"bank":5}
+// {"name":"robot0_jump4_knees_pic","fn":"robot0.jump2.png","src":[0,72],"size":[6,4],"dst":[0,0],"bank":4}
 
 extern void *robot0_jump4_toes_pic[];
 // {"name":"robot0_jump4_toes_pic","fn":"robot0.24x128.png","src":[0,104],"size":[6,2],"dst":[0,4],"bank":0}
@@ -306,13 +308,13 @@ extern void *robot0_jump5_head_pic[];
 // {"name":"robot0_jump5_head_pic","fn":"robot0.24x128.png","src":[4,16],"size":[4,4],"dst":[1,3],"bank":0}
 
 extern void *robot0_jump5_shoulders_pic[];
-// {"name":"robot0_jump5_shoulders_pic","fn":"robot0.jump5.png","src":[0,48],"size":[6,1],"dst":[0,7],"bank":2}
+// {"name":"robot0_jump5_shoulders_pic","fn":"robot0.jump5.png","src":[0,48],"size":[6,1],"dst":[0,7],"bank":4}
 
 extern void *robot0_jump5_knees_pic[];
 // {"name":"robot0_jump5_knees_pic","fn":"robot0.jump5.png","src":[0,56],"size":[6,5],"dst":[0,0],"bank":4}
 
 extern void *robot0_jump5_toes_pic[];
-// {"name":"robot0_jump5_toes_pic","fn":"robot0.jump5.png","src":[0,96],"size":[6,2],"dst":[0,5],"bank":0}
+// {"name":"robot0_jump5_toes_pic","fn":"robot0.jump5.png","src":[0,96],"size":[6,2],"dst":[0,5],"bank":4}
 
 // Jump image 6 - crouching down -- everything shifted down a row
 // Everything from jump5
@@ -328,6 +330,6 @@ extern void *robot0_jump6_knees_pic[];
 // {"name":"robot0_jump6_knees_pic","fn":"robot0.jump5.png","src":[0,56],"size":[6,5],"dst":[0,0],"bank":4}
 
 extern void *robot0_jump6_toes_pic[];
-// {"name":"robot0_jump6_toes_pic","fn":"robot0.jump5.png","src":[0,96],"size":[6,2],"dst":[0,5],"bank":0}
+// {"name":"robot0_jump6_toes_pic","fn":"robot0.jump5.png","src":[0,96],"size":[6,2],"dst":[0,5],"bank":4}
 
 #endif

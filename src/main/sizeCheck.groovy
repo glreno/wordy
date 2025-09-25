@@ -7,18 +7,24 @@ def bankFor =
         "VOR_PICS0": 0,
         "CART_BANK_0": 0,
 
+        "DICT_BANK_C_1": 1,
         "DICT_BANK_1": 1,
         "VOR_PICS1": 1,
         "CART_BANK_1": 1,
 
+        "DICT_BANK_C_2": 2,
         "DICT_BANK_2": 2,
         "VOR_PICS2": 2,
         "CART_BANK_2": 2,
 
+        "DICT_BANK_C_3": 3,
         "DICT_BANK_3": 3,
+        "DICT_IDX": 3,
+        "OPTIONS_BANK": 3,
         "VOR_PICS3": 3,
         "CART_BANK_3": 3,
 
+        "DICT_BANK_C_4": 4,
         "DICT_BANK_4": 4,
         "VOR_PICS4": 4,
         "CART_BANK_4": 4,

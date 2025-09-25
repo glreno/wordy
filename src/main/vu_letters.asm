@@ -358,7 +358,6 @@ even:
 ; void __fastcall__ vu_green(char letter, void *address);
 ; GLOBAL USAGE: ptr1 to pass dest to vu_grey_common
 ; GLOBAL USAGE: tmp2 to pass mask to vu_grey_common
-    .segment "APP"
 trampoline _vu_green,_vu_green_tramp
     .proc vu_green
     JSR staxptr1
@@ -373,7 +372,6 @@ trampoline _vu_green,_vu_green_tramp
 ; void __fastcall__ vu_grey(char letter, void *address);
 ; GLOBAL USAGE: ptr1 to pass dest to vu_grey_common
 ; GLOBAL USAGE: tmp2 to pass mask to vu_grey_common
-    .segment "APP"
 trampoline _vu_grey,_vu_grey_tramp
     .proc vu_grey
     JSR staxptr1

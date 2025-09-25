@@ -203,6 +203,7 @@ int main()
     initializeAWordl();
     for(;;)
     {
+        md_bankswitchIdx(); // BANK SWITCH!
         pickWord();
         mow_gameDriver(&opponentModel);
         dk_getc();

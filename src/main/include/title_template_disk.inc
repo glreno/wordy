@@ -9,12 +9,15 @@
     .import         _bankswitchTitle
     .import _cgetc
     .importzp ptr1
-    .macpack atari
+    ; .macpack atari - included by scrcode160
+    .include "include/scrcode160.mac"
     .include "include/version.inc"
 
-    .define copyright_long .concat(title7char,aqordl_version," Copyright (c) ",year," Gerald Reno, Jr.")
-    .define copyright_noname .concat(aqordl_version," Copyright (c) ",year," Gerald Reno, Jr.")
-    .define copyright_short title7char,aqordl_version," (c)",year," Reno"
+
+
+    .define copyright_long .concat(title7char," ",aqordl_version," Copyright(c)",year," Gerald Reno, Jr.")
+    .define copyright_noname .concat(aqordl_version," Copyright(c)",year," Gerald Reno, Jr. ")
+    .define copyright_short title7char," ",aqordl_version,"(c)",year," Reno"
 
 ; OS LOCATIONS
     DOSVEC = $A
@@ -39,7 +42,7 @@ _COPYRIGHT_NOTICE:
 ; This is the first thing in the title page cartridge bank
     .byte copyright_short
 _COPYRIGHT_NOTICE_INTERNAL_WIDE:
-    scrcode title10char
+    scrcode title10char," "
 _COPYRIGHT_NOTICE_INTERNAL:
 .export _COPYRIGHT_NOTICE_INTERNAL
     scrcode copyright_noname
@@ -68,6 +71,7 @@ license_screen:
     scrcode "   which is licensed under the zlib License     "
     scrcode "   Dictionary partially dependent on Ubuntu     "
     scrcode "   dictionaries-common, which is under GPL-2    "
+titlel_loading_message:
     scrcode licenseLoad
     ;        01234567890123456789012
 
@@ -78,11 +82,6 @@ license_screen:
     .segment "TITLE_PAGE"
     ;        01234567890123456789
     ;                            01234567890123456789
-options_screen_name:
-    .export options_screen_name
-title_screen_name:
-.export title_screen_name
-    scrcode title20char ; mode 6 text, lower case for high-bits 01, green
 title_screen:
     scrcode description1 ; " a word puzzle game "
     scrcode description2 ; "with a dancing robot"
@@ -90,20 +89,27 @@ title_screen:
     scrcode description4 ; "          but not social media          "
     scrcode description5 ; ""
     scrcode description6 ; "130XE disk version"
-    scrcode descriptionLoad
+titlet_loading_message:
+    scrcode descriptionLoad ; "loading robot"
     ;        01234567890123456789
+options_screen_name:
+    .export options_screen_name
+title_screen_name:
+.export title_screen_name
+    scrcode title20char ; mode 6 text, lower case for high-bits 01, green
 
     .segment "TITLEI_PAGE"
-    ;        01234567890123456789
-    ;                            01234567890123456789
+    ;                       01234567890123456789
+    ;                                           01234567890123456789
 instruction_screen:
     scrcode instruction1 ; "  nine attempts to  "
     scrcode instruction2 ; "  guess four words  "
     scrcode instruction3 ; "GREEN letters are correct.              "
     scrcode instruction4 ; "YELLOW letters are in the wrong place.  "
-    scrcode instruction5 ; "                                        "
-    scrcode instruction6 ; "To adjust colors, press 1-9             "
-_title_loading_message:
+    scrcode160 instruction5
+    scrcode160 instruction6
+    ;                       01234567890123456789
+titlei_loading_message:
     scrcode instructionLoad
     ;        01234567890123456789
 
@@ -126,6 +132,7 @@ credits_screen:
     scrcode "    (Carlin on Campus, Carlin, G. 1984) "
     scrcode "'The Ten Hundred Words People Use Most' "
     scrcode "    (Thing Explainer, Munroe, R. 2015)  "
+titlec_loading_message:
     scrcode creditLoad
     ;        01234567890123456789
 
@@ -135,27 +142,7 @@ credits_screen:
 press_a_key_to_begin_wide:
     .byte 0,0
 press_a_key_to_begin:
-    .byte 'P'+160
-    .byte 'R'+160
-    .byte 'E'+160
-    .byte 'S'+160
-    .byte 'S'+160
-    .byte 0
-    .byte 'A'+160
-    .byte 0
-    .byte 'K'+160
-    .byte 'E'+160
-    .byte 'Y'+160
-    .byte 0
-    .byte 'T'+160
-    .byte 'O'+160
-    .byte 0
-    .byte 'B'+160
-    .byte 'E'+160
-    .byte 'G'+160
-    .byte 'I'+160
-    .byte 'N'+160
-    .byte 0
+    scrcode160 "PRESS A KEY TO BEGIN "
 
 ;
 ; display list for hardcoded title screen
@@ -183,13 +170,13 @@ title_dl_romaddr:
 ; documentation
     .byte 2             ; green letters are correct
     .byte 2             ; yellow letters would like to move
-    .byte $70
-    .byte 2             ; To change palette....
-    .byte 2             ; To mute....
-; keypress text
     .byte $70,$70
-    .byte 6             ; loading...
+; keypress text
+    .byte 6             ; Press C...
+    .byte 6             ; Press L...
+; loading text
     .byte $70
+    .byte 6             ; loading...
     .byte $46
     .word press_a_key_to_begin
 ; end of screen
@@ -218,6 +205,8 @@ credits_display_list:
 ; keypress text
     .byte $70
     .byte $6 ; Loading dictionary
+    .byte $46
+    .word press_a_key_to_begin
 ; end of screen
     .byte $41
     .word credits_display_list
@@ -242,6 +231,8 @@ license_display_list:
     .byte 2,2,2,2
     .byte $70
     .byte $6 ; loading game
+    .byte $46
+    .word press_a_key_to_begin_wide
 ; end of screen
     .byte $41
     .word license_display_list
@@ -306,10 +297,10 @@ _title_show_credits_screen:
     LDA #34
     STA $22F
     ; return 34 indicating credits shown
-    LDA #<title_screen
-    STA title_dl_romaddr
-    LDA #>title_screen
-    STA title_dl_romaddr+1
+;   LDA #<title_screen
+;   STA title_dl_romaddr
+;   LDA #>title_screen
+;   STA title_dl_romaddr+1
     RTS
 .endproc
 
@@ -345,7 +336,7 @@ _title_show_license_screen:
     RTS
 .endproc
 
-    .segment "TITLEL_PAGE"
+    .segment "TITLEI_PAGE"
 _title_show_press_a_key:
     .export _title_show_press_a_key
 .proc title_show_press_a_key
@@ -361,19 +352,55 @@ _title_wait_for_key:
     .export _title_wait_for_key
 .proc title_wait_for_key
     ; A reg contains "shown" (0 if not shown)
+    PHA
 waitforkey:
     JSR _cgetc
+    ; Check the stack. If it's not a 0, just return
+    TAX ; copy the key for future reference
+    PLA
+    BEQ readthekey
+    ; we already showed it
     RTS
+readthekey:
+    TXA ; get the key from the stash
+    ; If A reg contains 'l'
+    ; then show the license page
+    CMP #108 ; ascii lowercase L
+    BEQ itsanL
+    ; If A reg contains 'c'
+    ; then show the credits page
+    CMP #99 ; ascii lowercase C
+    BEQ itsanC
+    ; not an L or C, wwe're done here
+    RTS
+itsanL:
+    JSR _title_show_license_screen
+    JMP shown
+itsanC:
+    JSR _title_show_credits_screen
+shown:
+    LDA #1 ; we've shown the license now
+    JMP _title_wait_for_key
 .endproc
 
 _title_erase_loading_msg:
     .export _title_erase_loading_msg
     .proc title_erase_loading_msg
-    LDY #20
-    LDA #<_title_loading_message
+    LDA #<titlei_loading_message
+    LDX #>titlei_loading_message
+    JSR doerase
+    LDA #<titlec_loading_message
+    LDX #>titlec_loading_message
+    JSR doerase
+    ; license screen is wider, so message is offset by two bytes to center it
+    LDA #<(titlel_loading_message+2)
+    LDX #>(titlel_loading_message+2)
+    JSR doerase
+    RTS
+doerase:
     STA ptr1
-    LDA #>_title_loading_message
-    STA ptr1+1
+    STX ptr1+1
+    LDY #19
     LDA #0
 loop:
     STA (ptr1),Y

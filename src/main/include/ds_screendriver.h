@@ -247,6 +247,14 @@ void __fastcall__ ds_setDliCallback(void *const cb);
 void __fastcall__ ds_setFlipCallback(void *const cb);
 
 /*
+* Set an ML callback routine to call every VBI
+* This is called after the flip callback.
+* Keep it short! Just set a flag or something.
+* Set to NULL to disable the callback.
+*/
+void __fastcall__ ds_setVbiCallback();
+
+/*
 * Set an ML callback routine to call every N jiffies.
 * Timers are decremented at the end of every VBI. When CDTMV1
 * reaches zero, the callback will be called.

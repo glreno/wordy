@@ -44,14 +44,16 @@ lvlvalues:
 ; Screen data, this will be copied to RAM
 ; Each of these strings is preceded by the screen RAM offset to print at, and length
 optionscreentext:
+    .export optionscreentext
     scrcode "   LEVEL    WORDS      AUDIO            "
-    scrcode "  A  Easy     774     0  Mute           "
-    scrcode "  B  Normal  1379     1  Key Click Off  "
-    scrcode "  C  Hard    4710     2  Normal         "
-    scrcode "  D  Tough   4973     3  Annoying       "
-    scrcode "          Press ENTER to start          "
+    scrcode "  A  Easy     766     0  Mute           "
+    scrcode "  B  Normal  1372     1  Key Click Off  "
+    scrcode "  C  Hard    4707     2  Normal         "
+    scrcode "  D  Tough   4974     3  Annoying       "
           ;  0123456789012345678901234567890123456789
+; Those dictionary sizes are the US numbers; UK are little smaller
 ; Display list. The start of the display list is copied from the title page.
+dlistoffset = * - optionscreentext
 optionscreendl:
 ; Leading blank rows
     .byte $70,$70,$70
@@ -62,6 +64,7 @@ optionscreendl:
     .byte $70,$70,$70,$70
 ; real text
     .byte $42
+menuoffset = * - optionscreendl
     .word 0 ; screen ram address goes here
     .byte $30
     .byte 2   ; E 0
@@ -69,11 +72,45 @@ optionscreendl:
     .byte 2   ; H 2
     .byte 2   ; T 3
     .byte $70,$70
-    .byte 2   ; Press a key
+    ; need to put an address here!
+    .byte $42 ; palette
+descoffset = * - optionscreendl
+    .word desc_palette ; instruction text address goes here
+    .byte 2,2 ; palette
+    .byte $70,$70
+    .byte $42   ; Press a key
+    .word desc_pressakey
     .byte $41
+addroffset = * - optionscreendl
 ; and that will be followed by the dl address
-;   .word optionscreendl
+bytestocopy = * - optionscreentext
 
+; swappable screen text:
+
+desc_pressakey:
+    scrcode "          Press ENTER to start          "
+desc_palette:
+    scrcode "To change palette during game, press    "
+    scrcode "any digit.  9:high-contrast 0:monochrome"
+    scrcode "                                        "
+desc_easy:
+    scrcode "EASY: The most common words in English  "
+    scrcode "                                        "
+    scrcode "                                        "
+desc_normal:
+    scrcode "NORMAL: The most common words in English"
+    scrcode "including derived forms.                "
+    scrcode "The Easy words are more likely to occur."
+desc_hard:
+    scrcode "HARD: Almost all 5-letter words, except "
+    scrcode "for naughty, rare, archaic, and slang.  "
+    scrcode "Easy and Normal words are more likely.  "
+desc_tough:
+    scrcode "TOUGH: Rare,archaic,slang,naughty words,"
+    scrcode "with equal probability. Not safe for    "
+    scrcode "live streaming unless you like dead air."
+desc_map:
+    .word desc_easy, desc_normal, desc_hard, desc_tough
     .BSS
 _selectedDictionary:
     .byte 0
@@ -112,8 +149,8 @@ show_options_screen_tramp:
     LDX #>optionscreentext
     JSR pushax
     ; Length
-    LDA #$0A
-    LDX #$01
+    LDA #<bytestocopy
+    LDX #>bytestocopy
     ; Copy
     JSR _memcpy
 
@@ -124,24 +161,25 @@ show_options_screen_tramp:
     JSR popax
 
     ; AX is now the screen RAM. Store that in ptr1
-    ; then add the dlist offset (240) to it.
+    ; then add the dlist offset ($C8) to it
     ; (which is easy because A is zero) and store that in ptr2
-    STX ptr1+1
-    STX ptr2+1
+    STX ptr1+1  ; ptr1 = screen ram
     STA ptr1
-    LDA #240
+    STX ptr2+1  ; ptr2 = dlist
+    LDA #dlistoffset
     STA ptr2
 
-    LDY #11+1
+;   LDY #menuoffset
 ;   LDA ptr1        it's a zero so skip copying it
 ;   STA (ptr2),Y
 ;   INY
+    LDY #menuoffset+1
     LDA ptr1+1
     STA (ptr2),Y
     INY
 
     ; and finally the address of the dlist
-    LDY #22
+    LDY #addroffset
     LDA ptr2
     STA (ptr2),Y
     INY
@@ -171,6 +209,14 @@ show_options_screen_tramp:
 
     LDA #$32 ; '2' normal (NOTE: screen value, the thing we store in SFX_LEVEL is different!!!)
     JSR doSelect
+
+    ; Show the palette key help instead of the Normal dictionary description
+    LDY #descoffset
+    LDA #<desc_palette
+    STA (ptr2),Y
+    LDA #>desc_palette
+    INY
+    STA (ptr2),Y
 
 optionKeyLoop:
     ; now a little loop:
@@ -215,6 +261,12 @@ doSelect:
     ; Which means it can only test for 1 bit, and BNE if that bit is set.
     ; And it sets the V flag to whateever is in bit 6 of whatever is at tmp1
     ; (NOT bit 6 of A!)
+    ; Remember the ASCII codes for 'a' and '1' are:
+    ;               '1' = $31 = 0011 0001
+    ;               'A' = $41 = 0100 0001
+    ;               'a' = $61 = 0110 0001
+    ; which means bit 5 ($20) indicates "lowercase or digit" and bit 6 ($40) indicates "letter"
+    ; and the magic V flag behaviour of BIT is a letter detector.
     BIT tmp1
     BVS isletter
     BNE isdigit
@@ -244,27 +296,48 @@ isdigit:
     JMP doHighlight
 isletter:
     ; tmp1 contains an ascii letter, which is effectively a number from 1-26.
-    ; I want a number from 0-3, soo subtract 1 and then mask off the rest
+    ; I want a number from 0-3, so subtract 1 and then mask off the rest
     DEC tmp1
     LDA tmp1
     AND #$03 ; and now it contains a number from 0-3
+    STA tmp1 ; keep it around, we need to select the dictionary, update the menu, and update the description
     ORA #4   ; make that 4-7
     ; look up the value to store
     TAY
     LDA audvalues,Y
     ; store the selected value
     STA _selectedDictionary
-    ; and update the screen
+    ; Y is also the index we need to highlight the menu item, so keep that around
 
     ; clear the previous highlight, and
     ; store the new highlight as "previous highlight"
-    LDA tmp3 ; tmp3=previous lvl highlight Y
+    LDA tmp3 ; tmp3=previous highlight, Y=newhighlight
     STY tmp3
     ; and highlight
     TAY
     JSR doHighlight
+
+    ; Load the description
+    ; tmp1 is the number from 0..3
+    ; Double it to 0..6 and use that as an index into
+    ; the table of dictionary descriptions.
+    ; Store the address there in the dlist at (ptr2),descoffset
+
+    LDY #descoffset
+    LDA tmp1
+    ASL A
+    TAX
+    LDA desc_map,X
+    STA (ptr2),Y
+    INY
+    LDA desc_map+1,X
+    STA (ptr2),Y
+
+    ; Get the Y register back from tmp3, and highlight the new row
+    ; and we can return after that
     LDY tmp3
 
+; Highlight the block of text starting at audoffsets,Y
 doHighlight:
     ; Y contains the offset index
     LDA audoffsets,Y

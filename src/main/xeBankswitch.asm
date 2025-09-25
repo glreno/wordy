@@ -27,6 +27,7 @@
 
 ; Location of 130XE bankswitch control byte, PORTB
 
+    PORTB = $D301
     _BANKSWITCH = $D301
     INITAD = $02E2
     BOOTP  = 9
@@ -159,7 +160,7 @@ _enableWarmStart:
     RTS
 
     .import start
-    .import _title_show_title_screen
+    .import _title_show_instruction_screen
 warmstart:
     .export warmstart
     JSR _bankswitchTitle
@@ -169,7 +170,7 @@ warmstart:
     STA RAMTOP
     LDA #$BC
     STA MEMTOP+1
-    JSR _title_show_title_screen
+    JSR _title_show_instruction_screen
     JMP start
 
 ; These are the segments to insert into the .cfg file to
@@ -177,29 +178,29 @@ warmstart:
 ; ....which is what those hardcoded functions are for
 
     .segment "XEBANK0_LOAD"
-    .word INITAD
-    .word INITAD+1
-    .word bankswitch130xe0
+    .word PORTB
+    .word PORTB
+    .byte $E3
 
     .segment "XEBANK1_LOAD"
-    .word INITAD
-    .word INITAD+1
-    .word bankswitch130xe1
+    .word PORTB
+    .word PORTB
+    .byte $E7
 
     .segment "XEBANK2_LOAD"
-    .word INITAD
-    .word INITAD+1
-    .word bankswitch130xe2
+    .word PORTB
+    .word PORTB
+    .byte $EB
 
     .segment "XEBANK3_LOAD"
-    .word INITAD
-    .word INITAD+1
-    .word bankswitch130xe3
+    .word PORTB
+    .word PORTB
+    .byte $EF
 
     .segment "XEBANK4_LOAD"
-    .word INITAD
-    .word INITAD+1
-    .word bankswitch130xe4
+    .word PORTB
+    .word PORTB
+    .byte $F3
 
 
 

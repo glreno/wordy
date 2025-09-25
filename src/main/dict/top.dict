@@ -24,19 +24,13 @@
 @DICT DICT_HS,x6
 @DICT DICT_HS_US,x6
 @DICT DICT_HS_UK,x6
-@DICTD DICT_HS,x3
-@DICTD DICT_HS_US,x3
-@DICTD DICT_HS_UK,x3
+@DICTD DICT_HS,x2
+@DICTD DICT_HS_US,x2
+@DICTD DICT_HS_UK,x2
 @DICT DICT_HA
 @DICTD DICT_HA
-@DICT DICT_SS,x6
-@DICT DICT_SS_US,x6
-@DICT DICT_SS_UK,x6
-@DICTD DICT_SS,x3
-@DICTD DICT_SS_US,x3
-@DICTD DICT_SS_UK,x3
-@DICT DICT_SA
-@DICTD DICT_SA
+@DICT DICT_TS,x2
+@DICTD DICT_TS
 ; Top Thousand Or So Words
 ; Unlike the other volumes, this will be split
 ; into Headwords and Derived Words volumes.
@@ -147,7 +141,6 @@ bests,vc
 bible,n
 bikes,np,vc
 bills,np,vc
-billy,n
 binds,vc
 birds,np
 birth,n
@@ -167,7 +160,6 @@ blood,n
 blues,np
 board,n,v
 boats,np,vc
-bobby,n
 boils,np,vc
 bombs,np,vc
 bonds,np,vc
@@ -180,7 +172,7 @@ boots,np,vc,clothes
 bored,vc
 borer,n
 bores,np,vc
-borne
+borne,vc
 bound
 bowls,np,vc
 boxes,np,vc
@@ -224,7 +216,6 @@ carbs,np,food
 cards,vc,np
 cared,vc
 cares,vc,np
-carol
 carry
 carts,vc,np
 carve
@@ -640,7 +631,6 @@ issue
 items,np
 japan
 jeans,n
-jimmy
 joins,np,vc
 joint
 joked,vc
@@ -740,7 +730,6 @@ males,np
 malls,np
 mamas,np
 march
-maria
 marks,np,vc
 marry
 masks,np,vc
@@ -1223,7 +1212,6 @@ tells,vc
 tends,vc
 tents,np
 terms,np
-terry
 tests,np,vc
 texts,np,vc
 thank

@@ -16,7 +16,7 @@
 #include <string.h>
 #include <conio.h>
 #include <_atarios.h>
-#define DICTSIZE 4956
+#define DICTSIZE 4980
 #define MAXCOUNT 255
 
 extern md_dict DICT_ES;
@@ -25,8 +25,7 @@ extern md_dict DICT_MS;
 extern md_dict DICT_MA;
 extern md_dict DICT_HS;
 extern md_dict DICT_HA;
-extern md_dict DICT_SS;
-extern md_dict DICT_SA;
+extern md_dict DICT_TS;
 
 short maxcount;
 short counts[DICTSIZE+1];
@@ -38,9 +37,9 @@ struct wordOfInterest
     int x, y;
 };
 
-struct wordOfInterest wordsOfInterest[15];
+#define NWORDSOFINTEREST 13
+struct wordOfInterest wordsOfInterest[NWORDSOFINTEREST];
 
-/*
 void lookupTest(md_dict *d,int id,const char *expDict, const char *target)
 {
     int n;
@@ -67,22 +66,21 @@ void dictTests(md_dict *d)
     lookupTest(d,9,"rare","ZOMBI"); // rare.dict last word
     lookupTest(d,10,"naut","ARSES"); // naughty.dict first word
     lookupTest(d,11,"naut","WOODY"); // naughty.dict last word
-    lookupTest(d,12,"bad ","CLITS"); // bad.dict first word
-    lookupTest(d,13,"bad ","TWATS"); // bad.dict last word
+//  lookupTest(d,12,"bad ","CLITS"); // bad.dict first word
+//  lookupTest(d,13,"bad ","TWATS"); // bad.dict last word
 
-    wordsOfInterest[14].index=-1;
-    wordsOfInterest[14].x=0;
-    wordsOfInterest[14].y=22;
-    strcpy(wordsOfInterest[14].word,"xxxxx");
+    wordsOfInterest[12].index=-1;
+    wordsOfInterest[12].x=0;
+    wordsOfInterest[12].y=22;
+    strcpy(wordsOfInterest[12].word,"xxxxx");
 }
-*/
 
 void displayCount(int index)
 {
     char buf[8];
     int i;
 
-    for(i=0;i<15;i++)
+    for(i=0;i<NWORDSOFINTEREST;i++)
     {
         if ( wordsOfInterest[i].index==index )
         {
@@ -122,7 +120,7 @@ void setUpDisplay()
     maxcount=0;
 
     cputsxy(0,15,"                                       ");
-    for(i=0;i<15;++i)
+    for(i=0;i<NWORDSOFINTEREST;++i)
     {
         displayWordOfInterest(i);
     }
@@ -134,10 +132,10 @@ short count(char *word)
     int found;
     short n;
 
-    found=md_findWord(&DICT_SA,(md_word*)word,NULL);
+    found=md_findWord(&DICT_HA,(md_word*)word,NULL);
     if ( found < 0 )
     {
-        printf("FAILED TO FIND [%s]\n",word);
+        printf("NOTFOUND[%s]\n",word);
         return MAXCOUNT;
     }
     n = counts[found] + (short)1;
@@ -145,10 +143,10 @@ short count(char *word)
     if ( n > maxcount )
     {
         maxcount=n;
-        wordsOfInterest[14].index=found;
-        strcpy(wordsOfInterest[14].word,word);
+        wordsOfInterest[12].index=found;
+        strcpy(wordsOfInterest[12].word,word);
     }
-    for(i=0;i<15;++i)
+    for(i=0;i<NWORDSOFINTEREST;++i)
     {
         if ( found == wordsOfInterest[i].index )
         {
@@ -169,6 +167,7 @@ void countRandomWords(md_dict *d)
     {
         OS.atract=0; // keep attract mode off
         // Pick a random word
+        md_bankswitchIdx(); // BANK SWITCH!
         md_pickRandomWord(d,&w1);
         md_wordToString(buf1,&w1);
         n = count(buf1);
@@ -206,15 +205,14 @@ md_dict *chooseDict()
 {
     int k;
     // Choose a dictionary
-    printf("Choose dictionary to test:\n");
+    printf("Choose dict to test:\n");
     printf("0: ES\n");
     printf("1: EA\n");
     printf("2: MS\n");
     printf("3: MA\n");
     printf("4: HS\n");
     printf("5: HA\n");
-    printf("6: SS\n");
-    printf("7: SA\n");
+    printf("6: TS\n");
     for(;;)
     {
         k = cgetc();
@@ -225,8 +223,7 @@ md_dict *chooseDict()
             case '3': return &DICT_MA;
             case '4': return &DICT_HS;
             case '5': return &DICT_HA;
-            case '6': return &DICT_SS;
-            case '7': return &DICT_SA;
+            case '6': return &DICT_TS;
         }
     }
 }
@@ -244,7 +241,7 @@ int main(void)
     // Show the original dictionary content
     clrscr();
     printf("Index of first/last of each volume\n");
-    //dictTests(&DICT_SA);
+    dictTests(&DICT_HA);
     printf("Press S to start\n");
     cgetc();
     setUpDisplay();
@@ -252,6 +249,7 @@ int main(void)
     // Stop when one of them hits 255.
     countRandomWords(dictToTest);
     printf("\n");
+/*
     showStats(" top",0,780);
     showStats("topd",781,1386);
     showStats("main",1387,3622);
@@ -259,6 +257,7 @@ int main(void)
     showStats("rare",4724,4882);
     showStats("naut",4883,4955);
     showStats(" bad",4956,4963);
+*/
 
     for(;;)
         ;

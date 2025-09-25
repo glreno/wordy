@@ -38,12 +38,15 @@
     .export _voa_cueQueue;
     .export _voa_currentPage
 
-    .DATA
+
+    .BSS
 
 _voa_cueQueue: .byte 0
 
 _voa_currentPage:
-    .word $FF00
+    .word 0 ; init to $FF00 in voa_preinit
+
+    .DATA
 
 ; a function in DATA segment since it needs to be writable
 
@@ -70,6 +73,14 @@ _voa_preinit:
     ; Clear the animation queue
     LDA #0
     STA _voa_qcurr
+    STA _voa_cueQueue
+    STA _voa_currentPage
+
+    LDA #$FF
+    STA _voa_currentPage+1
+    STA _animExitTo
+    STA _animExitTo+1
+
 
     ; register the animation timer handler
     ; this should be in voa_initialize, once there is one

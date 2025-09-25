@@ -11,8 +11,8 @@
 
 ; This is support code for running md_bsTests using 130XE bank swapping instead of a cartridge.
 
-_title_show_title_screen:
-    .export _title_show_title_screen
+_title_show_instruction_screen:
+    .export _title_show_instruction_screen
     RTS
 
 ; All the file header definitions
@@ -40,8 +40,12 @@ _title_show_title_screen:
     .word __CARTBANK1_LOAD__+__CARTBANK1_SIZE__-1
 
     .segment "XEBANK2_HDR"
-    .import __CARTBANK2_LOAD__
+    .import __DICT_IDX_LOAD__
     .import __CARTBANK2_LOAD__,__CARTBANK2_SIZE__
-    .word __CARTBANK2_LOAD__
+    .word __DICT_IDX_LOAD__
     .word __CARTBANK2_LOAD__+__CARTBANK2_SIZE__-1
 
+    .segment "XEBANK3_HDR"
+    .import __TRAMPOLINED_LOAD__,__TRAMPOLINED_SIZE__
+    .word __TRAMPOLINED_LOAD__
+    .word __TRAMPOLINED_LOAD__+__TRAMPOLINED_SIZE__-1

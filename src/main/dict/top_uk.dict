@@ -16,13 +16,11 @@
 @DICT DICT_MA
 @DICTD DICT_MA
 @DICT DICT_HS_UK,x6
-@DICTD DICT_HS_UK,x3
+@DICTD DICT_HS_UK,x2
 @DICT DICT_HA
 @DICTD DICT_HA
-@DICT DICT_SS_UK,x6
-@DICTD DICT_SS_UK,x3
-@DICT DICT_SA
-@DICTD DICT_SA
+@DICT DICT_TS,x2
+@DICTD DICT_TS
 ; Top Thousand Or So Words
 ; Unlike the other volumes, this will be split
 ; into Headwords and Derived Words volumes.

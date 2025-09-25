@@ -30,7 +30,6 @@
 ;           return 0;
 ;   return 1;
 
-    .segment "APP"
 trampoline _mw_isWon,_mw_isWon_tramp
         .proc mw_isWon
         ; store mw address in zeropage pointer

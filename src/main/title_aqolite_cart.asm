@@ -10,20 +10,22 @@
 ; Title definitions
 ;
     ; 7 char string, used for copyright messages in ROM
-    .define title7char  "Awordl "
+    .define title7char  "AQolite"
 
     ; 10 char string, used for copyright messages in Gr.0 text
-    .define title10char "   Awordl "
+    .define title10char "   AQolite"
 
     ; 20 char string, used for title messages in Gr.2 text
     ; so do not mix case!
-    .define title20char "       awordl       "
+    .define title20char "aqolite - text mode "
 
     ; Two lines of 20-char text for game instructions
-    .define instruction1 "  six attempts to   "
+    .define instruction1 "  nine attempts to  "
     .define instruction2 "  guess four words  "
-
-
+    ; Two lines of 40-char text for sub description
+    .define instruction3 "GREEN letters are correct.              "
+    .define instruction4 "YELLOW letters are in the wrong place.  "
+ 
 ;
 ; Minimum Memory Check
 ;
@@ -40,7 +42,7 @@
 ; Set to 1 to RODATA from the startup bank to RAM on startup
 ;
 
-    ;do_copyrodata=1
+    do_copyrodata=1
 
 ;
 ; Title screen template package

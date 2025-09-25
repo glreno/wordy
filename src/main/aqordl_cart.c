@@ -42,16 +42,9 @@ moq opponentModel;
 void *vu_letters;
 md_dict *dict;
                  // 012345678901234567890123456
-char titleText[] = "AQordl (robot)   US/N";
+char titleText[] = "AQordl (robot)   US/n";
 // titleText[18] should be S or K
 // titleText[20] should be e/n/h
-
-const unsigned char LASER[] = {
-    0b00011000,
-    0b00111100,
-    0b00111100,
-    0b00011000
-};
 
 //
 // RUN-ONCE INITIALIZATION CODE
@@ -90,7 +83,6 @@ void initializeQordl()
 {
     char shown = 0;
     int i,a,b;
-    int memlo = 0x2000;
 
     //
     // INITIALIZATION CODE AND LICENSE SCREEN
@@ -100,42 +92,48 @@ void initializeQordl()
     // but the zerobss will wipe out the LAST_BANKSWITCH field before calling main.
     // So do it again.
     bankswitchTitle();
-    title_erase_loading_msg();
-    //title_show_instruction_screen(); - already shown by file load
 
     // You may not bankswitch while the Title/License is on screen!
     // Before bankswitching, you must:
     // occasionaly check title_show_licence_on_L()
     // eventually title_show_press_a_key() and title_wait_for_key(shown);
     // build a display page, and page flip
+
+    // If someone presses L, show the license screen.
+    // This is something you call periodically while loading
     shown = shown || title_show_license_on_L();
 
-    // 130XE Disk version - hand-allocated memory!
-    // Can't touch anything below 0400 ever,
-    // or anything below 2000 before we're done using DOS.
-    // But we can put all the fontsin the DOS area no problem,
-    // since they're generated after startup.
-    // Put the screen after the officially usable RAM
-    // in the reserved area, and let the loader figure out the rest.
-    // __RESERVED_RAM__ is set to 32K so that nothing gets
-    // allocated into the 130XE bank-switch area.
+    // memory allocation based on APPMHI,
+    // which is MEMTOP minus a gr.0 screen minus __RESERVED_MEMORY__
+    // Remember that PAGE is a pmbase value, so must be on a 2K boundary.
+    // and that SCREENRAM needs dlist help if it crosses a 4K boundary.
 
-    SCREENRAM = (unsigned char*)    0x3BF0; // 26*40=1040 (0x410) bytes of screen RAM ending at 4000
-    FONTLIST1[0] = (unsigned char*) 0x9C00;
-    FONTLIST1[1] = (unsigned char*) 0xA000;
-    FONTLIST1[2] = (unsigned char*) 0xA400;
-    // I think there's room at 3000 3400 3800
-    // but I'd rather overwrite DOS than smash the stack.
-    FONTLIST2[0] = (unsigned char*) 0x1400;
-    FONTLIST2[1] = (unsigned char*) 0x1800;
-    FONTLIST2[2] = (unsigned char*) 0x1C00;
-    PAGES[0] = (ds_page*) 0xA800;
-    PAGES[1] = (ds_page*) 0xB000;
-    PAGES[2] = (ds_page*) 0xB800;
+    SCREENRAM = (unsigned char*) (OS.appmhi+1); // 26*40=1040 (0x410) bytes of screen RAM
+    FONTLIST1[0] = (unsigned char*) SCREENRAM+0x410; // 1K font
+    FONTLIST1[1] = (unsigned char*) (FONTLIST1[0]+1024);
+    FONTLIST1[2] = (unsigned char*) (FONTLIST1[1]+1024);
+    FONTLIST2[0] = (unsigned char*) (FONTLIST1[2]+1024);
+    FONTLIST2[1] = (unsigned char*) (FONTLIST2[0]+1024);
+    FONTLIST2[2] = (unsigned char*) (FONTLIST2[1]+1024);
+    PAGES[0] = (ds_page*) (FONTLIST2[2]+1024); // 2K page after the fonts
+    PAGES[1] = (ds_page*) (FONTLIST2[2]+1024+2048);
+    PAGES[2] = (ds_page*) (FONTLIST2[2]+1024+4096);
+
+    // Addresses:   16K     32K+
+    // SCREENRAM    0BF0    4BF0
+    // FONTLIST1[0] 1000    5000
+    // FONTLIST1[1] 1400    5400
+    // FONTLIST1[2] 1800    5800
+    // FONTLIST2[0] 1C00    5C00
+    // FONTLIST2[1] 2000    6000
+    // FONTLIST2[2] 2400    6400
+    // PAGES[0]     2800    7800
+    // PAGES[1]     3000    7000
+    // PAGES[2]     3800    7800
 
     // Create a screen
     ds_initScreenRam(SCREENRAM, 40*26); // this sets SAVMSC and zeroes out the given amount of space
-    vor_initialize(&opponentView, 0, PAGES, 4, LASER, SCREENRAM);
+    vor_initialize(&opponentView, 0, PAGES, SCREENRAM);
 
     shown = shown || title_show_license_on_L();
 
@@ -196,8 +194,6 @@ void initializeQordl()
     title_wait_for_key(shown);
 
     show_options_screen(&(PAGES[1]->pm.player0));
-//  title_show_difficulty_screen();
-//  shown = cgetc();
     dict = md_pickDictionary(&titleText[18],&titleText[20],selectedDictionary);
 
     voa_loadFirstPage(PAGES[2]);
@@ -227,16 +223,14 @@ void pickWord()
 
 #pragma code-name (pop)
 
-void enableWarmStart(void);
-
 //segment CODE - run by OS
 int main()
 {
-    enableWarmStart();
     initializeQordl();
 
     for(;;)
     {
+        md_bankswitchIdx(); // BANK SWITCH!
         pickWord();
         moq_gameDriver(titleText, &opponentModel);
         dk_getc();

@@ -136,7 +136,7 @@ dicttable:
     .import _DICT_MS_US
     .import _DICT_HS_US
     .import _DICT_HS_UK
-    .import _DICT_HA
+    .import _DICT_TS
 
         ; Dictionary     byte offset
     .word _DICT_ES_US   ; 0
@@ -145,7 +145,7 @@ dicttable:
     .word _DICT_MS_US
     .word _DICT_HS_US   ; 8
     .word _DICT_HS_UK
-    .word _DICT_HA      ; A
-    .word _DICT_HA
+    .word _DICT_TS      ; A
+    .word _DICT_TS
 
     .endproc

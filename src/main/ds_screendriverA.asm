@@ -32,9 +32,11 @@
     .import _DS_DLICBV
     .import _DS_ATCBV
     .import _DS_PFCBV
+    .import _DS_VBCBV
     .import _DS_DLICB
     .import _DS_ATCB
     .import _DS_PFCB
+    .import _DS_VBCB
     .import _DS_ATTIME
     .exportzp _DS_ZTMPM
     .exportzp _DS_ZTMPML
@@ -44,6 +46,7 @@
     .export _ds_flipToPageNextVBIandWait
     .export _ds_setDliCallback
     .export _ds_setFlipCallback
+    .export _ds_setVbiCallback
     .export _ds_setAnimTimerCallback
     .export _ds_calcScrLoc
     .export _ds_putc
@@ -171,6 +174,36 @@ _ds_setFlipCallback:
 done:
     RTS
     .endproc
+
+    .segment "ONCE"
+
+; REGISTER THE VBI CALLBACK
+; void ds_setVbiCallback(void *const cb)
+;
+; This is main-thread code, so it can use the standard cc65 zeropage addresses
+_ds_setVbiCallback:
+    .proc ds_setVbiCallback
+    ; Address is in AX
+    ; stash the LSB in page zero, we need A
+    STA tmp1
+    ; Disable the callback by setting the vector to RTS
+    lda #$60 ; RTS
+	sta _DS_VBCBV
+    ; Check address for null - if so, we're done.
+    TXA
+    ORA tmp1
+    beq done
+    ; Store the address in the vector
+    LDA tmp1
+	sta _DS_VBCB
+	stx _DS_VBCB+1
+    ; Enable the callback by setting the vector to JMP
+	lda #$4C ; JMP
+	sta _DS_VBCBV
+done:
+    RTS
+    .endproc
+
 
     .segment "ONCE"
 
